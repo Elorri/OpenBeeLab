@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import java.util.List;
+import com.example.android.openbeelab.Retrofit.WeeksShotResults;
+import com.example.android.openbeelab.Retrofit.WeeksShotRowObject;
+import com.example.android.openbeelab.pojo.Beehive;
 
 import retrofit.Call;
 import retrofit.Callback;
@@ -19,7 +21,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         givesContributors();
 
     }
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Void givesContributors() {
         // Create a very simple REST adapter which points the GitHub API.
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(NetworkService.API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -35,15 +37,18 @@ public class MainActivity extends AppCompatActivity {
         // Create an instance of our GitHub API interface.
         NetworkService.GitHub github = retrofit.create(NetworkService.GitHub.class);
 
-        // Create a call instance for looking up Retrofit contributors.
-        Call<List<NetworkService.Contributor>> call = github.contributors("square", "retrofit");
+        // Create a call instance for looking up Retrofit weeksShot.
+        //https://api.github.com/repos/square/retrofit/contributors
+        Call<WeeksShotResults> call = github.weeksShot("true", "30");
 
-        call.enqueue(new Callback<List<NetworkService.Contributor>>() {
+        call.enqueue(new Callback<WeeksShotResults>() {
             @Override
-            public void onResponse(Response<List<NetworkService.Contributor>> response, Retrofit retrofit) {
-                List<NetworkService.Contributor> contributors = response.body();
-                for (NetworkService.Contributor contributor : contributors) {
-                    Log.e("qqc", contributor.login + " (" + contributor.contributions + ")");
+            public void onResponse(Response<WeeksShotResults> response, Retrofit retrofit) {
+                WeeksShotResults retrofitResults = response.body();
+                for (WeeksShotRowObject row : retrofitResults.rows) {
+                    Log.e("qqc", "row.key " + row.key);
+                    Log.e("qqc", "row.value[0] " + row.value[0]);
+                    new Beehive(row.key, row.value[0]);
                 }
             }
 

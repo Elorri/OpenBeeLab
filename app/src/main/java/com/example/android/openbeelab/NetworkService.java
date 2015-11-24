@@ -3,30 +3,23 @@ package com.example.android.openbeelab;
 /**
  * Created by Elorri on 24/11/2015.
  */
-import java.util.List;
+
+import com.example.android.openbeelab.Retrofit.WeeksShotResults;
 
 import retrofit.Call;
 import retrofit.http.GET;
-import retrofit.http.Path;
+import retrofit.http.Query;
 
 public final class NetworkService {
-    public static final String API_URL = "https://api.github.com";
+    public static final String API_URL = "http://dev.openbeelab.org:5984";
 
-    public static class Contributor {
-        public final String login;
-        public final int contributions;
 
-        public Contributor(String login, int contributions) {
-            this.login = login;
-            this.contributions = contributions;
-        }
-    }
 
     public interface GitHub {
-        @GET("/repos/{owner}/{repo}/contributors")
-        Call<List<Contributor>> contributors(
-                @Path("owner") String owner,
-                @Path("repo") String repo);
+        @GET("/la_mine/_design/ruche_01/_view/weight_by_week")
+        Call<WeeksShotResults> weeksShot(
+                @Query("group") String owner,
+                @Query("limit") String repo);
     }
 
 
