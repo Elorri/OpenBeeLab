@@ -1,13 +1,13 @@
-package com.example.android.openbeelab.Retrofit;
+package com.example.android.openbeelab.retrofit;
 
 /**
  * Created by Elorri on 24/11/2015.
  */
-public class WeeksShotRowObject {
+public class MesureRowObject {
     public final String key;
     public final double[] value;
 
-    public WeeksShotRowObject(String key, double[] value) {
+    public MesureRowObject(String key, double[] value) {
         this.key = key;
         this.value = value;
     }
