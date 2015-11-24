@@ -1,20 +1,4 @@
-# OpenBeeLab Android App
-
-This repository will contains the Android App of [OpenBeeLab project] (http://openbeelab.org/)
-
-## Features
-
-This will app allows : 
-- to check out behives weight per week
-
-
-## Libraries used
-
-* [Retrofit] (http://square.github.io/retrofit/) 
-	Licensed under the Apache License, Version 2.0 
-	
-## Licence
-# Copyright 2012-2015 OpenBeeLab.
+# Copyright 2012-2016 OpenBeeLab.
 # This file is part of the OpenBeeLab project.
 
 # The OpenBeeLab project is free software: you can redistribute it and/or modify
@@ -29,4 +13,3 @@ This will app allows :
 
 # You should have received a copy of the GNU General Public License
 # along with OpenBeeLab.  If not, see <http://www.gnu.org/licenses/>.
-
