@@ -17,6 +17,7 @@ import lecho.lib.hellocharts.view.LineChartView;
 public class MainActivity extends AppCompatActivity {
 
 
+    private List<Measure> mMeasures;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Measure> measures) {
             if (measures != null) {
+                mMeasures=measures;
                 LineChartView lineChartView = (LineChartView) findViewById(R.id.chart);
                 lineChartView.setOnValueTouchListener(new ValueTouchListener());
                 lineChartView.setLineChartData(HelloCharts.getLineChartData(measures));
@@ -51,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onValueSelected(int lineIndex, int pointIndex, PointValue value) {
-            Toast.makeText(MainActivity.this, "Selected: " + value, Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this,
+                    ""+HelloCharts.getPointDesc(mMeasures,pointIndex),
+                    Toast.LENGTH_SHORT).show();
         }
 
         @Override

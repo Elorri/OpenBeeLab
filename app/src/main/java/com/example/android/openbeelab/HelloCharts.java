@@ -86,4 +86,8 @@ public class HelloCharts {
         chart.setMaximumViewport(v);
         chart.setCurrentViewport(v);
     }
+
+    public static String getPointDesc(List<Measure> measures, int pointIndex) {
+        return measures.get(pointIndex).toString();
+    }
 }
