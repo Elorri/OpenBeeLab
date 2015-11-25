@@ -1,0 +1,65 @@
+[33mcommit 82a31251609be11a970ab2b314cda54cbaa2f715[m
+Author: Elorri <etchemendy.elorri@gmail.com>
+Date:   Wed Nov 25 10:37:52 2015 +0100
+
+    Try HelloCharts and it is the winner
+
+[33mcommit 40210e0b1bee6576db9f6db3b875d7eccc9cd06c[m
+Author: Elorri <etchemendy.elorri@gmail.com>
+Date:   Wed Nov 25 09:18:12 2015 +0100
+
+    with cubic
+
+[33mcommit 2440a213b5fc71c81487faf2e046d318e5d04f25[m
+Author: Elorri <etchemendy.elorri@gmail.com>
+Date:   Wed Nov 25 09:11:08 2015 +0100
+
+    Try LineChart2
+
+[33mcommit 665d2376f64a77525cf35c07b8986a7e75dad1c5[m
+Author: Elorri <etchemendy.elorri@gmail.com>
+Date:   Wed Nov 25 00:19:24 2015 +0100
+
+    Try LineChart1
+
+[33mcommit 0debbbe677078dab49ee3e5157b75a8370d673a2[m
+Author: Elorri <etchemendy.elorri@gmail.com>
+Date:   Tue Nov 24 23:56:43 2015 +0100
+
+    Add MPAndroidChart library + try LineChartColored
+
+[33mcommit 4f76dc09c493e498e272cb62fde4069099cd5515[m
+Author: Elorri <etchemendy.elorri@gmail.com>
+Date:   Tue Nov 24 22:48:26 2015 +0100
+
+    Add License
+
+[33mcommit 28204940f0c648bf33858b17d5f3b7d5f0d7766c[m
+Author: Elorri <etchemendy.elorri@gmail.com>
+Date:   Tue Nov 24 21:23:33 2015 +0100
+
+    Add readme.md
+
+[33mcommit 6a2181a01d2bd0426aaab0c4e256c5442747062e[m
+Author: Elorri <etchemendy.elorri@gmail.com>
+Date:   Tue Nov 24 20:56:16 2015 +0100
+
+    Connect to openbeelab serveur using retrofit
+
+[33mcommit 3b93589696b48b6915eae91ad1a6dbfdc5e55177[m
+Author: Elorri <etchemendy.elorri@gmail.com>
+Date:   Tue Nov 24 19:38:17 2015 +0100
+
+    Idem without AsyncTask
+
+[33mcommit 2fe52d825d434d69d666bd2d2411519c88d95cd9[m
+Author: Elorri <etchemendy.elorri@gmail.com>
+Date:   Tue Nov 24 19:26:19 2015 +0100
+
+    Add retrofit mock data (GitHub contributors)
+
+[33mcommit cec2dc1283303752916ed44497384bd394c66073[m
+Author: Elorri <etchemendy.elorri@gmail.com>
+Date:   Tue Nov 24 17:56:10 2015 +0100
+
+    Create HelloWorld with HelloWorld

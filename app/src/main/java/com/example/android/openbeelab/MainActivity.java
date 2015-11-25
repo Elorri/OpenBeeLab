@@ -4,6 +4,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.example.android.openbeelab.pojo.Measure;
+import com.example.android.openbeelab.pojo.Tools;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,15 +20,7 @@ import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.LineChartView;
 
-/*
- * Example taken from
- * https://github.com/lecho/hellocharts-android/blob/master/hellocharts-samples/src/lecho/lib/hellocharts/samples/LineChartActivity.java#L210
- * Go see toggleCubic() method on website for more info. I've not reproduced everything here.
- * With cubic value, les points étant reliés par des lignes arrondies, il se peut qu'elles
- * passent au dessus ou en dessous de la valeur max ou min de y. Exemple: si les valeurs de y
- * oscillent entre 0 et 100, lorsque que y vaudra 100 ou 0 la courbe sera un peu coupée.
- * Pour eviter ça il faut positionner le viewport a 105,-5 pour les valeurs de y.
- */
+
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -35,7 +30,7 @@ public class MainActivity extends AppCompatActivity  {
 
     private int maxNumberOfLines = 4;
     private int numberOfPoints = 12;
-    float[][] randomNumbersTab = new float[maxNumberOfLines][numberOfPoints];
+    //float[][] randomNumbersTab = new float[maxNumberOfLines][numberOfPoints];
 
 
     private int numberOfLines = 1;
@@ -58,42 +53,22 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        OpenbeelabService.getMesures();
+        OpenbeelabService.getMeasures();
 
         chart = (LineChartView) findViewById(R.id.chart);
         chart.setOnValueTouchListener(new ValueTouchListener());
 
-        // Generate some randome values.
-        generateValues();
-
-        generateData();
-
-        // Disable viewport recalculations, see toggleCubic() method for more info.
-        //chart.setViewportCalculationEnabled(false);
-
+        generateData(measures);
         resetViewport();
 
     }
 
 
-    private void generateValues() {
-        for (int i = 0; i < maxNumberOfLines; ++i) {
-            for (int j = 0; j < numberOfPoints; ++j) {
-                randomNumbersTab[i][j] = (float) Math.random() * 100f;
-            }
-        }
-    }
-
-    private void generateData() {
+    private void generateData(List<Measure> measures) {
 
         List<Line> lines = new ArrayList<Line>();
         for (int i = 0; i < numberOfLines; ++i) {
-
-            List<PointValue> values = new ArrayList<PointValue>();
-            for (int j = 0; j < numberOfPoints; ++j) {
-                values.add(new PointValue(j, randomNumbersTab[i][j]));
-            }
-
+            List<PointValue> values = Tools.convertToHelloChartData(measures);
             Line line = new Line(values);
             line.setColor(ChartUtils.COLORS[i]);
             line.setShape(shape);
@@ -127,18 +102,19 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-    private void resetViewport() {
+    private void resetViewport(LineChartView chart) {
         // Reset viewport height range to (0,100)
         final Viewport v = new Viewport(chart.getMaximumViewport());
 //        v.bottom = 0;
 //        v.top = 100;
         v.bottom = -5;
-        v.top = 105;
+        v.top = 65;
         v.left = 0;
         v.right = numberOfPoints - 1;
         chart.setMaximumViewport(v);
         chart.setCurrentViewport(v);
     }
+
 
 
     private class ValueTouchListener implements LineChartOnValueSelectListener {
