@@ -16,7 +16,7 @@ This will app allows :
 	Licensed under the Apache License, Version 2.0 
 	
 ## Screenshots
-	![screen](https://github.com/Elorri/OpenBeeLab/Screenshot_2015-11-25-20-06-30.png)
+	![screen](https://raw.github.com/Elorri/OpenBeeLab/Screenshot_2015-11-25-20-06-30.png)
 	
 ## Licence
 
