@@ -16,10 +16,7 @@ This will app allows :
 	Licensed under the Apache License, Version 2.0 
 	
 ## Screenshots
-![screen](https://github.com/Elorri/OpenBeeLab/blob/master/screenshot/screen1.png)
-![screen](../master/screenshot/screen1.png)
-![screen](./master/screenshot/screen1.png)
-![screen](./blob/master/screenshot/screen1.png)
+![screen](../master/screenshot/Screenshot_2015-11-25-20-06-30.png "weight per week overthe last 30 days")
 	
 ## Licence
 
