@@ -16,10 +16,10 @@ This will app allows :
 	Licensed under the Apache License, Version 2.0 
 	
 ## Screenshots
-	![screen](https://github.com/Elorri/OpenBeeLab/blob/master/screenshot/screen1.png)
-	![screen](../master/screenshot/screen1.png)
-	![screen](./master/screenshot/screen1.png)
-	![screen](./blob/master/screenshot/screen1.png)
+![screen](https://github.com/Elorri/OpenBeeLab/blob/master/screenshot/screen1.png)
+![screen](../master/screenshot/screen1.png)
+![screen](./master/screenshot/screen1.png)
+![screen](./blob/master/screenshot/screen1.png)
 	
 ## Licence
 
