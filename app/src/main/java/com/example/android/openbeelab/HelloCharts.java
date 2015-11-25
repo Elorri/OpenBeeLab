@@ -1,5 +1,8 @@
 package com.example.android.openbeelab;
 
+import android.content.Context;
+import android.graphics.Color;
+
 import com.example.android.openbeelab.pojo.Measure;
 
 import java.util.ArrayList;
@@ -12,7 +15,6 @@ import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.model.Viewport;
-import lecho.lib.hellocharts.util.ChartUtils;
 import lecho.lib.hellocharts.view.LineChartView;
 
 /**
@@ -21,9 +23,13 @@ import lecho.lib.hellocharts.view.LineChartView;
 public class HelloCharts {
 
 
+    private Context context;
 
+    public HelloCharts(Context context) {
+        this.context = context;
+    }
 
-    public static List<PointValue> getPointValues(List<Measure> measures){
+    public  List<PointValue> getPointValues(List<Measure> measures){
 
         List<PointValue> values = new ArrayList<>();
         int i=0;
@@ -34,7 +40,7 @@ public class HelloCharts {
         return values;
     }
 
-    public static List<AxisValue> getAxisValues(List<Measure> measures){
+    public  List<AxisValue> getAxisValues(List<Measure> measures){
         List<AxisValue> axisValues = new ArrayList<>();
         int i=0;
         for (Measure measure : measures) {
@@ -45,9 +51,9 @@ public class HelloCharts {
     }
 
 
-    public static Line createLine(List<PointValue> values) {
+    public  Line createLine(List<PointValue> values) {
         Line line = new Line(values);
-        line.setColor(ChartUtils.COLORS[0]);
+        line.setColor(Color.parseColor(getContext().getString(R.string.primary)));
         line.setShape(ValueShape.CIRCLE);
         line.setCubic(true);
         line.setFilled(true);
@@ -58,7 +64,7 @@ public class HelloCharts {
         return line;
     }
 
-    public static LineChartData createLinesData(List<Line> lines, List<AxisValue> axisValues) {
+    public  LineChartData createLinesData(List<Line> lines, List<AxisValue> axisValues) {
         LineChartData linesData = new LineChartData(lines);
         Axis axisX = new Axis(axisValues);
         Axis axisY = new Axis().setHasLines(true);
@@ -68,16 +74,16 @@ public class HelloCharts {
         return linesData;
     }
 
-    public static LineChartData getLineChartData(List<Measure> measures) {
-        List<PointValue> values = HelloCharts.getPointValues(measures);
-        List<AxisValue> axisValues= HelloCharts.getAxisValues(measures);
-        Line line = HelloCharts.createLine(values);
+    public  LineChartData getLineChartData(List<Measure> measures) {
+        List<PointValue> values = getPointValues(measures);
+        List<AxisValue> axisValues= getAxisValues(measures);
+        Line line = createLine(values);
         List<Line> lines = new ArrayList<Line>();
         lines.add(line);
-        return HelloCharts.createLinesData(lines, axisValues);
+        return createLinesData(lines, axisValues);
     }
 
-    public static void setViewport(LineChartView chart, int bottom, int top, int left, int right) {
+    public  void setViewport(LineChartView chart, int bottom, int top, int left, int right) {
         final Viewport v = new Viewport(chart.getMaximumViewport());
         v.bottom = bottom;
         v.top = top;
@@ -89,5 +95,9 @@ public class HelloCharts {
 
     public static String getPointDesc(List<Measure> measures, int pointIndex) {
         return measures.get(pointIndex).toString();
+    }
+
+    public Context getContext() {
+        return context;
     }
 }

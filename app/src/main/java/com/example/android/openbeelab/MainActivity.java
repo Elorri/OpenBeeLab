@@ -42,8 +42,9 @@ public class MainActivity extends AppCompatActivity {
                 mMeasures=measures;
                 LineChartView lineChartView = (LineChartView) findViewById(R.id.chart);
                 lineChartView.setOnValueTouchListener(new ValueTouchListener());
-                lineChartView.setLineChartData(HelloCharts.getLineChartData(measures));
-                HelloCharts.setViewport(lineChartView, -5, 65, 0, measures.size() - 1);
+                HelloCharts helloCharts=new HelloCharts(MainActivity.this);
+                lineChartView.setLineChartData(helloCharts.getLineChartData(measures));
+                helloCharts.setViewport(lineChartView, -5, 65, 0, measures.size() - 1);
             }
         }
     }

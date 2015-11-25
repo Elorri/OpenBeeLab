@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#FFC107</color>
+    <color name="colorPrimaryDark">#795548</color>
+    <color name="colorAccent">#FF6F00</color>
+
+
+    <!-- Google's Material Design Color Palette (http://www.google.com/design/spec/style/color.html#color-color-palette) -->
+    <color name="lime_500">#CDDC39</color>
+    <color name="lime_200">#E6EE9C</color>
+    <color name="amber_500">#FFC107</color>
+    <color name="amber_900">#FF6F00</color>
+    <color name="brown_500">#795548</color>
+    <color name="brown_800">#4E342E</color>
+    <color name="brown_900">#3E2723</color>
+    <color name="yellow_a200">#FFFF00</color>
+
+
+
 </resources>

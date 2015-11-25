@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">OpenBeeLab</string>
+    <string name="app_name">Open Bee Lab</string>
+
+
+    <!-- Colors needed as strings -->
+    <string name="primary">#FFC107</string>
 </resources>
