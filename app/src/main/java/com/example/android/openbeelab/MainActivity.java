@@ -163,6 +163,7 @@ public class MainActivity extends AppCompatActivity  implements OnSeekBarChangeL
         set1.setFillColor(ColorTemplate.getHoloBlue());
         set1.setHighLightColor(Color.rgb(244, 117, 117));
         set1.setDrawCircleHole(false);
+        set1.setDrawCubic(true); //????
         //set1.setFillFormatter(new MyFillFormatter(0f));
 //        set1.setDrawHorizontalHighlightIndicator(false);
 //        set1.setVisible(false);
