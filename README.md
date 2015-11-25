@@ -15,6 +15,9 @@ This will app allows :
 * [HelloCharts] (https://github.com/lecho/hellocharts-android) 
 	Licensed under the Apache License, Version 2.0 
 	
+## Screenshots
+	![screen](https://github.com/Elorri/OpenBeeLab/Screenshot_2015-11-25-20-06-30.png "weight per week over the last 30 days")
+	
 ## Licence
 
 	 Copyright 2012-2016 OpenBeeLab.
