@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.example.android.openbeelab.pojo.Measure;
+import com.example.android.openbeelab.retrofit.OpenBeelabService;
 
 import java.util.List;
 

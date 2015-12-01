@@ -4,4 +4,9 @@
 
     <!-- Colors needed as strings -->
     <string name="primary">#FFC107</string>
+
+
+    <!-- SyncAdapter related -->
+    <!-- that the account is specific to our OpenBeeLabApp-->
+    <string name="sync_account_type">openbeelab.android.example.com</string>
 </resources>

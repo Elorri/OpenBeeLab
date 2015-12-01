@@ -1,12 +1,10 @@
-package com.example.android.openbeelab;
+package com.example.android.openbeelab.retrofit;
 
 /**
  * Created by Elorri on 24/11/2015.
  */
 
 import com.example.android.openbeelab.pojo.Measure;
-import com.example.android.openbeelab.retrofit.MesureResults;
-import com.example.android.openbeelab.retrofit.MesureRowObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
