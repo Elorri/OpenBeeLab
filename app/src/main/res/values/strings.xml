@@ -9,4 +9,8 @@
     <!-- SyncAdapter related -->
     <!-- that the account is specific to our OpenBeeLabApp-->
     <string name="sync_account_type">openbeelab.android.example.com</string>
+
+
+    <!-- Uri authority for our content provider-->
+    <string name="content_authority">com.example.android.openbeelab</string>
 </resources>

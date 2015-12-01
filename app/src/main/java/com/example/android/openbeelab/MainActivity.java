@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.example.android.openbeelab.pojo.Measure;
-import com.example.android.openbeelab.retrofit.OpenBeelabService;
+import com.example.android.openbeelab.retrofit.OpenBeelabNetworkJson;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected List<Measure> doInBackground(Void... params) {
-            return OpenBeelabService.getMeasures();
+            return OpenBeelabNetworkJson.getMeasures();
         }
 
         @Override

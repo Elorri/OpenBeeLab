@@ -16,7 +16,7 @@ import retrofit.Retrofit;
 import retrofit.http.GET;
 import retrofit.http.Query;
 
-public class OpenBeelabService {
+public class OpenBeelabNetworkJson {
     public static final String API_URL = "http://dev.openbeelab.org:5984";
 
 
@@ -28,10 +28,10 @@ public class OpenBeelabService {
     }
 
 
-    static List<Measure> getMeasures() {
+    public static List<Measure> getMeasures() {
         try {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(OpenBeelabService.API_URL)
+                    .baseUrl(OpenBeelabNetworkJson.API_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
