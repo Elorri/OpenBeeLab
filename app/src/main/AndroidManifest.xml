@@ -32,7 +32,7 @@
         </service>
         <!-- The SyncAdapter service -->
         <service
-            android:name=".sync.BeeService"
+            android:name=".sync.BeeSyncService"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
