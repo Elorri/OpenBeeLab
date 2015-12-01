@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
         BackgroundTask backgroundTask = new BackgroundTask();
         backgroundTask.execute();
+
+        //TODO add this here BeeSyncAdapter.initializeSyncAdapter(this);
+        //TODO add this whenever we need a manual sync  BeeSyncAdapter.syncImmediately()
     }
 
 
