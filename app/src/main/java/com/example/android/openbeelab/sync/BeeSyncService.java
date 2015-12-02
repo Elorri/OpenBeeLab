@@ -8,19 +8,19 @@ import android.os.IBinder;
  */
 public class BeeSyncService extends Service {
     private static final Object sSyncAdapterLock = new Object();
-    private static BeeSyncAdapter sSunshineSyncAdapter = null;
+    private static BeeSyncAdapter sBeeSyncAdapter = null;
 
     @Override
     public void onCreate() {
         synchronized (sSyncAdapterLock) {
-            if (sSunshineSyncAdapter == null) {
-                sSunshineSyncAdapter = new BeeSyncAdapter(getApplicationContext(), true);
+            if (sBeeSyncAdapter == null) {
+                sBeeSyncAdapter = new BeeSyncAdapter(getApplicationContext(), true);
             }
         }
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        return sSunshineSyncAdapter.getSyncAdapterBinder();
+        return sBeeSyncAdapter.getSyncAdapterBinder();
     }
 }

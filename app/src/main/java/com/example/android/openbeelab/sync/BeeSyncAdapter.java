@@ -5,13 +5,20 @@ import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncRequest;
 import android.content.SyncResult;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.android.openbeelab.R;
+import com.example.android.openbeelab.db.BeeContract;
+import com.example.android.openbeelab.pojo.Measure;
+import com.example.android.openbeelab.retrofit.OpenBeelabNetworkJson;
+
+import java.util.List;
 
 /**
  * Created by Elorri on 01/12/2015.
@@ -24,6 +31,7 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
     //public static final int SYNC_INTERVAL = 60 * 180;
     public static final int SYNC_INTERVAL = 60 * 720;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
+    private String LOG_TAG = BeeSyncAdapter.class.getSimpleName();
 
 
     public BeeSyncAdapter(Context context, boolean autoInitialize) {
@@ -31,8 +39,19 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     @Override
-    public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
-        //TODO OpenBeelabNetworkJson.getMeasures();
+    public void onPerformSync(Account account, Bundle extras, String authority,
+                              ContentProviderClient provider, SyncResult syncResult) {
+        List<Measure> measures = OpenBeelabNetworkJson.getMeasures();
+        syncDB(measures);
+    }
+
+    private void syncDB(List<Measure> measures) {
+        ContentValues[] measuresContentValues = Measure.getContentValuesArray(measures);
+        int inserted = 0;
+        if (measuresContentValues.length > 0)
+            inserted = getContext().getContentResolver().bulkInsert(BeeContract.MeasureEntry
+                    .CONTENT_URI, measuresContentValues);
+        Log.d(LOG_TAG, "SyncDB Complete. " + inserted + " Inserted");
     }
 
     public static void initializeSyncAdapter(Context context) {

@@ -34,7 +34,7 @@ public class HelloCharts {
         List<PointValue> values = new ArrayList<>();
         int i=0;
         for (Measure measure : measures) {
-            values.add(new PointValue(i, (float)measure.weightPerWeek));
+            values.add(new PointValue(i, (float)measure.value));
             i++;
         }
         return values;
@@ -44,7 +44,7 @@ public class HelloCharts {
         List<AxisValue> axisValues = new ArrayList<>();
         int i=0;
         for (Measure measure : measures) {
-             axisValues.add(new AxisValue(i).setLabel(measure.weekId));
+             axisValues.add(new AxisValue(i).setLabel(measure.tag));
             i++;
         }
         return axisValues;

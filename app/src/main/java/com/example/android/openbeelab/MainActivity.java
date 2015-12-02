@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.example.android.openbeelab.pojo.Measure;
 import com.example.android.openbeelab.retrofit.OpenBeelabNetworkJson;
+import com.example.android.openbeelab.sync.BeeSyncAdapter;
 
 import java.util.List;
 
@@ -25,10 +26,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BackgroundTask backgroundTask = new BackgroundTask();
-        backgroundTask.execute();
+//        BackgroundTask backgroundTask = new BackgroundTask();
+//        backgroundTask.execute();
 
-        //TODO add this here BeeSyncAdapter.initializeSyncAdapter(this);
+        BeeSyncAdapter.initializeSyncAdapter(this);
         //TODO add this whenever we need a manual sync  BeeSyncAdapter.syncImmediately()
     }
 
