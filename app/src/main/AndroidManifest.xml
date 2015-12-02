@@ -21,6 +21,12 @@
             </intent-filter>
         </activity>
 
+        <provider
+            android:authorities="@string/content_authority"
+            android:name=".db.BeeProvider"
+            android:exported="false"
+            android:syncable="true" />
+
         <!-- SyncAdapter's dummy authentication service -->
         <service android:name=".sync.BeeAuthenticatorService">
             <intent-filter>
