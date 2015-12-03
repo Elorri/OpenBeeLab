@@ -1,6 +1,5 @@
 package com.example.android.openbeelab;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.android.openbeelab.db.BeeContract;
 import com.example.android.openbeelab.hellocharts.HelloCharts;
 import com.example.android.openbeelab.pojo.Measure;
 
@@ -50,8 +48,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-//        BackgroundTask backgroundTask = new BackgroundTask();
-//        backgroundTask.execute();
         if (savedInstanceState == null)
             getLoaderManager().initLoader(BEEHOUSE_LOADER, null, this);
         else
@@ -102,15 +98,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
     }
 
-//    public class BackgroundTask extends AsyncTask<Void, Void, Void> {
-//        @Override
-//        protected Void doInBackground(Void... params) {
-//            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-//            List<Measure> measures = OpenBeelabNetworkJson.getMeasures(getContext());
-//            syncDB(measures);
-//            return null;
-//        }
-//    }
+
 
     private class ValueTouchListener implements LineChartOnValueSelectListener {
 
