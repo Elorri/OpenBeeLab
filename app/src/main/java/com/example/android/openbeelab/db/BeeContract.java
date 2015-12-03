@@ -33,8 +33,11 @@ public class BeeContract {
 
         public static final String COLUMN_NAME = "name"; //e.g. "global weight"
         public static final String COLUMN_TIMESTAMP = "timestamp";
+        public static final String COLUMN_WEEK_ID = "weekId";//e.g. "2014W29"
         public static final String COLUMN_VALUE = "value"; //e.g. "45.0"
-        public static final String COLUMN_TAG = "weekId";//e.g. "2014W29"
+        public static final String COLUMN_UNIT = "unit"; //e.g. "Kg"
+
+
 
         public static Uri buildMeasureUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);

@@ -1,9 +1,13 @@
 package com.example.android.openbeelab;
 
 import android.content.ContentValues;
-import android.os.AsyncTask;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +17,6 @@ import android.widget.Toast;
 import com.example.android.openbeelab.db.BeeContract;
 import com.example.android.openbeelab.hellocharts.HelloCharts;
 import com.example.android.openbeelab.pojo.Measure;
-import com.example.android.openbeelab.retrofit.OpenBeelabNetworkJson;
 
 import java.util.List;
 
@@ -24,16 +27,20 @@ import lecho.lib.hellocharts.view.LineChartView;
 /**
  * Created by Elorri on 03/12/2015.
  */
-public class DetailFragment  extends Fragment {
+public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String DETAIL_URI = "URI";
     private static final String LOG_TAG = DetailFragment.class.getSimpleName();
 
+    private static final int BEEHOUSE_LOADER = 0;
+
     private List<Measure> mMeasures;
     private LineChartView mLineChartView;
+    private static Uri mUri;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         View view = inflater.inflate(R.layout.weight_per_period, container, false);
         mLineChartView = (LineChartView) view.findViewById(R.id.chart);
         return view;
@@ -42,31 +49,68 @@ public class DetailFragment  extends Fragment {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        BackgroundTask backgroundTask = new BackgroundTask();
-        backgroundTask.execute();
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+//        BackgroundTask backgroundTask = new BackgroundTask();
+//        backgroundTask.execute();
+        if (savedInstanceState == null)
+            getLoaderManager().initLoader(BEEHOUSE_LOADER, null, this);
+        else
+            getLoaderManager().restartLoader(BEEHOUSE_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
-    public class BackgroundTask extends AsyncTask<Void, Void, List<Measure>> {
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+        CursorLoader cursorLoader = null;
 
-        @Override
-        protected List<Measure> doInBackground(Void... params) {
-            List<Measure> measures = OpenBeelabNetworkJson.getMeasures(getContext());
-            syncDB(measures);
-            return measures;
-        }
-
-        @Override
-        protected void onPostExecute(List<Measure> measures) {
-            if (measures != null) {
-                mMeasures=measures;
-                mLineChartView.setOnValueTouchListener(new ValueTouchListener());
-                HelloCharts helloCharts=new HelloCharts(getContext());
-                mLineChartView.setLineChartData(helloCharts.getLineChartData(measures));
-                helloCharts.setViewport(mLineChartView, -5, 65, 0, measures.size() - 1);
+        Bundle arguments = getArguments();
+        if (arguments != null) {
+            mUri = arguments.getParcelable(DETAIL_URI);
+            if (mUri != null) {
+                cursorLoader = new CursorLoader(getActivity(),
+                        mUri,
+                        null,
+                        null,
+                        null,
+                        null);
             }
         }
+        return cursorLoader;
     }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+
+        if (cursor != null) {
+            Log.e("hh", "are you here ?");
+            mMeasures = Measure.getMeasures(cursor);
+            for (Measure m : mMeasures) {
+                Log.e("hh", m.getShortDesc());
+            }
+
+            mLineChartView.setOnValueTouchListener(new ValueTouchListener());
+            HelloCharts helloCharts = new HelloCharts(getContext());
+            mLineChartView.setLineChartData(helloCharts.getLineChartData(mMeasures));
+            helloCharts.setViewport(mLineChartView, -5, 65, 0, mMeasures.size() - 1);
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+    }
+
+//    public class BackgroundTask extends AsyncTask<Void, Void, Void> {
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+//            List<Measure> measures = OpenBeelabNetworkJson.getMeasures(getContext());
+//            syncDB(measures);
+//            return null;
+//        }
+//    }
 
     private class ValueTouchListener implements LineChartOnValueSelectListener {
 
@@ -85,12 +129,14 @@ public class DetailFragment  extends Fragment {
 
 
     private void syncDB(List<Measure> measures) {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         ContentValues[] measuresContentValues = Measure.getContentValuesArray(measures);
         int inserted = 0;
         if (measuresContentValues.length > 0)
             inserted = getContext().getContentResolver().bulkInsert(BeeContract.MeasureEntry
                     .CONTENT_URI, measuresContentValues);
-        Log.d(LOG_TAG, "SyncDB Complete. " + inserted + " Inserted");
+        Log.e(LOG_TAG, "SyncDB Complete. " + inserted + " Inserted");
     }
+
 
 }

@@ -95,7 +95,7 @@ public class HelloCharts {
     }
 
     public static String getPointDesc(List<Measure> measures, int pointIndex) {
-        return measures.get(pointIndex).toString();
+        return measures.get(pointIndex).getShortDesc();
     }
 
     public Context getContext() {

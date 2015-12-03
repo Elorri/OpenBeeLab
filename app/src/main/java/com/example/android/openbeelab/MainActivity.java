@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
 
 
 
-       // BeeSyncAdapter.initializeSyncAdapter(this);
+        //BeeSyncAdapter.initializeSyncAdapter(this);
         //TODO add this whenever we need a manual sync  BeeSyncAdapter.syncImmediately()
     }
 
