@@ -1,13 +1,15 @@
 package com.example.android.openbeelab;
 
+import android.content.ContentValues;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.example.android.openbeelab.db.BeeContract;
 import com.example.android.openbeelab.pojo.Measure;
 import com.example.android.openbeelab.retrofit.OpenBeelabNetworkJson;
-import com.example.android.openbeelab.sync.BeeSyncAdapter;
 
 import java.util.List;
 
@@ -19,6 +21,7 @@ import lecho.lib.hellocharts.view.LineChartView;
 public class MainActivity extends AppCompatActivity {
 
 
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private List<Measure> mMeasures;
 
     @Override
@@ -26,11 +29,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        BackgroundTask backgroundTask = new BackgroundTask();
-//        backgroundTask.execute();
+        BackgroundTask backgroundTask = new BackgroundTask();
+        backgroundTask.execute();
 
-        BeeSyncAdapter.initializeSyncAdapter(this);
+
+
+       // BeeSyncAdapter.initializeSyncAdapter(this);
         //TODO add this whenever we need a manual sync  BeeSyncAdapter.syncImmediately()
+    }
+
+
+    private void syncDB(List<Measure> measures) {
+        ContentValues[] measuresContentValues = Measure.getContentValuesArray(measures);
+        int inserted = 0;
+        if (measuresContentValues.length > 0)
+            inserted = this.getContentResolver().bulkInsert(BeeContract.MeasureEntry
+                    .CONTENT_URI, measuresContentValues);
+        Log.d(LOG_TAG, "SyncDB Complete. " + inserted + " Inserted");
     }
 
 
@@ -38,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected List<Measure> doInBackground(Void... params) {
-            return OpenBeelabNetworkJson.getMeasures();
+            List<Measure> measures = OpenBeelabNetworkJson.getMeasures();
+            syncDB(measures);
+            return measures;
         }
 
         @Override

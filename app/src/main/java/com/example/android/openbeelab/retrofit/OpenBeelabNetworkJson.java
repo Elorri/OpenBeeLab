@@ -45,7 +45,7 @@ public class OpenBeelabNetworkJson {
             final List<Measure> measures = new ArrayList<>();
             for (MesureRowObject row : retrofitResults.rows) {
                 //TODO virer ce static string
-                 measures.add(new Measure("global_weight",row.key, row.value[0]));
+                 measures.add(new Measure("global_weight",row.key, row.value[0], "Kg"));
             }
             return measures;
         } catch (IOException e) {

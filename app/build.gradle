@@ -27,4 +27,5 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit-converters:2.0.0-beta2'
     compile 'com.squareup.retrofit:converter-gson:2.0.0-beta2'
     compile 'com.github.lecho:hellocharts-library:1.5.8@aar'
+    compile 'com.facebook.stetho:stetho:1.2.0'
 }

@@ -15,13 +15,15 @@ public class Measure {
     public double id; //can be null
     public final String name;
     public String timestamp; //can be null
-    public final String tag;
+    public final String weekId;
     public final double value;
+    public final String unit;
 
-    public Measure(String name, String tag, double value) {
+    public Measure(String name, String weekId, double value, String unit) {
         this.name = name;
-        this.tag = tag;
+        this.weekId = weekId;
         this.value = value;
+        this.unit = unit;
     }
 
     @Override
@@ -29,14 +31,14 @@ public class Measure {
         NumberFormat numberFormat = NumberFormat.getNumberInstance();
         numberFormat.setMaximumFractionDigits(1);
         numberFormat.setRoundingMode(RoundingMode.CEILING);
-        return tag + "  " + numberFormat.format(value);
+        return weekId + "  " + numberFormat.format(value);
     }
 
 
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(BeeContract.MeasureEntry.COLUMN_NAME, this.name);
-        contentValues.put(BeeContract.MeasureEntry.COLUMN_TAG, this.tag);
+        contentValues.put(BeeContract.MeasureEntry.COLUMN_TAG, this.weekId);
         contentValues.put(BeeContract.MeasureEntry.COLUMN_VALUE, this.value);
         return contentValues;
     }

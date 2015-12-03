@@ -23,7 +23,12 @@ public class BeeDbHelper extends SQLiteOpenHelper {
                 +BeeContract.MeasureEntry.COLUMN_NAME+" TEXT(50) NOT NULL, "
                 +BeeContract.MeasureEntry.COLUMN_TIMESTAMP+" TEXT(50), "
                 +BeeContract.MeasureEntry.COLUMN_VALUE+" REAL NOT NULL, "
-                +BeeContract.MeasureEntry.COLUMN_TAG+" TEXT(10) NOT NULL)";
+                +BeeContract.MeasureEntry.COLUMN_TAG+" TEXT(10) NOT NULL, "
+                +"UNIQUE("
+                +BeeContract.MeasureEntry.COLUMN_NAME+", "
+                +BeeContract.MeasureEntry.COLUMN_TIMESTAMP+", "
+                +BeeContract.MeasureEntry.COLUMN_VALUE+", "
+                +BeeContract.MeasureEntry.COLUMN_TAG+") ON CONFLICT REPLACE);";
         db.execSQL(SQL_CREATE_FOOD_TABLE);
     }
 

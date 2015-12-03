@@ -44,7 +44,7 @@ public class HelloCharts {
         List<AxisValue> axisValues = new ArrayList<>();
         int i=0;
         for (Measure measure : measures) {
-             axisValues.add(new AxisValue(i).setLabel(measure.tag));
+             axisValues.add(new AxisValue(i).setLabel(measure.weekId));
             i++;
         }
         return axisValues;
