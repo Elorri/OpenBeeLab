@@ -16,7 +16,7 @@ This will app allows :
 	Licensed under the Apache License, Version 2.0 
 	
 ## Screenshots
-![screen](../master/screenshot/Screenshot_2015-12-03-18-24-36_iphone6plus_spacegrey_portrait "apiaries overview")
+![screen](../master/screenshot/Screenshot_2015-12-03-18-24-36_iphone6plus_spacegrey_portrait.png "apiaries overview")
 ![screen](../master/screenshot/Screenshot_2015-11-25-20-06-30_iphone6plus_spacegrey_portrait.png "weight per week overthe last 30 days")
 	
 ## Licence
