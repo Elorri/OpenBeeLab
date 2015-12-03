@@ -15,9 +15,10 @@ public class BeeContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
 
-    public static final String PATH_MEASURE = "measure";
     public static final String PATH_APIARY = "apiary";
+    private static final String PATH_BEEHOUSE = "beehouse";
     public static final String PATH_WEIGHT_OVER_PERIOD = "weight_over_period";
+    public static final String PATH_MEASURE = "measure";
 
 
     public static final class MeasureEntry implements BaseColumns {
@@ -64,6 +65,25 @@ public class BeeContract {
         public static Uri buildApiariesViewUri(String user_id) {
             return BASE_CONTENT_URI.buildUpon().appendPath(user_id).appendPath(PATH_APIARY).build();
         }
+
+        public static String getUserIdFromApiariesViewUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+    }
+
+
+    public static final class BeehouseEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_BEEHOUSE)
+                .build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_APIARY;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_APIARY;
+
+        public static final String TABLE_NAME = "behouse";
+
+        public static final String COLUMN_CURRENT_WEIGHT = "movie_id";
     }
 
 

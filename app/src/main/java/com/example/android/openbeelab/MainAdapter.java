@@ -27,7 +27,8 @@ public class MainAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         view.setBackgroundDrawable(context.getResources()
-                .getDrawable(Utility.getIconResourceForBeehouseCondition(cursor.getDouble(1))));
+                .getDrawable(Utility.getIconResourceForBeehouseCondition(cursor.getDouble
+                        (MainFragment.COL_BEHOUSE_WEIGHT))));
 //        ((ImageView) view).setImageResource(Utility.getIconResourceForBeehouseCondition(cursor
 //                .getDouble(1)));
     }

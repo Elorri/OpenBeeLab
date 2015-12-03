@@ -18,15 +18,19 @@ public class BeeProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private BeeDbHelper mOpenHelper;
 
-    //will match content://com.example.android.openbeelab/measure/
-    public static final int MEASURE = 100;
-
-    //will match content://com.example.android.openbeelab/{user_id}/{apiary_id}/{beehouse_id}/measure/weight_over_period
-    public static final int WEIGHT_OVER_PERIOD = 101;
-
 
     //will match content://com.example.android.openbeelab/{user_id}/apiary/
-    public static final int USER_APIARIES = 200;
+    public static final int USER_APIARIES = 100;
+
+
+    //will match content://com.example.android.openbeelab/measure/
+    public static final int MEASURE = 200;
+
+    //will match content://com.example.android.openbeelab/{user_id}/{apiary_id}/{beehouse_id}/measure/weight_over_period
+    public static final int WEIGHT_OVER_PERIOD = 201;
+
+
+
 
 
     public static UriMatcher buildUriMatcher() {
@@ -55,14 +59,24 @@ public class BeeProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case USER_APIARIES: {
                 MatrixCursor apiariesCursorView = null;
-                String[] apiariesCursorView_columns = {"_id", "current_weight"};
+                String[] apiariesCursorView_columns = {"_id",
+                        "apiary_id",
+                        "beehouse_id",
+                        "current_weight"};
+
                 apiariesCursorView = new MatrixCursor(apiariesCursorView_columns);
-                apiariesCursorView.addRow(new Object[]{1, 42.5d});
-                apiariesCursorView.addRow(new Object[]{1, 20.8d});
-                apiariesCursorView.addRow(new Object[]{1, 42.5d});
-                apiariesCursorView.addRow(new Object[]{1, 95.5d});
-                apiariesCursorView.addRow(new Object[]{1, 10.5d});
-                apiariesCursorView.addRow(new Object[]{1, 42.5d});
+                apiariesCursorView.addRow(new Object[]{1,"la_mine_rucher_01",
+                        "beehouse1" ,42.5d});
+                apiariesCursorView.addRow(new Object[]{2, "la_mine_rucher_01",
+                        "beehouse2" ,20.8d});
+                apiariesCursorView.addRow(new Object[]{3, "la_mine_rucher_01",
+                        "beehouse3" ,42.5d});
+                apiariesCursorView.addRow(new Object[]{4, "la_mine_rucher_01",
+                        "beehouse4" ,95.5d});
+                apiariesCursorView.addRow(new Object[]{5, "la_mine_rucher_01",
+                        "beehouse5" ,10.5d});
+                apiariesCursorView.addRow(new Object[]{6, "la_mine_rucher_01",
+                        "beehouse6" ,42.5d});
                 retCursor = apiariesCursorView;
                 break;
             }

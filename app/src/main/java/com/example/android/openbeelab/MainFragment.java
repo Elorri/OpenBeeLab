@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.example.android.openbeelab.db.BeeContract;
+
 /**
  * Created by Elorri on 03/12/2015.
  */
@@ -24,6 +26,28 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
     private MainAdapter mMainAdapter;
     private static final int APIARIES_LOADER = 0;
     private int mPosition = GridView.INVALID_POSITION;
+
+
+
+    private static final String[] APIARIES_COLUMNS = {
+            BeeContract.ApiaryEntry._ID,
+            BeeContract.BeehouseEntry._ID,
+            BeeContract.BeehouseEntry.COLUMN_CURRENT_WEIGHT
+    };
+
+    // These indices are tied to MOVIE_COLUMNS.  If MOVIE_COLUMNS changes, these
+    // must change.
+    static final int COL_APIARY_ID = 1;
+    static final int COL_BEHOUSE_ID = 2;
+    static final int COL_BEHOUSE_WEIGHT = 3;
+
+
+
+
+
+    public interface Callback {
+        void onItemSelected(Uri uri, boolean firstDisplay);
+    }
 
 
     @Override
@@ -50,7 +74,7 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //onMovieClicked(parent, position);
+                onBehouseClicked(parent, position);
                 setPosition(position);
             }
         });
@@ -59,6 +83,18 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
         }
         return rootView;
+    }
+
+    private void onBehouseClicked(AdapterView<?> parent, int position) {
+        Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+        if (cursor != null) {
+            String userId = BeeContract.ApiaryEntry.getUserIdFromApiariesViewUri(mMainUri);
+            String apiaryId=cursor.getString(COL_APIARY_ID);
+            String beehouseId=cursor.getString(COL_BEHOUSE_ID);
+            Uri uri = BeeContract.MeasureEntry.buildWeightOverPeriodViewUri(userId, apiaryId,
+                    beehouseId);
+            ((Callback) getActivity()).onItemSelected(uri, false);
+        }
     }
 
     @Override
@@ -71,7 +107,7 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getActivity(),
                 mMainUri,
-                null,
+                APIARIES_COLUMNS,
                 null,
                 null,
                 null);
