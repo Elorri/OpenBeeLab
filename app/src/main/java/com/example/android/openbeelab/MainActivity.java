@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected List<Measure> doInBackground(Void... params) {
-            List<Measure> measures = OpenBeelabNetworkJson.getMeasures();
+            List<Measure> measures = OpenBeelabNetworkJson.getMeasures(MainActivity.this);
             syncDB(measures);
             return measures;
         }

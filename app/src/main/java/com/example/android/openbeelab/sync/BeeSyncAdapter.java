@@ -40,7 +40,7 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority,
                               ContentProviderClient provider, SyncResult syncResult) {
         Log.d(LOG_TAG, "onPerformSync");
-        List<Measure> measures = OpenBeelabNetworkJson.getMeasures();
+        List<Measure> measures = OpenBeelabNetworkJson.getMeasures(getContext());
         //syncDB(measures);
     }
 
