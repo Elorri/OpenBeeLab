@@ -1,8 +1,9 @@
-package com.example.android.openbeelab;
+package com.example.android.openbeelab.hellocharts;
 
 import android.content.Context;
 import android.graphics.Color;
 
+import com.example.android.openbeelab.R;
 import com.example.android.openbeelab.pojo.Measure;
 
 import java.util.ArrayList;

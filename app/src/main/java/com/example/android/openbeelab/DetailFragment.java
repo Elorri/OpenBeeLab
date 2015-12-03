@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.android.openbeelab.db.BeeContract;
+import com.example.android.openbeelab.hellocharts.HelloCharts;
 import com.example.android.openbeelab.pojo.Measure;
 import com.example.android.openbeelab.retrofit.OpenBeelabNetworkJson;
 
