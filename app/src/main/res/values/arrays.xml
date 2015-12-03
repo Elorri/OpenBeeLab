@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="pref_userDB_options">
+        <item>@string/pref_userDB_option_label_lamine</item>
+        <item>@string/pref_userDB_option_label_lamine_dev</item>
+        <item>@string/pref_userDB_option_label_fred_db</item>
+    </string-array>
+
+    <string-array name="pref_userDB_values">
+        <item>@string/pref_userDB_option_value_lamine</item>
+        <item>@string/pref_userDB_option_value_lamine_dev</item>
+        <item>@string/pref_userDB_option_value_fred_db</item>
+    </string-array>
+</resources>
