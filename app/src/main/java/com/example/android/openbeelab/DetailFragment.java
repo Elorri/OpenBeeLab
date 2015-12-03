@@ -128,15 +128,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     }
 
 
-    private void syncDB(List<Measure> measures) {
-        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-        ContentValues[] measuresContentValues = Measure.getContentValuesArray(measures);
-        int inserted = 0;
-        if (measuresContentValues.length > 0)
-            inserted = getContext().getContentResolver().bulkInsert(BeeContract.MeasureEntry
-                    .CONTENT_URI, measuresContentValues);
-        Log.e(LOG_TAG, "SyncDB Complete. " + inserted + " Inserted");
-    }
+
 
 
 }

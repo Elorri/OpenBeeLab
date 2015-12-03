@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncRequest;
 import android.content.SyncResult;
@@ -13,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.android.openbeelab.R;
+import com.example.android.openbeelab.db.BeeContract;
 import com.example.android.openbeelab.pojo.Measure;
 import com.example.android.openbeelab.retrofit.OpenBeelabNetworkJson;
 
@@ -39,11 +41,21 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority,
                               ContentProviderClient provider, SyncResult syncResult) {
-        Log.d(LOG_TAG, "onPerformSync");
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         List<Measure> measures = OpenBeelabNetworkJson.getMeasures(getContext());
-        //syncDB(measures);
+        syncDB(measures);
     }
 
+
+    private void syncDB(List<Measure> measures) {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+        ContentValues[] measuresContentValues = Measure.getContentValuesArray(measures);
+        int inserted = 0;
+        if (measuresContentValues.length > 0)
+            inserted = getContext().getContentResolver().bulkInsert(BeeContract.MeasureEntry
+                    .CONTENT_URI, measuresContentValues);
+        Log.e(LOG_TAG, "SyncDB Complete. " + inserted + " Inserted");
+    }
 
     public static void initializeSyncAdapter(Context context) {
         getSyncAccount(context);

@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.openbeelab.db.BeeContract;
+import com.example.android.openbeelab.sync.BeeSyncAdapter;
 
 
 public class MainActivity extends AppCompatActivity implements MainFragment.Callback {
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
 
 
 
-        //BeeSyncAdapter.initializeSyncAdapter(this);
+        BeeSyncAdapter.initializeSyncAdapter(this);
         //TODO add this whenever we need a manual sync  BeeSyncAdapter.syncImmediately()
     }
 
