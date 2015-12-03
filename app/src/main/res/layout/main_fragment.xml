@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+android:gravity="center"
+        android:layout_marginTop="@dimen/medium_margin"
+        android:layout_marginBottom="@dimen/medium_margin"
+        android:layout_marginLeft="@dimen/small_margin"
+        android:layout_marginRight="@dimen/small_margin"
+        android:text="la_mine_rucher_01"
+        android:textAppearance="?android:textAppearanceLarge"/>
+
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnWidth="160dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="columnWidth"
+        android:choiceMode="singleChoice"
+        android:gravity="center"
+        android:horizontalSpacing="@dimen/medium_margin"
+        android:verticalSpacing="@dimen/medium_margin"
+        />
+
+</LinearLayout>

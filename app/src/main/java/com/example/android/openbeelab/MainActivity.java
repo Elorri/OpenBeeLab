@@ -2,6 +2,7 @@ package com.example.android.openbeelab;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,13 +28,29 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private List<Measure> mMeasures;
 
+    private Uri mMainUri;
+    static final String MAIN_URI = "mMainUri";
+    private MainFragment mMainFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
 
-        BackgroundTask backgroundTask = new BackgroundTask();
-        backgroundTask.execute();
+
+        if (savedInstanceState == null)
+            mMainUri = BeeContract.ApiaryEntry
+                    .buildApiariesViewUri(Utility.getPreferredUserDB(this));
+        else
+            mMainUri = savedInstanceState.getParcelable(MAIN_URI);
+        mMainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.main_fragment);
+        mMainFragment.setMainUri(mMainUri);
+
+
+
+
+//        BackgroundTask backgroundTask = new BackgroundTask();
+//        backgroundTask.execute();
 
 
 
@@ -110,6 +127,12 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(MAIN_URI, mMainUri);
     }
 
 }

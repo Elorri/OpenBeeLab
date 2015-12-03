@@ -16,7 +16,8 @@ public class BeeContract {
 
 
     public static final String PATH_MEASURE = "measure";
-    public static final String WEIGHT_OVER_PERIOD = "weight_over_period";
+    public static final String PATH_APIARY = "apiary";
+    public static final String PATH_WEIGHT_OVER_PERIOD = "weight_over_period";
 
 
     public static final class MeasureEntry implements BaseColumns {
@@ -37,6 +38,34 @@ public class BeeContract {
         public static Uri buildMeasureUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        public static Uri buildWeightOverPeriodViewUri(String user_id, String apiary_id, String beehouse_id) {
+            return BASE_CONTENT_URI.buildUpon()
+                    .appendPath(user_id)
+                    .appendPath(apiary_id)
+                    .appendPath(beehouse_id)
+                    .appendPath(PATH_MEASURE)
+                    .appendPath(PATH_WEIGHT_OVER_PERIOD)
+                    .build();
+        }
     }
+
+    public static final class ApiaryEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_APIARY)
+                .build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_APIARY;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_APIARY;
+
+        public static final String TABLE_NAME = "apiary";
+
+        public static Uri buildApiariesViewUri(String user_id) {
+            return BASE_CONTENT_URI.buildUpon().appendPath(user_id).appendPath(PATH_APIARY).build();
+        }
+    }
+
+
 
 }

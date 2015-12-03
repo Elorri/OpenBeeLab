@@ -4,6 +4,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -18,19 +19,26 @@ public class BeeProvider extends ContentProvider {
     private BeeDbHelper mOpenHelper;
 
     //will match content://com.example.android.openbeelab/measure/
-    static final int MEASURE = 100;
+    public static final int MEASURE = 100;
 
-    //will match content://com.example.android.openbeelab/{user_id}/{apiary_id}/{beehouse_id}/measures/weight_over_period
-    static final int WEIGHT_OVER_PERIOD = 101;
+    //will match content://com.example.android.openbeelab/{user_id}/{apiary_id}/{beehouse_id}/measure/weight_over_period
+    public static final int WEIGHT_OVER_PERIOD = 101;
 
 
-    private static UriMatcher buildUriMatcher() {
+    //will match content://com.example.android.openbeelab/{user_id}/apiary/
+    public static final int USER_APIARIES = 200;
+
+
+    public static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = BeeContract.CONTENT_AUTHORITY;
 
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, BeeContract.PATH_MEASURE, MEASURE);
-        matcher.addURI(authority, "#/#/#/" + BeeContract.PATH_MEASURE + "/" + BeeContract.WEIGHT_OVER_PERIOD, WEIGHT_OVER_PERIOD);
+        matcher.addURI(authority, "*/" + BeeContract.PATH_APIARY, USER_APIARIES);
+        matcher.addURI(authority, "*/*/*/" + BeeContract.PATH_MEASURE + "/" + BeeContract
+                .PATH_WEIGHT_OVER_PERIOD, WEIGHT_OVER_PERIOD);
+
         return matcher;
     }
 
@@ -45,6 +53,19 @@ public class BeeProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
+            case USER_APIARIES: {
+                MatrixCursor apiariesCursorView = null;
+                String[] apiariesCursorView_columns = {"_id", "current_weight"};
+                apiariesCursorView = new MatrixCursor(apiariesCursorView_columns);
+                apiariesCursorView.addRow(new Object[]{1, 42.5d});
+                apiariesCursorView.addRow(new Object[]{1, 20.8d});
+                apiariesCursorView.addRow(new Object[]{1, 42.5d});
+                apiariesCursorView.addRow(new Object[]{1, 95.5d});
+                apiariesCursorView.addRow(new Object[]{1, 10.5d});
+                apiariesCursorView.addRow(new Object[]{1, 42.5d});
+                retCursor = apiariesCursorView;
+                break;
+            }
             case WEIGHT_OVER_PERIOD: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         BeeContract.MeasureEntry.TABLE_NAME,
