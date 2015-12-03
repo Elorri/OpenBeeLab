@@ -7,7 +7,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 /**
  * Created by Elorri on 02/12/2015.
@@ -102,20 +101,7 @@ public class BeeProvider extends ContentProvider {
         Uri returnUri;
         switch (match) {
             case MEASURE: {
-                Cursor cursor = query(BeeContract.MeasureEntry.CONTENT_URI, null, ""
-                                + BeeContract.MeasureEntry.COLUMN_NAME + "=? and "
-                                + BeeContract.MeasureEntry.COLUMN_TIMESTAMP + "=? and "
-                                + BeeContract.MeasureEntry.COLUMN_VALUE + "=? and "
-                                + BeeContract.MeasureEntry.COLUMN_TAG + "=?",
-                        new String[]{
-                                (String) values.get(BeeContract.MeasureEntry.COLUMN_NAME),
-                                (String) values.get(BeeContract.MeasureEntry.COLUMN_TIMESTAMP),
-                                (String.valueOf(values.get(BeeContract.MeasureEntry.COLUMN_VALUE))),
-                                (String) values.get(BeeContract.MeasureEntry.COLUMN_TAG)
-                        }, null);
-                long _id=-1;
-                if (!cursor.moveToNext())
-                    _id = db.insert(BeeContract.MeasureEntry.TABLE_NAME, null, values);
+                long _id = db.insert(BeeContract.MeasureEntry.TABLE_NAME, null, values);
                 if (_id > 0)
                     returnUri = BeeContract.MeasureEntry.buildMeasureUri(_id);
                 else
@@ -177,44 +163,14 @@ public class BeeProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case MEASURE:
+                //For now, remove old inserts before adding new ones, later new ones should step
+                // on the older.
+                delete(BeeContract.MeasureEntry.CONTENT_URI, null, null);
                 db.beginTransaction();
                 int returnCount = 0;
                 try {
                     for (ContentValues value : values) {
-                        String name=(String) value.get(BeeContract.MeasureEntry
-                                .COLUMN_NAME);
-                        String timestamp=(String) value.get(BeeContract.MeasureEntry
-                                .COLUMN_TIMESTAMP);
-                        String valuec=(String.valueOf(value.get(BeeContract.MeasureEntry
-                                .COLUMN_VALUE)));
-                        String tag=(String) value.get(BeeContract.MeasureEntry.COLUMN_TAG);
-
-                        String timestampSelection;
-                        String timestampSelectionArg;
-                        if(timestamp==null) {
-                            timestampSelection=" is ? and ";
-                            timestampSelectionArg="null";
-                        }else{ timestampSelection= "=? and ";
-                            timestampSelectionArg=timestamp;
-                        }
-
-                        Cursor cursor = query(BeeContract.MeasureEntry.CONTENT_URI, null, ""
-                                        + BeeContract.MeasureEntry.COLUMN_NAME + "=? and "
-                                        + BeeContract.MeasureEntry.COLUMN_TIMESTAMP +""+timestampSelection
-                                        + BeeContract.MeasureEntry.COLUMN_VALUE + "=? and "
-                                        + BeeContract.MeasureEntry.COLUMN_TAG + "=?",
-                                new String[]{
-                                        (String) value.get(BeeContract.MeasureEntry.COLUMN_NAME),
-                                        timestampSelectionArg,
-                                        (String.valueOf(value.get(BeeContract.MeasureEntry
-                                                .COLUMN_VALUE))),
-                                        (String) value.get(BeeContract.MeasureEntry.COLUMN_TAG)
-                                }, null);
-                        long _id=-1;
-                        Log.e("Ljjj", "!cursor.moveToNext() "+!cursor.moveToNext()+" name " +
-                                ""+name+" valuec "+valuec+" weekId "+tag);
-                        if (!cursor.moveToNext())
-                           _id = db.insert(BeeContract.MeasureEntry.TABLE_NAME, null, value);
+                        long _id = db.insert(BeeContract.MeasureEntry.TABLE_NAME, null, value);
                         if (_id != -1) {
                             returnCount++;
                         }
