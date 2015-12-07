@@ -11,10 +11,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.openbeelab.hellocharts.HelloCharts;
 import com.example.android.openbeelab.pojo.Measure;
+import com.example.android.openbeelab.sync.BeeSyncAdapter;
 
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     private List<Measure> mMeasures;
     private LineChartView mLineChartView;
+    private TextView mDetailViewEmpty;
     private static Uri mUri;
 
     @Override
@@ -41,6 +44,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         View view = inflater.inflate(R.layout.weight_per_period, container, false);
         mLineChartView = (LineChartView) view.findViewById(R.id.chart);
+        mDetailViewEmpty=(TextView)view.findViewById(R.id.detail_view_empty);
         return view;
     }
 
@@ -80,16 +84,33 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
 
         if (cursor != null) {
-            Log.e("hh", "are you here ?");
-            mMeasures = Measure.getMeasures(cursor);
-            for (Measure m : mMeasures) {
-                Log.e("hh", m.getShortDesc());
-            }
+            if(cursor.getCount()!=0) {
+                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "cursor" +
+                        ".lenght:" + cursor.getCount());
+                mMeasures = Measure.getMeasures(cursor);
+                for (Measure m : mMeasures) {
+                    Log.e("hh", m.getShortDesc());
+                }
 
-            mLineChartView.setOnValueTouchListener(new ValueTouchListener());
-            HelloCharts helloCharts = new HelloCharts(getContext());
-            mLineChartView.setLineChartData(helloCharts.getLineChartData(mMeasures));
-            helloCharts.setViewport(mLineChartView, -5, 65, 0, mMeasures.size() - 1);
+                mLineChartView.setOnValueTouchListener(new ValueTouchListener());
+                HelloCharts helloCharts = new HelloCharts(getContext());
+                mLineChartView.setLineChartData(helloCharts.getLineChartData(mMeasures));
+                helloCharts.setViewport(mLineChartView, -5, 65, 0, mMeasures.size() - 1);
+            }else{
+                // if cursor is empty, why? do we have an invalid uri
+                int message = R.string.empty_beehouse_list;
+                @BeeSyncAdapter.UserDbStatus int userDbStatus = Utility.getUserDbStatus(getActivity());
+                switch (userDbStatus) {
+                    case BeeSyncAdapter.USER_DB_STATUS_SERVER_ERROR:
+                        message = R.string.empty_beehouse_list_server_error;
+                        break;
+                    default:
+                        if (!Utility.isNetworkAvailable(getActivity())) {
+                            message = R.string.empty_beehouse_list_no_network;
+                        }
+                }
+                mDetailViewEmpty.setText(message);
+            }
         }
     }
 

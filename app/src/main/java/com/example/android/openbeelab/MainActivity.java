@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -28,13 +29,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
 
 
         if (savedInstanceState == null)
-            mMainUri = BeeContract.ApiaryEntry
-                    .buildApiariesViewUri(Utility.getPreferredUserDB(this));
+            mMainUri = BeeContract.BeehouseEntry
+                    .buildBeehousesViewUri(Utility.getPreferredDatabase(this), Utility
+                            .getPreferredUserId(this));
         else
             mMainUri = savedInstanceState.getParcelable(MAIN_URI);
         mMainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.main_fragment);
         mMainFragment.setMainUri(mMainUri);
-
 
 
         BeeSyncAdapter.initializeSyncAdapter(this);
@@ -42,6 +43,28 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Uri currentMainUri = BeeContract.BeehouseEntry
+                .buildBeehousesViewUri(Utility.getPreferredDatabase(this), Utility.getPreferredUserId(this));
+        if (!Utility.compareUris(mMainUri, currentMainUri)) {
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+            onMainUriChange(currentMainUri);
+        }
+    }
+
+    private void onMainUriChange(Uri newUri) {
+        mMainUri = newUri;
+        mMainFragment.setMainUri(mMainUri);
+        mMainFragment.onMainUriChange();
+        BeeSyncAdapter.syncImmediately(this);
+
+//        DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
+//        if (null != detailFragment) {
+//            detailFragment.onMainUriChange();
+//        }
+    }
 
 
     @Override
@@ -50,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         intent.setData(uri);
         startActivity(intent);
     }
-
 
 
     @Override

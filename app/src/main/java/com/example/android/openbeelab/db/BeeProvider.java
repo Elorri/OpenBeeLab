@@ -18,19 +18,22 @@ public class BeeProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private BeeDbHelper mOpenHelper;
 
+    //will match content://com.example.android.openbeelab/user/
+    public static final int USER = 100;
 
-    //will match content://com.example.android.openbeelab/{user_id}/apiary/
-    public static final int USER_APIARIES = 100;
+    //will match content://com.example.android.openbeelab/beehouse/
+    public static final int BEEHOUSE = 200;
+
+
+    //will match content://com.example.android.openbeelab/{userDb}/{userId}/beehouse/
+    public static final int USER_BEEHOUSES = 201;
 
 
     //will match content://com.example.android.openbeelab/measure/
-    public static final int MEASURE = 200;
+    public static final int MEASURE = 300;
 
-    //will match content://com.example.android.openbeelab/{user_id}/{apiary_id}/{beehouse_id}/measure/weight_over_period
-    public static final int WEIGHT_OVER_PERIOD = 201;
-
-
-
+    //will match /{userDb}/{userId}/{beehouseId}/measure/weight_over_period
+    public static final int WEIGHT_OVER_PERIOD = 301;
 
 
     public static UriMatcher buildUriMatcher() {
@@ -38,10 +41,13 @@ public class BeeProvider extends ContentProvider {
         final String authority = BeeContract.CONTENT_AUTHORITY;
 
         // For each type of URI you want to add, create a corresponding code.
+        matcher.addURI(authority, BeeContract.PATH_USER, USER);
+        matcher.addURI(authority, BeeContract.PATH_BEEHOUSE, BEEHOUSE);
         matcher.addURI(authority, BeeContract.PATH_MEASURE, MEASURE);
-        matcher.addURI(authority, "*/" + BeeContract.PATH_APIARY, USER_APIARIES);
-        matcher.addURI(authority, "*/*/*/" + BeeContract.PATH_MEASURE + "/" + BeeContract
+        matcher.addURI(authority, "*/#/#/" + BeeContract.PATH_MEASURE + "/" + BeeContract
                 .PATH_WEIGHT_OVER_PERIOD, WEIGHT_OVER_PERIOD);
+        matcher.addURI(authority, "*/#/" + BeeContract.PATH_BEEHOUSE, USER_BEEHOUSES);
+
 
         return matcher;
     }
@@ -57,32 +63,50 @@ public class BeeProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
-            case USER_APIARIES: {
-                MatrixCursor apiariesCursorView = null;
-                String[] apiariesCursorView_columns = {"_id",
-                        "apiary_id",
+            case USER_BEEHOUSES: {
+                MatrixCursor beehousesCursorView = null;
+                String[] beehousesCursorView_columns = {"_id",
                         "beehouse_id",
+                        "beehouse_name",
                         "current_weight"};
 
-                apiariesCursorView = new MatrixCursor(apiariesCursorView_columns);
-                apiariesCursorView.addRow(new Object[]{1,"la_mine_rucher_01",
-                        "beehouse1" ,42.5d});
-                apiariesCursorView.addRow(new Object[]{2, "la_mine_rucher_01",
-                        "beehouse2" ,20.8d});
-                apiariesCursorView.addRow(new Object[]{3, "la_mine_rucher_01",
-                        "beehouse3" ,42.5d});
-                apiariesCursorView.addRow(new Object[]{4, "la_mine_rucher_01",
-                        "beehouse4" ,95.5d});
-                apiariesCursorView.addRow(new Object[]{5, "la_mine_rucher_01",
-                        "beehouse5" ,10.5d});
-                apiariesCursorView.addRow(new Object[]{6, "la_mine_rucher_01",
-                        "beehouse6" ,42.5d});
-                retCursor = apiariesCursorView;
+                beehousesCursorView = new MatrixCursor(beehousesCursorView_columns);
+                beehousesCursorView.addRow(new Object[]{1, 1, "beehouse1", 42.5d});
+                beehousesCursorView.addRow(new Object[]{2, 2, "beehouse2", 20.8d});
+                beehousesCursorView.addRow(new Object[]{3, 3, "beehouse3", 42.5d});
+                beehousesCursorView.addRow(new Object[]{4, 4, "beehouse4", 95.5d});
+                beehousesCursorView.addRow(new Object[]{5, 5, "beehouse5", 10.5d});
+                beehousesCursorView.addRow(new Object[]{6, 6, "beehouse6", 42.5d});
+                retCursor = beehousesCursorView;
                 break;
             }
             case WEIGHT_OVER_PERIOD: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         BeeContract.MeasureEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            case USER: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        BeeContract.UserEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            case BEEHOUSE: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        BeeContract.BeehouseEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,
@@ -194,30 +218,42 @@ public class BeeProvider extends ContentProvider {
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
-        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
+        int returnCount = 0;
         switch (match) {
+            case USER:
+                returnCount = insertInBulk(BeeContract.UserEntry.TABLE_NAME, values);
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
+            case BEEHOUSE:
+                returnCount = insertInBulk(BeeContract.BeehouseEntry.TABLE_NAME, values);
+                getContext().getContentResolver().notifyChange(uri, null);
+                return returnCount;
             case MEASURE:
-                //For now, remove old inserts before adding new ones, later new ones should step
-                // on the older.
-                delete(BeeContract.MeasureEntry.CONTENT_URI, null, null);
-                db.beginTransaction();
-                int returnCount = 0;
-                try {
-                    for (ContentValues value : values) {
-                        long _id = db.insert(BeeContract.MeasureEntry.TABLE_NAME, null, value);
-                        if (_id != -1) {
-                            returnCount++;
-                        }
-                    }
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
+                returnCount = insertInBulk(BeeContract.MeasureEntry.TABLE_NAME, values);
                 getContext().getContentResolver().notifyChange(uri, null);
                 return returnCount;
             default:
                 return super.bulkInsert(uri, values);
+        }
+    }
+
+
+    private int insertInBulk(String tableName, ContentValues[] values) {
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        db.beginTransaction();
+        int returnCount = 0;
+        try {
+            for (ContentValues value : values) {
+                long _id = db.insert(tableName, null, value);
+                if (_id != -1) {
+                    returnCount++;
+                }
+            }
+            db.setTransactionSuccessful();
+            return returnCount;
+        } finally {
+            db.endTransaction();
         }
     }
 }

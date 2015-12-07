@@ -5,25 +5,39 @@ import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncRequest;
 import android.content.SyncResult;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.util.Log;
 
 import com.example.android.openbeelab.R;
 import com.example.android.openbeelab.db.BeeContract;
+import com.example.android.openbeelab.pojo.Beehouse;
 import com.example.android.openbeelab.pojo.Measure;
-import com.example.android.openbeelab.retrofit.OpenBeelabNetworkJson;
+import com.example.android.openbeelab.pojo.User;
+import com.example.android.openbeelab.retrofit.JsonCall;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 /**
  * Created by Elorri on 01/12/2015.
  */
 public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({USER_DB_STATUS_SERVER_ERROR, USER_DB_STATUS_UNKNOWN})
+    public @interface UserDbStatus {
+    }
+
+    public static final int USER_DB_STATUS_SERVER_ERROR = 0;
+    public static final int USER_DB_STATUS_UNKNOWN = 1;
+
 
     // Interval at which to sync with the openbeelab server, in seconds.
     // 60 seconds (1 minute) * 180 = 3 hours
@@ -42,20 +56,35 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority,
                               ContentProviderClient provider, SyncResult syncResult) {
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-        List<Measure> measures = OpenBeelabNetworkJson.getMeasures(getContext());
-        syncDB(measures);
+
+
+        List<User> users = JsonCall.getUsers(getContext());
+        User.syncDB(getContext(), users);
+        Cursor usersCursor = getContext().getContentResolver()
+                .query(BeeContract.UserEntry.CONTENT_URI, null, null, null, null);
+        List<User> users_with_ids = User.getUsers(usersCursor);
+
+        for (User user : users_with_ids) {
+            List<Beehouse> beehouses = JsonCall.getBeehouses(getContext(), user.getId());
+            Beehouse.syncDB(getContext(), beehouses);
+            Cursor beehousesCursor = getContext().getContentResolver()
+                    .query(BeeContract.BeehouseEntry.CONTENT_URI, null, null, null, null);
+            List<Beehouse> beehouses_with_ids = Beehouse.getBeehouses(beehousesCursor);
+
+            for(Beehouse beehouse : beehouses_with_ids){
+                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+                List<Measure> measures = JsonCall.getLast30DaysMeasures(getContext(), beehouse
+                        .getId(), beehouse.getName());
+                Measure.syncDB(getContext(),measures);
+            }
+        }
+
+
+
     }
 
 
-    private void syncDB(List<Measure> measures) {
-        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-        ContentValues[] measuresContentValues = Measure.getContentValuesArray(measures);
-        int inserted = 0;
-        if (measuresContentValues.length > 0)
-            inserted = getContext().getContentResolver().bulkInsert(BeeContract.MeasureEntry
-                    .CONTENT_URI, measuresContentValues);
-        Log.e(LOG_TAG, "SyncDB Complete. " + inserted + " Inserted");
-    }
+
 
     public static void initializeSyncAdapter(Context context) {
         getSyncAccount(context);

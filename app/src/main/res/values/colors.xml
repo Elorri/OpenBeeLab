@@ -14,7 +14,6 @@
     <color name="brown_800">#4E342E</color>
     <color name="brown_900">#3E2723</color>
     <color name="yellow_a200">#FFFF00</color>
-
-
+    <color name="yellow_a100">#FFFF8D</color>
 
 </resources>

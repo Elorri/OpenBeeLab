@@ -17,20 +17,36 @@
 
     <!-- Preferences related -->
     <!-- shown on screen -->
-    <string name="pref_userDB_label">User DB</string>
-    <string name="pref_userDB_option_label_lamine">la mine</string>
-    <string name="pref_userDB_option_label_lamine_dev">la mine dev</string>
-    <string name="pref_userDB_option_label_fred_db">fred db</string>
-    <!-- stored in sharedpreferences -->
-    <string name="pref_userDB_option_value_lamine">la_mine</string>
-    <string name="pref_userDB_option_value_lamine_dev">la_mine_dev</string>
-    <string name="pref_userDB_option_value_fred_db">fred_db</string>
-    <string name="pref_userDB_option_default">la_mine</string>
-    <string name="pref_userDB_key">user_db</string>
+    <string name="pref_database_label">Database</string>
+    <string name="pref_database_option_label_lamine">la mine</string>
+    <string name="pref_database_option_label_lamine_dev">la mine dev</string>
+    <string name="pref_database_option_label_fred_db">fred db</string>
+    <string name="pref_userName_label">User</string>
+    <string name="pref_userName_option_label_pierre">Pierre</string>
+    <string name="pref_userName_option_label_remy">Remy</string>
+        <!-- stored in sharedpreferences -->
+    <string name="pref_database_option_value_lamine">la_mine</string>
+    <string name="pref_database_option_value_lamine_dev">la_mine_dev</string>
+    <string name="pref_database_option_value_fred_db">fred_db</string>
+    <string name="pref_database_option_default">la_mine</string>
+    <string name="pref_database_key">user_db</string>
+    <string name="pref_userId_option_value_pierre">1</string>
+    <string name="pref_userId_option_value_remy">2</string>
+    <string name="pref_userId_option_default">1</string>
+    <string name="pref_userId_key">user_id</string>
+
+    <!-- Key name for status stored in SharedPreferences -->
+    <string name="pref_user_db_status_key" translatable="false">user_db_status</string>
 
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_detail">Beehouse details</string>
+
+    <!-- Empty Beehouses Database -->
+    <string name="empty_beehouse_list">No beehouses information available.</string>
+    <string name="empty_beehouse_list_server_error">No beehouses information available. The server is not returning valid data. Please check for an updated version of OpenBeeLab.</string>
+    <string name="empty_beehouse_list_no_network">No beehouses information available. The network is
+        not available to fetch data.</string>
 
 
 </resources>

@@ -1,5 +1,6 @@
 package com.example.android.openbeelab;
 
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,40 +8,42 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.example.android.openbeelab.db.BeeContract;
+import com.example.android.openbeelab.sync.BeeSyncAdapter;
 
 /**
  * Created by Elorri on 03/12/2015.
  */
-public class MainFragment extends Fragment  implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainFragment extends Fragment  implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String SELECTED_KEY = "selected_position";
     private static final String MAIN_URI = "main_uri";
     private GridView mGridView;
     private Uri mMainUri;
     private MainAdapter mMainAdapter;
-    private static final int APIARIES_LOADER = 0;
+    private static final int BEEHOUSES_LOADER = 0;
     private int mPosition = GridView.INVALID_POSITION;
 
 
 
-    private static final String[] APIARIES_COLUMNS = {
-            BeeContract.ApiaryEntry._ID,
+    private static final String[] BEEHOUSES_COLUMNS = {
             BeeContract.BeehouseEntry._ID,
+            BeeContract.BeehouseEntry.COLUMN_NAME,
             BeeContract.BeehouseEntry.COLUMN_CURRENT_WEIGHT
     };
 
     // These indices are tied to MOVIE_COLUMNS.  If MOVIE_COLUMNS changes, these
     // must change.
-    static final int COL_APIARY_ID = 1;
-    static final int COL_BEHOUSE_ID = 2;
-    static final int COL_BEHOUSE_WEIGHT = 3;
-
+    static final int COL_BEEHOUSE_ID = 1;
+    static final int COL_BEEHOUSE_NAME = 2;
+    static final int COL_BEEHOUSE_WEIGHT = 3;
 
 
 
@@ -85,13 +88,21 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
         return rootView;
     }
 
+    public void onMainUriChange() {
+        if (mMainUri != null) {
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+            Log.e("h", ""+mMainUri.toString());
+            getLoaderManager().restartLoader(BEEHOUSES_LOADER, null, this);
+        }
+    }
+
     private void onBehouseClicked(AdapterView<?> parent, int position) {
         Cursor cursor = (Cursor) parent.getItemAtPosition(position);
         if (cursor != null) {
-            String userId = BeeContract.ApiaryEntry.getUserIdFromApiariesViewUri(mMainUri);
-            String apiaryId=cursor.getString(COL_APIARY_ID);
-            String beehouseId=cursor.getString(COL_BEHOUSE_ID);
-            Uri uri = BeeContract.MeasureEntry.buildWeightOverPeriodViewUri(userId, apiaryId,
+            String database = Utility.getPreferredDatabase(getContext());
+            String userId = Utility.getPreferredUserId(getContext());
+            String beehouseId=cursor.getString(COL_BEEHOUSE_ID);
+            Uri uri = BeeContract.MeasureEntry.buildWeightOverPeriodViewUri(database, userId,
                     beehouseId);
             ((Callback) getActivity()).onItemSelected(uri, false);
         }
@@ -99,7 +110,7 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
 
     @Override
     public void onResume() {
-        getLoaderManager().initLoader(APIARIES_LOADER, null, this);
+        getLoaderManager().initLoader(BEEHOUSES_LOADER, null, this);
         super.onResume();
     }
 
@@ -107,7 +118,7 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(getActivity(),
                 mMainUri,
-                APIARIES_COLUMNS,
+                BEEHOUSES_COLUMNS,
                 null,
                 null,
                 null);
@@ -121,6 +132,7 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
             // to, do so now.
             mGridView.smoothScrollToPosition(mPosition);
         }
+        updateEmptyView();
     }
 
     @Override
@@ -147,4 +159,41 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
         }
         super.onSaveInstanceState(outState);
     }
+
+
+
+    /*
+ Updates the empty list view with contextually relevant information that the user can
+ use to determine why they aren't seeing weather.
+*/
+    private void updateEmptyView() {
+        if (mMainAdapter.getCount() == 0) {
+            TextView tv = (TextView) getView().findViewById(R.id.listview_apiaries_empty);
+            if (null != tv) {
+                // if cursor is empty, why? do we have an invalid location
+                int message = R.string.empty_beehouse_list;
+                @BeeSyncAdapter.UserDbStatus int userDbStatus = Utility.getUserDbStatus
+                        (getActivity());
+                switch (userDbStatus) {
+                    case BeeSyncAdapter.USER_DB_STATUS_SERVER_ERROR:
+                        message = R.string.empty_beehouse_list_server_error;
+                        break;
+                    default:
+                        if (!Utility.isNetworkAvailable(getActivity())) {
+                            message = R.string.empty_beehouse_list_no_network;
+                        }
+                }
+                tv.setText(message);
+            }
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_user_db_status_key))) {
+            updateEmptyView();
+        }
+    }
+
+
 }
