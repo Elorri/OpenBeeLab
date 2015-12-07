@@ -47,7 +47,7 @@ public class BeeContract {
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BEEHOUSE;
 
-        public static final String TABLE_NAME = "behouse";
+        public static final String TABLE_NAME = "beehouse";
 
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_USER_ID = "user_id";
@@ -63,9 +63,7 @@ public class BeeContract {
                     .build();
         }
 
-//        public static String getUserIdFromBeehousesViewUri(Uri uri) {
-//            return uri.getPathSegments().get(1);
-//        }
+
     }
 
 
@@ -102,6 +100,11 @@ public class BeeContract {
                     .appendPath(PATH_MEASURE)
                     .appendPath(PATH_WEIGHT_OVER_PERIOD)
                     .build();
+        }
+
+        //will match content://com.example.android.openbeelab/{userDb}/{userId}/beehouse/
+        public static String getBeehouseIdFromWeightOverPeriodViewUri(Uri uri) {
+            return uri.getPathSegments().get(3);
         }
     }
 

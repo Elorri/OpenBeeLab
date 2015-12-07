@@ -64,7 +64,7 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
                 .query(BeeContract.UserEntry.CONTENT_URI, null, null, null, null);
         List<User> users_with_ids = User.getUsers(usersCursor);
 
-        for (User user : users_with_ids) {
+        for (User user : users) {
             List<Beehouse> beehouses = JsonCall.getBeehouses(getContext(), user.getId());
             Beehouse.syncDB(getContext(), beehouses);
             Cursor beehousesCursor = getContext().getContentResolver()

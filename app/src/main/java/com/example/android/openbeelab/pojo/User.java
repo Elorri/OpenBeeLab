@@ -35,7 +35,9 @@ public class User {
         return id;
     }
 
-
+    public String getName() {
+        return name;
+    }
 
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues();

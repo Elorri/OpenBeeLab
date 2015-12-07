@@ -4,10 +4,10 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
-import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 /**
  * Created by Elorri on 02/12/2015.
@@ -61,23 +61,20 @@ public class BeeProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+uri.toString());
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
             case USER_BEEHOUSES: {
-                MatrixCursor beehousesCursorView = null;
-                String[] beehousesCursorView_columns = {"_id",
-                        "beehouse_id",
-                        "beehouse_name",
-                        "current_weight"};
-
-                beehousesCursorView = new MatrixCursor(beehousesCursorView_columns);
-                beehousesCursorView.addRow(new Object[]{1, 1, "beehouse1", 42.5d});
-                beehousesCursorView.addRow(new Object[]{2, 2, "beehouse2", 20.8d});
-                beehousesCursorView.addRow(new Object[]{3, 3, "beehouse3", 42.5d});
-                beehousesCursorView.addRow(new Object[]{4, 4, "beehouse4", 95.5d});
-                beehousesCursorView.addRow(new Object[]{5, 5, "beehouse5", 10.5d});
-                beehousesCursorView.addRow(new Object[]{6, 6, "beehouse6", 42.5d});
-                retCursor = beehousesCursorView;
+                String beehouseId = BeeContract.MeasureEntry
+                        .getBeehouseIdFromWeightOverPeriodViewUri(uri);
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        BeeContract.BeehouseEntry.TABLE_NAME,
+                        projection,
+                        BeeContract.MeasureEntry.COLUMN_BEEHOUSE_ID + "=?",
+                        new String[]{beehouseId},
+                        null,
+                        null,
+                        sortOrder);
                 break;
             }
             case WEIGHT_OVER_PERIOD: {
