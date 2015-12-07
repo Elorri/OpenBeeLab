@@ -15,6 +15,7 @@ import android.support.annotation.IntDef;
 import android.util.Log;
 
 import com.example.android.openbeelab.R;
+import com.example.android.openbeelab.Utility;
 import com.example.android.openbeelab.db.BeeContract;
 import com.example.android.openbeelab.pojo.Beehouse;
 import com.example.android.openbeelab.pojo.Measure;
@@ -30,13 +31,15 @@ import java.util.List;
  */
 public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
 
+
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({USER_DB_STATUS_SERVER_ERROR, USER_DB_STATUS_UNKNOWN})
+    @IntDef({USER_DB_STATUS_SERVER_ERROR, USER_DB_STATUS_SERVEUR_UNKNOWN, USER_DB_STATUS_SERVER_LOAD_COMPLETED})
     public @interface UserDbStatus {
     }
 
     public static final int USER_DB_STATUS_SERVER_ERROR = 0;
-    public static final int USER_DB_STATUS_UNKNOWN = 1;
+    public static final int USER_DB_STATUS_SERVEUR_UNKNOWN = 1;
+    public static final int USER_DB_STATUS_SERVER_LOAD_COMPLETED = 2;
 
 
     // Interval at which to sync with the openbeelab server, in seconds.
@@ -57,14 +60,16 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
                               ContentProviderClient provider, SyncResult syncResult) {
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
 
-
+        User.resetDB(getContext());
+        Beehouse.resetDB(getContext());
+        Measure.resetDB(getContext());
         List<User> users = JsonCall.getUsers(getContext());
         User.syncDB(getContext(), users);
         Cursor usersCursor = getContext().getContentResolver()
                 .query(BeeContract.UserEntry.CONTENT_URI, null, null, null, null);
         List<User> users_with_ids = User.getUsers(usersCursor);
 
-        for (User user : users) {
+        for (User user : users_with_ids) {
             List<Beehouse> beehouses = JsonCall.getBeehouses(getContext(), user.getId());
             Beehouse.syncDB(getContext(), beehouses);
             Cursor beehousesCursor = getContext().getContentResolver()
@@ -79,8 +84,7 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         }
 
-
-
+        Utility.setUserDbStatus(getContext(), BeeSyncAdapter.USER_DB_STATUS_SERVER_LOAD_COMPLETED);
     }
 
 

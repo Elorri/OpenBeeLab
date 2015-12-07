@@ -117,6 +117,12 @@ public class Measure {
         return measures;
     }
 
+    public static void resetDB(Context context){
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+        context.getContentResolver().delete(BeeContract.MeasureEntry
+                .CONTENT_URI, null, null);
+    }
+
     public static void syncDB(Context context, List<Measure> measures) {
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         if (measures != null) {

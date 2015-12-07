@@ -56,6 +56,11 @@ public class User {
         return values;
     }
 
+    public static void resetDB(Context context){
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+        context.getContentResolver().delete(BeeContract.UserEntry
+                .CONTENT_URI, null, null);
+    }
 
     public static void syncDB(Context context, List<User> users) {
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");

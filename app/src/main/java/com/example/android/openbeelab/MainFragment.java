@@ -22,7 +22,7 @@ import com.example.android.openbeelab.sync.BeeSyncAdapter;
 /**
  * Created by Elorri on 03/12/2015.
  */
-public class MainFragment extends Fragment  implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
+public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener{
     private static final String SELECTED_KEY = "selected_position";
     private static final String MAIN_URI = "main_uri";
     private GridView mGridView;
@@ -30,7 +30,6 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
     private MainAdapter mMainAdapter;
     private static final int BEEHOUSES_LOADER = 0;
     private int mPosition = GridView.INVALID_POSITION;
-
 
 
     private static final String[] BEEHOUSES_COLUMNS = {
@@ -65,7 +64,6 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.main_fragment, container, false);
@@ -91,7 +89,7 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
     public void onMainUriChange() {
         if (mMainUri != null) {
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-            Log.e("h", ""+mMainUri.toString());
+            Log.e("h", "" + mMainUri.toString());
             getLoaderManager().restartLoader(BEEHOUSES_LOADER, null, this);
         }
     }
@@ -101,7 +99,7 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
         if (cursor != null) {
             String database = Utility.getPreferredDatabase(getContext());
             String userId = Utility.getPreferredUserId(getContext());
-            String beehouseId=cursor.getString(COL_BEEHOUSE_ID);
+            String beehouseId = cursor.getString(COL_BEEHOUSE_ID);
             Uri uri = BeeContract.MeasureEntry.buildWeightOverPeriodViewUri(database, userId,
                     beehouseId);
             ((Callback) getActivity()).onItemSelected(uri, false);
@@ -126,6 +124,8 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "data : "+data+" - data" +
+                ".count"+data.getCount());
         mMainAdapter.swapCursor(data);
         if (mPosition != GridView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
@@ -161,12 +161,12 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
     }
 
 
-
     /*
  Updates the empty list view with contextually relevant information that the user can
  use to determine why they aren't seeing weather.
 */
     private void updateEmptyView() {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         if (mMainAdapter.getCount() == 0) {
             TextView tv = (TextView) getView().findViewById(R.id.listview_apiaries_empty);
             if (null != tv) {
@@ -177,6 +177,9 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
                 switch (userDbStatus) {
                     case BeeSyncAdapter.USER_DB_STATUS_SERVER_ERROR:
                         message = R.string.empty_beehouse_list_server_error;
+                        break;
+                    case BeeSyncAdapter.USER_DB_STATUS_SERVER_LOAD_COMPLETED:
+                        getLoaderManager().restartLoader(BEEHOUSES_LOADER, null, this);
                         break;
                     default:
                         if (!Utility.isNetworkAvailable(getActivity())) {
@@ -194,6 +197,7 @@ public class MainFragment extends Fragment  implements LoaderManager.LoaderCallb
             updateEmptyView();
         }
     }
+
 
 
 }

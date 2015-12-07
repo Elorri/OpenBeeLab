@@ -23,6 +23,7 @@ public class Beehouse {
 
     private static String LOG_TAG = Beehouse.class.getSimpleName();
 
+
     public Beehouse(long id, String name, long userId, String apiaryName, double currentWeight) {
         this.id = id;
         this.name = name;
@@ -65,6 +66,12 @@ public class Beehouse {
             i++;
         }
         return values;
+    }
+
+    public static void resetDB(Context context){
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+        context.getContentResolver().delete(BeeContract.BeehouseEntry
+                .CONTENT_URI, null, null);
     }
 
     public static void syncDB(Context context, List<Beehouse> beehouses) {

@@ -63,6 +63,11 @@ public class BeeContract {
                     .build();
         }
 
+        //will match content://com.example.android.openbeelab/{userDb}/{userId}/beehouse/
+        public static String getUserIdFromBeehousesViewUri(Uri uri) {
+            return uri.getPathSegments().get(2);
+        }
+
 
     }
 

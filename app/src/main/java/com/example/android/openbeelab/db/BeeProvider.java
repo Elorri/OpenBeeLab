@@ -65,6 +65,19 @@ public class BeeProvider extends ContentProvider {
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
             case USER_BEEHOUSES: {
+                String userId = BeeContract.BeehouseEntry.getUserIdFromBeehousesViewUri(uri);
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        BeeContract.BeehouseEntry.TABLE_NAME,
+                        projection,
+                        BeeContract.BeehouseEntry.COLUMN_USER_ID + "=?",
+                        new String[]{userId},
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            case WEIGHT_OVER_PERIOD: {
                 String beehouseId = BeeContract.MeasureEntry
                         .getBeehouseIdFromWeightOverPeriodViewUri(uri);
                 retCursor = mOpenHelper.getReadableDatabase().query(
@@ -75,18 +88,6 @@ public class BeeProvider extends ContentProvider {
                         null,
                         null,
                         sortOrder);
-                break;
-            }
-            case WEIGHT_OVER_PERIOD: {
-                retCursor = mOpenHelper.getReadableDatabase().query(
-                        BeeContract.MeasureEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder
-                );
                 break;
             }
             case USER: {
@@ -173,12 +174,21 @@ public class BeeProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+uri);
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         int rowsDeleted;
         // this makes delete all rows return the number of rows deleted
         if (null == selection) selection = "1";
         switch (match) {
+            case USER:
+                rowsDeleted = db.delete(
+                        BeeContract.UserEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case BEEHOUSE:
+                rowsDeleted = db.delete(
+                        BeeContract.BeehouseEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             case MEASURE:
                 rowsDeleted = db.delete(
                         BeeContract.MeasureEntry.TABLE_NAME, selection, selectionArgs);
@@ -215,6 +225,7 @@ public class BeeProvider extends ContentProvider {
 
     @Override
     public int bulkInsert(Uri uri, ContentValues[] values) {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         final int match = sUriMatcher.match(uri);
         int returnCount = 0;
         switch (match) {
