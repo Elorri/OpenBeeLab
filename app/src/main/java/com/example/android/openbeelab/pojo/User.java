@@ -105,5 +105,52 @@ public class User {
         return users;
     }
 
+    /**
+     * Retrieve an array of option label for the listPreference settings view from a
+     * cursor  that contains the following columns. Order is important.
+     * 0 : COLUMN_ID
+     * 1 : COLUMN_NAME
+     *
+     * @param cursor
+     * @return List<User>
+     */
+    public static CharSequence[] toCharSequenceOptionLabel(Cursor cursor) {
+        final int COL_USER_ID = 0;
+        final int COL_USER_NAME = 1;
+
+
+        CharSequence[] optionsLabel = new CharSequence[cursor.getCount()];
+        int i=0;
+        while (cursor.moveToNext()) {
+            optionsLabel[i]=cursor.getString(COL_USER_NAME);
+            i++;
+        }
+        return optionsLabel;
+    }
+
+    /**
+     * Retrieve an array of option label for the listPreference settings view from a
+     * cursor  that contains the following columns. Order is important.
+     * 0 : COLUMN_ID
+     * 1 : COLUMN_NAME
+     *
+     * @param cursor
+     * @return List<User>
+     */
+    public static CharSequence[] toCharSequenceOptionValue(Cursor cursor) {
+        final int COL_USER_ID = 0;
+        final int COL_USER_NAME = 1;
+
+
+        CharSequence[] optionsValue = new CharSequence[cursor.getCount()];
+        int i=0;
+        while (cursor.moveToNext()) {
+            optionsValue[i]=cursor.getString(COL_USER_ID);
+            i++;
+        }
+        return optionsValue;
+    }
+
+
     
 }

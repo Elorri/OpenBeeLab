@@ -96,8 +96,10 @@ public static final int BULK_INSERT_RECORDS_TO_INSERT=3;
         );
         int i = 0;
         while (cursor.moveToNext()) {
-            Log.e("Lifecycle", i + ("$" + cursor.getString(cursor.getColumnIndex(BeeContract
-                    .UserEntry._ID)) + "|" + cursor.getString(cursor.getColumnIndex(BeeContract.UserEntry.COLUMN_NAME)) + "|" + cursor.getString(cursor.getColumnIndex(BeeContract.UserEntry.COLUMN_DATABASE))));
+            Log.e("Lifecycle", i + ("$"
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.UserEntry._ID)) + "|"
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.UserEntry.COLUMN_NAME)) + "|"
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.UserEntry.COLUMN_DATABASE))));
             i++;
         }
         Log.e("Lifecycle", i + "record displayed");

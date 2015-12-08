@@ -90,9 +90,9 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
                     .query(BeeContract.BeehouseEntry.CONTENT_URI, null, null, null, null);
             List<Beehouse> beehouses_with_ids = Beehouse.getBeehouses(beehousesCursor);
             if (beehousesCursor.getCount() > 0) {
+                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "USER_DB_STATUS_BEEHOUSES_SYNC_DONE");
                 Utility.setUserDbStatus(getContext(), BeeSyncAdapter
                         .USER_DB_STATUS_BEEHOUSES_SYNC_DONE);
-                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "USER_DB_STATUS_BEEHOUSES_SYNC_DONE");
             }
 
             for (Beehouse beehouse : beehouses_with_ids) {

@@ -8,14 +8,12 @@
         android:title="@string/pref_database_label"
         android:key="@string/pref_database_key"
         android:defaultValue="@string/pref_database_option_default"
-        android:entryValues="@array/pref_userDB_values"
-        android:entries="@array/pref_userDB_options" />
+        android:entries="@array/pref_database_options_label"
+        android:entryValues="@array/pref_database_options_values" />
 
     <ListPreference
         android:title="@string/pref_userName_label"
         android:key="@string/pref_userId_key"
-        android:defaultValue="@string/pref_userId_option_default"
-        android:entryValues="@array/pref_userId_values"
-        android:entries="@array/pref_userName_options" />
+        android:defaultValue="@string/pref_userId_option_default" />
 
 </PreferenceScreen>

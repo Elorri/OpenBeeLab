@@ -21,19 +21,23 @@
     <string name="pref_database_option_label_lamine">la mine</string>
     <string name="pref_database_option_label_lamine_dev">la mine dev</string>
     <string name="pref_database_option_label_fred_db">fred db</string>
-    <string name="pref_userName_label">User</string>
-    <string name="pref_userName_option_label_pierre">Pierre</string>
-    <string name="pref_userName_option_label_remy">Remy</string>
-        <!-- stored in sharedpreferences -->
+    <!-- stored in sharedpreferences -->
+    <string name="pref_database_key">user_db</string>
     <string name="pref_database_option_value_lamine">la_mine</string>
     <string name="pref_database_option_value_lamine_dev">la_mine_dev</string>
     <string name="pref_database_option_value_fred_db">fred_db</string>
     <string name="pref_database_option_default">la_mine</string>
-    <string name="pref_database_key">user_db</string>
-    <string name="pref_userId_option_value_pierre">4</string>
-    <string name="pref_userId_option_value_remy">5</string>
-    <string name="pref_userId_option_default">4</string>
+
+    <!-- shown on screen -->
+    <string name="pref_userName_label">User</string>
+    <!--<string name="pref_userName_option_label_pierre">Pierre</string>-->
+    <!--<string name="pref_userName_option_label_remy">Remy</string>-->
+    <!-- stored in sharedpreferences -->
     <string name="pref_userId_key">user_id</string>
+    <!--<string name="pref_userId_option_value_pierre">4</string>-->
+    <!--<string name="pref_userId_option_value_remy">5</string>-->
+    <string name="pref_userId_option_default">1</string>
+
 
     <!-- Key name for status stored in SharedPreferences -->
     <string name="pref_user_db_status_key" translatable="false">user_db_status</string>

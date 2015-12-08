@@ -6,6 +6,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.example.android.openbeelab.sync.BeeSyncAdapter;
 
@@ -91,6 +92,7 @@ public class Utility {
      * @param userDbStatus The IntDef value to set
      */
     public static  void setUserDbStatus(Context c, @BeeSyncAdapter.UserDbStatus int userDbStatus) {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor spe = sp.edit();
         spe.putInt(c.getString(R.string.pref_user_db_status_key), userDbStatus);

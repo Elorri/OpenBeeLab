@@ -3,12 +3,19 @@ package com.example.android.openbeelab;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.example.android.openbeelab.db.BeeContract;
+import com.example.android.openbeelab.pojo.User;
+import com.example.android.openbeelab.sync.BeeSyncAdapter;
 
 /**
  * Created by Elorri on 03/12/2015.
@@ -26,7 +33,17 @@ public class SettingsActivity extends Activity {
     }
 
 
-    public static class SettingsFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
+    public static class SettingsFragment extends PreferenceFragment implements Preference
+            .OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
+
+        private static final String[] USERS_COLUMNS = {
+                BeeContract.UserEntry._ID,
+                BeeContract.UserEntry.COLUMN_NAME
+        };
+
+        private static final int COL_USER_ID = 0;
+        private static final int COL_USER_NAME = 1;
+
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -37,6 +54,24 @@ public class SettingsActivity extends Activity {
             // updated when the preference changes.
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_database_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_userId_key)));
+        }
+
+        // Registers a shared preference change listener that gets notified when preferences change
+        @Override
+        public void onResume() {
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            sp.registerOnSharedPreferenceChangeListener(this);
+            super.onResume();
+        }
+
+        // Unregisters a shared preference change listener
+        @Override
+        public void onPause() {
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            sp.unregisterOnSharedPreferenceChangeListener(this);
+            super.onPause();
         }
 
         /**
@@ -75,6 +110,30 @@ public class SettingsActivity extends Activity {
             return true;
         }
 
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+            if (key.equals(getString(R.string.pref_user_db_status_key))) {
+                if (Utility.getUserDbStatus(getActivity()) == BeeSyncAdapter.USER_DB_STATUS_USERS_SYNC_DONE) {
+                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+                    String database = Utility.getPreferredDatabase(getActivity());
+                    Cursor cursor = getActivity().getContentResolver().query(
+                            BeeContract.UserEntry.CONTENT_URI,
+                            USERS_COLUMNS,
+                            BeeContract.UserEntry.COLUMN_DATABASE + "=?",
+                            new String[]{database},
+                            BeeContract.UserEntry.COLUMN_NAME + " ASC");
+
+                    CharSequence[] pref_userId_options_values = User.toCharSequenceOptionValue
+                            (cursor);
+                    CharSequence[] pref_userName_options_label = User.toCharSequenceOptionLabel
+                            (cursor);
+                    ListPreference user = (ListPreference) findPreference(getString(R.string.pref_userId_key));
+                    user.setEntries(pref_userName_options_label);
+                    user.setEntryValues(pref_userId_options_values);
+                }
+            }
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

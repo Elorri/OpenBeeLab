@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
+        startActivity(new Intent(this, SettingsActivity.class));
 
         if (savedInstanceState == null)
             mMainUri = BeeContract.BeehouseEntry
