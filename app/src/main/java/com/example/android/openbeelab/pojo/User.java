@@ -91,9 +91,15 @@ public class User {
 
         List<User> users = new ArrayList<>(cursor.getCount());
         while (cursor.moveToNext()) {
-            long id = cursor.getLong(COLUMN_ID);
+            long id = Long.valueOf(cursor.getString(COLUMN_ID));
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "id "+id);
+            int _id=cursor.getColumnIndex(BeeContract.UserEntry._ID);
+            id=cursor.getLong(_id);
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "_id "+_id + "id "+id);
             String name = cursor.getString(COLUMN_NAME);
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "name "+name);
             String database = cursor.getString(COLUMN_DATABASE);
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "database "+database);
             users.add(new User(id, name, database));
         }
         return users;

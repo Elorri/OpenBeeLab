@@ -83,6 +83,7 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         for (User user : users_with_ids) {
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "user.id: "+user.getId());
             List<Beehouse> beehouses = JsonCall.getBeehouses(getContext(), user.getId());
             Beehouse.syncDB(getContext(), beehouses);
             beehousesCursor = getContext().getContentResolver()
@@ -95,7 +96,8 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
             }
 
             for (Beehouse beehouse : beehouses_with_ids) {
-                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "beehouse.id: "+beehouse
+                        .getId());
                 List<Measure> measures = JsonCall.getLast30DaysMeasures(getContext(), beehouse
                         .getId(), beehouse.getName());
                 Measure.syncDB(getContext(), measures);

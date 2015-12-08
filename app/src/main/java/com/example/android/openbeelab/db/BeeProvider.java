@@ -256,6 +256,7 @@ public class BeeProvider extends ContentProvider {
         try {
             for (ContentValues value : values) {
                 long _id = db.insert(tableName, null, value);
+                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "_id "+_id);
                 if (_id != -1) {
                     returnCount++;
                 }

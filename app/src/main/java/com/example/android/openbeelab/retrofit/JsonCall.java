@@ -61,9 +61,9 @@ public class JsonCall {
         beehouses.add(new Beehouse("ruche_02", user_id, "la_mine_rucher_01", 43.6d));
         beehouses.add(new Beehouse("ruche_03", user_id, "la_mine_rucher_01", 78.5d));
         beehouses.add(new Beehouse("ruche_04", user_id, "la_mine_rucher_01", 98.2d));
-        beehouses.add(new Beehouse("ruche_05", user_id, "la_mine_rucher_02", 54.5d));
-        beehouses.add(new Beehouse("ruche_06", user_id, "la_mine_rucher_02", 22.8d));
-        beehouses.add(new Beehouse("ruche_07", user_id, "la_mine_rucher_02", 37.5d));
+        beehouses.add(new Beehouse("ruche_01", user_id, "la_mine_rucher_02", 54.5d));
+        beehouses.add(new Beehouse("ruche_02", user_id, "la_mine_rucher_02", 22.8d));
+        beehouses.add(new Beehouse("ruche_03", user_id, "la_mine_rucher_02", 37.5d));
         return beehouses;
     }
 
