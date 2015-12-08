@@ -30,6 +30,9 @@ public class SettingsActivity extends Activity {
         getFragmentManager().beginTransaction()
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
+
+        BeeSyncAdapter.initializeSyncAdapter(this);
+        //TODO add this whenever we need a manual sync  BeeSyncAdapter.syncImmediately()
     }
 
 

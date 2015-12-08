@@ -14,6 +14,8 @@
     <ListPreference
         android:title="@string/pref_userName_label"
         android:key="@string/pref_userId_key"
-        android:defaultValue="@string/pref_userId_option_default" />
+        android:defaultValue="@string/pref_userId_option_default"
+        android:entryValues="@array/pref_userId_options_values"
+        android:entries="@array/pref_userName_options_label"/>
 
 </PreferenceScreen>

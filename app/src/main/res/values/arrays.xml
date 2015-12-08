@@ -13,14 +13,13 @@
         <item>@string/pref_database_option_value_fred_db</item>
     </string-array>
 
-    <!--<string-array name="pref_userName_options_label">-->
-        <!--<item>@string/pref_userName_option_label_pierre</item>-->
-        <!--<item>@string/pref_userName_option_label_remy</item>-->
-    <!--</string-array>-->
+    <string-array name="pref_userName_options_label">
+        <item>@string/pref_userName_option_label_value_default_unknown</item>
+    </string-array>
 
-    <!--<string-array name="pref_userId_options_values">-->
-        <!--<item>@string/pref_userId_option_value_pierre</item>-->
-        <!--<item>@string/pref_userId_option_value_remy</item>-->
-    <!--</string-array>-->
-    
+    <string-array name="pref_userId_options_values">
+        <item>@string/pref_userId_option_default</item>
+    </string-array>
+
+
 </resources>

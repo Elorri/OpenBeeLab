@@ -80,7 +80,7 @@ public class Utility {
     public static int getUserDbStatus(Context c) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         return sp.getInt(c.getString(R.string.pref_user_db_status_key), BeeSyncAdapter
-                .USER_DB_STATUS_SERVEUR_UNKNOWN);
+                .USER_DB_STATUS_USERS_UNKNOWN);
     }
 
     /**

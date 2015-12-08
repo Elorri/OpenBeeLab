@@ -92,7 +92,7 @@ public class JsonCall {
                     //TODO virer ce static string
                     measures.add(new Measure("global_weight", row.key, row.value[0], "Kg", beehouseId));
                 }
-                Utility.setUserDbStatus(context, BeeSyncAdapter.USER_DB_STATUS_SERVEUR_UNKNOWN);
+                Utility.setUserDbStatus(context, BeeSyncAdapter.USER_DB_STATUS_USERS_UNKNOWN);
             } else {
                 Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "USER_DB_STATUS_SERVER_ERROR");
                 Utility.setUserDbStatus(context, BeeSyncAdapter.USER_DB_STATUS_SERVER_ERROR);

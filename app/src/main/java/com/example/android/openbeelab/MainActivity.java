@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
-        startActivity(new Intent(this, SettingsActivity.class));
+        if (Utility.getUserDbStatus(this) == BeeSyncAdapter.USER_DB_STATUS_USERS_UNKNOWN)
+            startActivity(new Intent(this, SettingsActivity.class));
 
         if (savedInstanceState == null)
             mMainUri = BeeContract.BeehouseEntry
@@ -39,10 +40,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         mMainFragment.setMainUri(mMainUri);
 
 
-        BeeSyncAdapter.initializeSyncAdapter(this);
-        //TODO add this whenever we need a manual sync  BeeSyncAdapter.syncImmediately()
     }
-
 
 
     @Override

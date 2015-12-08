@@ -32,14 +32,16 @@ import java.util.List;
 public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
 
 
+
+
     @Retention(RetentionPolicy.SOURCE)
-    @IntDef({USER_DB_STATUS_SERVER_ERROR, USER_DB_STATUS_SERVEUR_UNKNOWN,
+    @IntDef({USER_DB_STATUS_SERVER_ERROR, USER_DB_STATUS_USERS_UNKNOWN,
             USER_DB_STATUS_USERS_SYNC_DONE, USER_DB_STATUS_BEEHOUSES_SYNC_DONE, USER_DB_STATUS_MEASURES_SYNC_DONE})
     public @interface UserDbStatus {
     }
 
     public static final int USER_DB_STATUS_SERVER_ERROR = 0;
-    public static final int USER_DB_STATUS_SERVEUR_UNKNOWN = 1;
+    public static final int USER_DB_STATUS_USERS_UNKNOWN = 1;
     public static final int USER_DB_STATUS_USERS_SYNC_DONE = 2;
     public static final int USER_DB_STATUS_BEEHOUSES_SYNC_DONE = 3;
     public static final int USER_DB_STATUS_MEASURES_SYNC_DONE = 4;
