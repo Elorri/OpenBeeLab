@@ -65,7 +65,7 @@ public class BeeContract {
 
         //will match content://com.example.android.openbeelab/{userDb}/{userId}/beehouse/
         public static String getUserIdFromBeehousesViewUri(Uri uri) {
-            return uri.getPathSegments().get(2);
+            return uri.getPathSegments().get(1);
         }
 
 
@@ -107,9 +107,8 @@ public class BeeContract {
                     .build();
         }
 
-        //will match content://com.example.android.openbeelab/{userDb}/{userId}/beehouse/
         public static String getBeehouseIdFromWeightOverPeriodViewUri(Uri uri) {
-            return uri.getPathSegments().get(3);
+            return uri.getPathSegments().get(2);
         }
     }
 

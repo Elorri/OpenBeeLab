@@ -30,9 +30,9 @@
     <string name="pref_database_option_value_fred_db">fred_db</string>
     <string name="pref_database_option_default">la_mine</string>
     <string name="pref_database_key">user_db</string>
-    <string name="pref_userId_option_value_pierre">1</string>
-    <string name="pref_userId_option_value_remy">2</string>
-    <string name="pref_userId_option_default">1</string>
+    <string name="pref_userId_option_value_pierre">4</string>
+    <string name="pref_userId_option_value_remy">5</string>
+    <string name="pref_userId_option_default">4</string>
     <string name="pref_userId_key">user_id</string>
 
     <!-- Key name for status stored in SharedPreferences -->

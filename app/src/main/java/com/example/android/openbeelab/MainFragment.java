@@ -22,7 +22,7 @@ import com.example.android.openbeelab.sync.BeeSyncAdapter;
 /**
  * Created by Elorri on 03/12/2015.
  */
-public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener{
+public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String SELECTED_KEY = "selected_position";
     private static final String MAIN_URI = "main_uri";
     private GridView mGridView;
@@ -40,11 +40,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     // These indices are tied to MOVIE_COLUMNS.  If MOVIE_COLUMNS changes, these
     // must change.
-    static final int COL_BEEHOUSE_ID = 1;
-    static final int COL_BEEHOUSE_NAME = 2;
-    static final int COL_BEEHOUSE_WEIGHT = 3;
-
-
+    static final int COL_BEEHOUSE_ID = 0;
+    static final int COL_BEEHOUSE_NAME = 1;
+    static final int COL_BEEHOUSE_WEIGHT = 2;
 
 
     public interface Callback {
@@ -124,8 +122,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "data : "+data+" - data" +
-                ".count"+data.getCount());
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "data : " + data + " - data" +
+                ".count" + data.getCount());
         mMainAdapter.swapCursor(data);
         if (mPosition != GridView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
@@ -168,18 +166,21 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private void updateEmptyView() {
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         if (mMainAdapter.getCount() == 0) {
+            @BeeSyncAdapter.UserDbStatus int userDbStatus = Utility.getUserDbStatus
+                    (getActivity());
+            if (userDbStatus == BeeSyncAdapter.USER_DB_STATUS_BEEHOUSES_SYNC_DONE) {
+                getLoaderManager().restartLoader(BEEHOUSES_LOADER, null, this);
+                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "restartLoader");
+                return;
+            }
+
             TextView tv = (TextView) getView().findViewById(R.id.listview_apiaries_empty);
             if (null != tv) {
                 // if cursor is empty, why? do we have an invalid location
                 int message = R.string.empty_beehouse_list;
-                @BeeSyncAdapter.UserDbStatus int userDbStatus = Utility.getUserDbStatus
-                        (getActivity());
                 switch (userDbStatus) {
                     case BeeSyncAdapter.USER_DB_STATUS_SERVER_ERROR:
                         message = R.string.empty_beehouse_list_server_error;
-                        break;
-                    case BeeSyncAdapter.USER_DB_STATUS_SERVER_LOAD_COMPLETED:
-                        getLoaderManager().restartLoader(BEEHOUSES_LOADER, null, this);
                         break;
                     default:
                         if (!Utility.isNetworkAvailable(getActivity())) {
@@ -197,7 +198,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             updateEmptyView();
         }
     }
-
 
 
 }

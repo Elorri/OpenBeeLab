@@ -66,6 +66,7 @@ public class BeeProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)) {
             case USER_BEEHOUSES: {
                 String userId = BeeContract.BeehouseEntry.getUserIdFromBeehousesViewUri(uri);
+                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+userId);
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         BeeContract.BeehouseEntry.TABLE_NAME,
                         projection,
@@ -80,8 +81,9 @@ public class BeeProvider extends ContentProvider {
             case WEIGHT_OVER_PERIOD: {
                 String beehouseId = BeeContract.MeasureEntry
                         .getBeehouseIdFromWeightOverPeriodViewUri(uri);
+                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+beehouseId);
                 retCursor = mOpenHelper.getReadableDatabase().query(
-                        BeeContract.BeehouseEntry.TABLE_NAME,
+                        BeeContract.MeasureEntry.TABLE_NAME,
                         projection,
                         BeeContract.MeasureEntry.COLUMN_BEEHOUSE_ID + "=?",
                         new String[]{beehouseId},
