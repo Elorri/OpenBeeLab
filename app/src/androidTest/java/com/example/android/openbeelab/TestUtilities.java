@@ -28,14 +28,26 @@ public class TestUtilities extends AndroidTestCase {
             BeeContract.UserEntry.COLUMN_DATABASE
     };
 
-    // These indices are tied to USERS_COLUMNS.  If USERS_COLUMNS changes, these
-// must change.
-    static final int COLUMN_ID = 0;
-    static final int COLUMN_NAME = 1;
-    static final int COLUMN_DATABASE = 2;
 
 
+    private static final String[] BEEHOUSES_COLUMNS = {
+            BeeContract.BeehouseEntry._ID,
+            BeeContract.BeehouseEntry.COLUMN_NAME,
+            BeeContract.BeehouseEntry.COLUMN_USER_ID,
+            BeeContract.BeehouseEntry.COLUMN_APIARY_NAME,
+            BeeContract.BeehouseEntry.COLUMN_CURRENT_WEIGHT
+    };
 
+
+    private static final String[] MEASURES_COLUMNS = {
+            BeeContract.MeasureEntry._ID,
+            BeeContract.MeasureEntry.COLUMN_NAME,
+            BeeContract.MeasureEntry.COLUMN_TIMESTAMP,
+            BeeContract.MeasureEntry.COLUMN_WEEK_ID,
+            BeeContract.MeasureEntry.COLUMN_VALUE,
+            BeeContract.MeasureEntry.COLUMN_UNIT,
+            BeeContract.MeasureEntry.COLUMN_BEEHOUSE_ID
+    };
 
 
 
@@ -60,12 +72,6 @@ public class TestUtilities extends AndroidTestCase {
 
 
 
-
-
-
-
-
-
 public static final int BULK_INSERT_RECORDS_TO_INSERT=3;
     public static ContentValues[] createListUserWithoutIdContentValues() {
         List<User> users=new ArrayList<>(3);
@@ -75,6 +81,10 @@ public static final int BULK_INSERT_RECORDS_TO_INSERT=3;
         return User.getContentValuesArray(users);
     }
 
+    
+    
+    
+    
     public void testShowUserTable() {
         // Test the sort_by content provider query
         Cursor cursor = mContext.getContentResolver().query(
@@ -88,6 +98,54 @@ public static final int BULK_INSERT_RECORDS_TO_INSERT=3;
         while (cursor.moveToNext()) {
             Log.e("Lifecycle", i + ("$" + cursor.getString(cursor.getColumnIndex(BeeContract
                     .UserEntry._ID)) + "|" + cursor.getString(cursor.getColumnIndex(BeeContract.UserEntry.COLUMN_NAME)) + "|" + cursor.getString(cursor.getColumnIndex(BeeContract.UserEntry.COLUMN_DATABASE))));
+            i++;
+        }
+        Log.e("Lifecycle", i + "record displayed");
+    }
+
+    public void testShowBeehouseTable() {
+        // Test the sort_by content provider query
+        Cursor cursor = mContext.getContentResolver().query(
+                BeeContract.BeehouseEntry.CONTENT_URI,
+                BEEHOUSES_COLUMNS,
+                null,
+                null,
+                null
+        );
+        int i = 0;
+        while (cursor.moveToNext()) {
+            Log.e("Lifecycle", i + ("$" 
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry._ID)) + "|" 
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry.COLUMN_NAME)) + "|"
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry.COLUMN_USER_ID)) + "|"
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry.COLUMN_APIARY_NAME)) + "|"
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry.COLUMN_CURRENT_WEIGHT))));
+            i++;
+        }
+        Log.e("Lifecycle", i + "record displayed");
+    }
+
+
+    public void testShowMeasureTable() {
+        // Test the sort_by content provider query
+        Cursor cursor = mContext.getContentResolver().query(
+                BeeContract.MeasureEntry.CONTENT_URI,
+                MEASURES_COLUMNS,
+                null,
+                null,
+                null
+        );
+        int i = 0;
+        while (cursor.moveToNext()) {
+            Log.e("Lifecycle", i + ("$"
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.MeasureEntry._ID)) + "|"
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.MeasureEntry.COLUMN_NAME)) + "|"
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.MeasureEntry.COLUMN_TIMESTAMP)) + "|"
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.MeasureEntry.COLUMN_WEEK_ID)) + "|"
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.MeasureEntry.COLUMN_NAME)) + "|"
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.MeasureEntry.COLUMN_VALUE)) + "|"
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.MeasureEntry.COLUMN_UNIT)) + "|"
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.MeasureEntry.COLUMN_BEEHOUSE_ID))));
             i++;
         }
         Log.e("Lifecycle", i + "record displayed");
