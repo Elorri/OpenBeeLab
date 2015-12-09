@@ -99,6 +99,12 @@ public class SettingsActivity extends Activity {
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
+            setPreferenceSummary(preference, value);
+            return true;
+        }
+
+        private void setPreferenceSummary(Preference preference, Object value) {
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
             String stringValue = value.toString();
 
             if (preference instanceof ListPreference) {
@@ -108,12 +114,12 @@ public class SettingsActivity extends Activity {
                 int prefIndex = listPreference.findIndexOfValue(stringValue);
                 if (prefIndex >= 0) {
                     preference.setSummary(listPreference.getEntries()[prefIndex]);
+                    ((ListPreference) preference).setValueIndex(prefIndex);
                 }
             } else {
                 // For other preferences, set the summary to the value's simple string representation.
                 preference.setSummary(stringValue);
             }
-            return true;
         }
 
         @Override
@@ -140,35 +146,22 @@ public class SettingsActivity extends Activity {
                         cursors[0] = cursor;
                         Cursor cursor2 = new MergeCursor(cursors);
 
-                        String[] pref_userId_options_values_string = User.toStringOptionValue
-                                (cursor);
-                        String[] pref_userName_options_label_string = User.toStringOptionLabel
-                                (cursor2);
 
-                        CharSequence[] pref_userId_options_values = pref_userId_options_values_string;
-                        CharSequence[] pref_userName_options_label = pref_userName_options_label_string;
+                        CharSequence[] pref_userId_options_values = User.toStringOptionValue(cursor);
+                        CharSequence[] pref_userName_options_label = User.toStringOptionLabel(cursor2);
 
                         ListPreference userPref = (ListPreference) findPreference(getString(R.string.pref_userId_key));
                         userPref.setEntries(pref_userName_options_label);
                         userPref.setEntryValues(pref_userId_options_values);
 
-
                         //Set a new userPref default value
-                        //String userPrefDefault = (String)pref_userId_options_values[0];
-//                        String userPrefDefault=getString(R.string.pref_userId_option_default);
-                       //String userPrefDefault="toto";
-                        String userPrefDefault=pref_userId_options_values_string[0];
-                        userPref.setDefaultValue(userPrefDefault);
+                        String userPrefDefault=(String)pref_userId_options_values[0];
+      
+                        // Update the preference summary with new default value.
+                         setPreferenceSummary(userPref, userPrefDefault);
 
-                        // Trigger the listener immediately with the preference's
-                        // new default value.
-//                        onPreferenceChange(userPref,
-//                                PreferenceManager
-//                                        .getDefaultSharedPreferences(userPref.getContext())
-//                                        .getString(userPref.getKey(), userPrefDefault));
-                        userPref.setSummary(userPrefDefault);
-
-                        //Open alert dialog asking the user to change the value.
+                        //Open alert dialog asking the user to change the value. For now nothing
+                        // done
                         break;
                     }
                     default:
