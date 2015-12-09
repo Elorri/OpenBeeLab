@@ -150,15 +150,17 @@ public class SettingsActivity extends Activity {
 
                         //Set a new userPref default value
                         //String userPrefDefault = (String)pref_userId_options_values[0];
-                        String userPrefDefault=getString(R.string.pref_userId_option_default);
+//                        String userPrefDefault=getString(R.string.pref_userId_option_default);
+                        String userPrefDefault="toto";
                         userPref.setDefaultValue(userPrefDefault);
 
                         // Trigger the listener immediately with the preference's
                         // new default value.
-                        onPreferenceChange(userPref,
-                                PreferenceManager
-                                        .getDefaultSharedPreferences(userPref.getContext())
-                                        .getString(userPref.getKey(), userPrefDefault));
+//                        onPreferenceChange(userPref,
+//                                PreferenceManager
+//                                        .getDefaultSharedPreferences(userPref.getContext())
+//                                        .getString(userPref.getKey(), userPrefDefault));
+                        userPref.setSummary(userPrefDefault);
 
                         //Open alert dialog asking the user to change the value.
                         break;
