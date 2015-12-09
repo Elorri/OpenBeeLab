@@ -124,7 +124,7 @@ public class SettingsActivity extends Activity {
                 switch (userDbStatus) {
                     case BeeSyncAdapter.USER_DB_STATUS_USERS_LOADING:
 //                        preference.setSummary(getString(R.string.pref_location_error_description, value.toString()));
-//                        break;
+                        break;
                     case BeeSyncAdapter.USER_DB_STATUS_USERS_SYNC_DONE: {
                         String database = Utility.getPreferredDatabase(getActivity());
                         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "" + database);
@@ -140,8 +140,13 @@ public class SettingsActivity extends Activity {
                         cursors[0] = cursor;
                         Cursor cursor2 = new MergeCursor(cursors);
 
-                        CharSequence[] pref_userId_options_values = User.toStringOptionValue(cursor);
-                        CharSequence[] pref_userName_options_label = User.toStringOptionLabel(cursor2);
+                        String[] pref_userId_options_values_string = User.toStringOptionValue
+                                (cursor);
+                        String[] pref_userName_options_label_string = User.toStringOptionLabel
+                                (cursor2);
+
+                        CharSequence[] pref_userId_options_values = pref_userId_options_values_string;
+                        CharSequence[] pref_userName_options_label = pref_userName_options_label_string;
 
                         ListPreference userPref = (ListPreference) findPreference(getString(R.string.pref_userId_key));
                         userPref.setEntries(pref_userName_options_label);
@@ -151,7 +156,8 @@ public class SettingsActivity extends Activity {
                         //Set a new userPref default value
                         //String userPrefDefault = (String)pref_userId_options_values[0];
 //                        String userPrefDefault=getString(R.string.pref_userId_option_default);
-                        String userPrefDefault="toto";
+                       //String userPrefDefault="toto";
+                        String userPrefDefault=pref_userId_options_values_string[0];
                         userPref.setDefaultValue(userPrefDefault);
 
                         // Trigger the listener immediately with the preference's
