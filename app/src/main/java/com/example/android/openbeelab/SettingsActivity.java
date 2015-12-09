@@ -126,7 +126,7 @@ public class SettingsActivity extends Activity {
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
             if (key.equals(getString(R.string.pref_user_db_status_key))) {
-                @BeeSyncAdapter.UserDbStatus int userDbStatus = Utility.getUserDbStatus(getActivity());
+                @BeeSyncAdapter.UserStatus int userDbStatus = Utility.getUserDbStatus(getActivity());
                 switch (userDbStatus) {
                     case BeeSyncAdapter.USER_DB_STATUS_USERS_LOADING:
 //                        preference.setSummary(getString(R.string.pref_location_error_description, value.toString()));
@@ -156,7 +156,7 @@ public class SettingsActivity extends Activity {
 
                         //Set a new userPref default value
                         String userPrefDefault=(String)pref_userId_options_values[0];
-      
+
                         // Update the preference summary with new default value.
                          setPreferenceSummary(userPref, userPrefDefault);
 

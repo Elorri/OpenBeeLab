@@ -4,6 +4,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -24,9 +25,11 @@ public class BeeProvider extends ContentProvider {
     //will match content://com.example.android.openbeelab/beehouse/
     public static final int BEEHOUSE = 200;
 
+    //will match content://com.example.android.openbeelab/{userDb}/unknown/beehouse/
+    public static final int USER_BEEHOUSES_UNKNOWN = 201;
 
     //will match content://com.example.android.openbeelab/{userDb}/{userId}/beehouse/
-    public static final int USER_BEEHOUSES = 201;
+    public static final int USER_BEEHOUSES = 202;
 
 
     //will match content://com.example.android.openbeelab/measure/
@@ -35,6 +38,7 @@ public class BeeProvider extends ContentProvider {
     //will match /{userDb}/{userId}/{beehouseId}/measure/weight_over_period
     public static final int WEIGHT_OVER_PERIOD = 301;
 
+    public static final String UNKNOWN = "unknown";
 
     public static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -46,6 +50,7 @@ public class BeeProvider extends ContentProvider {
         matcher.addURI(authority, BeeContract.PATH_MEASURE, MEASURE);
         matcher.addURI(authority, "*/#/#/" + BeeContract.PATH_MEASURE + "/" + BeeContract
                 .PATH_WEIGHT_OVER_PERIOD, WEIGHT_OVER_PERIOD);
+        matcher.addURI(authority, "*/" + UNKNOWN + "/" + BeeContract.PATH_BEEHOUSE, USER_BEEHOUSES_UNKNOWN);
         matcher.addURI(authority, "*/#/" + BeeContract.PATH_BEEHOUSE, USER_BEEHOUSES);
 
 
@@ -61,12 +66,19 @@ public class BeeProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+uri.toString());
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "" + uri.toString());
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
+            case USER_BEEHOUSES_UNKNOWN: {
+                MatrixCursor cursorEmpty = null;
+                String[] cursorCursorEmpty_columns = {"_id", "first_column"};
+                cursorEmpty = new MatrixCursor(cursorCursorEmpty_columns);
+                retCursor = cursorEmpty;
+                break;
+            }
             case USER_BEEHOUSES: {
                 String userId = BeeContract.BeehouseEntry.getUserIdFromBeehousesViewUri(uri);
-                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+userId);
+                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "" + userId);
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         BeeContract.BeehouseEntry.TABLE_NAME,
                         projection,
@@ -81,7 +93,7 @@ public class BeeProvider extends ContentProvider {
             case WEIGHT_OVER_PERIOD: {
                 String beehouseId = BeeContract.MeasureEntry
                         .getBeehouseIdFromWeightOverPeriodViewUri(uri);
-                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+beehouseId);
+                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "" + beehouseId);
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         BeeContract.MeasureEntry.TABLE_NAME,
                         projection,
@@ -176,7 +188,7 @@ public class BeeProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+uri);
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "" + uri);
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         int rowsDeleted;
@@ -256,7 +268,7 @@ public class BeeProvider extends ContentProvider {
         try {
             for (ContentValues value : values) {
                 long _id = db.insert(tableName, null, value);
-                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "_id "+_id);
+                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "_id " + _id);
                 if (_id != -1) {
                     returnCount++;
                 }

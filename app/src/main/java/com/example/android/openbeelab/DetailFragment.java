@@ -99,7 +99,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             }else{
                 // if cursor is empty, why? do we have an invalid uri
                 int message = R.string.empty_beehouse_list;
-                @BeeSyncAdapter.UserDbStatus int userDbStatus = Utility.getUserDbStatus(getActivity());
+                @BeeSyncAdapter.UserStatus int userDbStatus = Utility.getUserDbStatus(getActivity());
                 switch (userDbStatus) {
                     case BeeSyncAdapter.USER_DB_STATUS_SERVER_ERROR:
                         message = R.string.empty_beehouse_list_server_error;

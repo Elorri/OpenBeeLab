@@ -37,8 +37,8 @@
     <string name="pref_userId_key">user_id</string>
     <!--<string name="pref_userId_option_value_pierre">4</string>-->
     <!--<string name="pref_userId_option_value_remy">5</string>-->
-    <string name="pref_userId_option_value_unknown">0</string>
-    <string name="pref_userId_option_default">0</string>
+    <string name="pref_userId_option_value_unknown">unknown</string>
+    <string name="pref_userId_option_default">unknown</string>
 
 
 
@@ -50,6 +50,8 @@
     <string name="title_activity_detail">Beehouse details</string>
 
     <!-- Empty Beehouses Database -->
+    <string name="empty_beehouse_list_user_unknown">No beehouses information available. The
+    user has not been specified in settings.</string>
     <string name="empty_beehouse_list">No beehouses information available.</string>
     <string name="empty_beehouse_list_loading">Loading beehouses...</string>
     <string name="empty_beehouse_list_server_error">No beehouses information available. The server is not returning valid data. Please check for an updated version of OpenBeeLab.</string>

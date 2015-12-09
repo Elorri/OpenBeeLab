@@ -76,11 +76,11 @@ public class Utility {
      * @return the location status integer type
      */
     @SuppressWarnings("ResourceType")
-    @BeeSyncAdapter.UserDbStatus
+    @BeeSyncAdapter.UserStatus
     public static int getUserDbStatus(Context c) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         return sp.getInt(c.getString(R.string.pref_user_db_status_key), BeeSyncAdapter
-                .USER_DB_STATUS_USERS_UNKNOWN);
+                .STATUS_USER_UNKNOWN);
     }
 
     /**
@@ -91,7 +91,7 @@ public class Utility {
      * @param c              Context to get the PreferenceManager from.
      * @param userDbStatus The IntDef value to set
      */
-    public static  void setUserDbStatus(Context c, @BeeSyncAdapter.UserDbStatus int userDbStatus) {
+    public static  void setUserDbStatus(Context c, @BeeSyncAdapter.UserStatus int userDbStatus) {
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor spe = sp.edit();
