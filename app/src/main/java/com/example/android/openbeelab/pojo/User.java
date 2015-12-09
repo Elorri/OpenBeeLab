@@ -114,15 +114,16 @@ public class User {
      * @param cursor
      * @return List<User>
      */
-    public static CharSequence[] toCharSequenceOptionLabel(Cursor cursor) {
+    public static String[] toCharSequenceOptionLabel(Cursor cursor) {
         final int COL_USER_ID = 0;
         final int COL_USER_NAME = 1;
 
 
-        CharSequence[] optionsLabel = new CharSequence[cursor.getCount()];
+        String[] optionsLabel = new String[cursor.getCount()];
         int i=0;
         while (cursor.moveToNext()) {
             optionsLabel[i]=cursor.getString(COL_USER_NAME);
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "optionsValue "+cursor.getString(COL_USER_NAME));
             i++;
         }
         return optionsLabel;
@@ -137,15 +138,17 @@ public class User {
      * @param cursor
      * @return List<User>
      */
-    public static CharSequence[] toCharSequenceOptionValue(Cursor cursor) {
+    public static String[] toCharSequenceOptionValue(Cursor cursor) {
         final int COL_USER_ID = 0;
         final int COL_USER_NAME = 1;
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "getCount "+cursor.getCount());
 
 
-        CharSequence[] optionsValue = new CharSequence[cursor.getCount()];
+        String[] optionsValue = new String[cursor.getCount()];
         int i=0;
         while (cursor.moveToNext()) {
             optionsValue[i]=cursor.getString(COL_USER_ID);
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "optionsValue "+cursor.getString(COL_USER_ID));
             i++;
         }
         return optionsValue;

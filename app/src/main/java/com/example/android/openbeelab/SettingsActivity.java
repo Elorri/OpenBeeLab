@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.MergeCursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -31,8 +32,7 @@ public class SettingsActivity extends Activity {
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
 
-        BeeSyncAdapter.initializeSyncAdapter(this);
-        //TODO add this whenever we need a manual sync  BeeSyncAdapter.syncImmediately()
+
     }
 
 
@@ -65,6 +65,9 @@ public class SettingsActivity extends Activity {
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
             sp.registerOnSharedPreferenceChangeListener(this);
+
+            BeeSyncAdapter.initializeSyncAdapter(getActivity());
+            //TODO add this whenever we need a manual sync  BeeSyncAdapter.syncImmediately()
             super.onResume();
         }
 
@@ -118,19 +121,35 @@ public class SettingsActivity extends Activity {
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
             if (key.equals(getString(R.string.pref_user_db_status_key))) {
                 if (Utility.getUserDbStatus(getActivity()) == BeeSyncAdapter.USER_DB_STATUS_USERS_SYNC_DONE) {
-                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
                     String database = Utility.getPreferredDatabase(getActivity());
+                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "" + database);
                     Cursor cursor = getActivity().getContentResolver().query(
                             BeeContract.UserEntry.CONTENT_URI,
                             USERS_COLUMNS,
                             BeeContract.UserEntry.COLUMN_DATABASE + "=?",
                             new String[]{database},
                             BeeContract.UserEntry.COLUMN_NAME + " ASC");
+                    if (cursor.getCount() == 0)
+                        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "cursor vide");
+                    Cursor[] cursors=new Cursor[1];
+                    cursors[0]=cursor;
+                    Cursor cursor2=new MergeCursor(cursors);
+
+//                    String[] array={"4","5","6"};
 
                     CharSequence[] pref_userId_options_values = User.toCharSequenceOptionValue
                             (cursor);
+
+
                     CharSequence[] pref_userName_options_label = User.toCharSequenceOptionLabel
-                            (cursor);
+                            (cursor2);
+
+//                    CharSequence[] pref_userId_options_values = array;
+//                    CharSequence[] pref_userName_options_label = array;
+
+                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "pref_userName_options_label" + pref_userName_options_label);
+                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "pref_userId_options_values" + pref_userId_options_values);
+
                     ListPreference user = (ListPreference) findPreference(getString(R.string.pref_userId_key));
                     user.setEntries(pref_userName_options_label);
                     user.setEntryValues(pref_userId_options_values);
