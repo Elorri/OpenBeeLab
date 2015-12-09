@@ -43,7 +43,8 @@
 
 
     <!-- Key name for status stored in SharedPreferences -->
-    <string name="pref_user_db_status_key" translatable="false">user_db_status</string>
+    <string name="pref_user_status_key" translatable="false">user_status</string>
+    <string name="pref_serveur_status_key" translatable="false">serveur_status</string>
 
 
     <string name="action_settings">Settings</string>
@@ -52,6 +53,9 @@
     <!-- Empty Beehouses Database -->
     <string name="empty_beehouse_list_user_unknown">No beehouses information available. The
     user has not been specified in settings.</string>
+        <string name="empty_beehouse_list_user_unknown_no_internet">No beehouses information
+            available. The user has not been specified in settings. The network is
+        not available to fetch data.</string>
     <string name="empty_beehouse_list">No beehouses information available.</string>
     <string name="empty_beehouse_list_loading">Loading beehouses...</string>
     <string name="empty_beehouse_list_server_error">No beehouses information available. The server is not returning valid data. Please check for an updated version of OpenBeeLab.</string>

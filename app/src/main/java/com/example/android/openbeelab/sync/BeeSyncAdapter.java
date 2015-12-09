@@ -32,8 +32,6 @@ import java.util.List;
 public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
 
 
-
-
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({USER_DB_STATUS_SERVER_ERROR,
             STATUS_USER_UNKNOWN,
@@ -52,6 +50,20 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
     public static final int USER_DB_STATUS_MEASURES_SYNC_DONE = 5;
 
 
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({
+            STATUS_SERVEUR_UNKNOWN,
+            STATUS_SERVEUR_NO_INTERNET,
+            STATUS_SERVEUR_DOWN,
+            STATUS_SERVEUR_ERROR})
+    public @interface ServeurStatus {
+    }
+    public static final int STATUS_SERVEUR_UNKNOWN = 0;
+    public static final int STATUS_SERVEUR_NO_INTERNET = 1;
+    public static final int STATUS_SERVEUR_DOWN = 2;
+    public static final int STATUS_SERVEUR_ERROR = 3;
+
+
     // Interval at which to sync with the openbeelab server, in seconds.
     // 60 seconds (1 minute) * 180 = 3 hours
     // 60 seconds (1 minute) * 720 = 12 hours
@@ -68,56 +80,56 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority,
                               ContentProviderClient provider, SyncResult syncResult) {
-        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-        Utility.setUserDbStatus(getContext(), BeeSyncAdapter
-                .USER_DB_STATUS_USERS_LOADING);
 
-        Cursor usersCursor = null;
-        Cursor beehousesCursor = null;
-        Cursor measuresCursor = null;
+            Utility.setUserStatus(getContext(), BeeSyncAdapter
+                    .USER_DB_STATUS_USERS_LOADING);
+
+            Cursor usersCursor = null;
+            Cursor beehousesCursor = null;
+            Cursor measuresCursor = null;
 
 
-        User.resetDB(getContext());
-        Beehouse.resetDB(getContext());
-        Measure.resetDB(getContext());
-        List<User> users = JsonCall.getUsers(getContext());
-        User.syncDB(getContext(), users);
-        usersCursor = getContext().getContentResolver()
-                .query(BeeContract.UserEntry.CONTENT_URI, null, null, null, null);
-        List<User> users_with_ids = User.getUsers(usersCursor);
+            User.resetDB(getContext());
+            Beehouse.resetDB(getContext());
+            Measure.resetDB(getContext());
+            List<User> users = JsonCall.getUsers(getContext());
+            User.syncDB(getContext(), users);
+            usersCursor = getContext().getContentResolver()
+                    .query(BeeContract.UserEntry.CONTENT_URI, null, null, null, null);
+            List<User> users_with_ids = User.getUsers(usersCursor);
 
-        if (usersCursor.getCount() > 0) {
-            Utility.setUserDbStatus(getContext(), BeeSyncAdapter
-                    .USER_DB_STATUS_USERS_SYNC_DONE);
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "USER_DB_STATUS_USERS_SYNC_DONE");
-        }
-
-        for (User user : users_with_ids) {
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "user.id: "+user.getId());
-            List<Beehouse> beehouses = JsonCall.getBeehouses(getContext(), user.getId());
-            Beehouse.syncDB(getContext(), beehouses);
-            beehousesCursor = getContext().getContentResolver()
-                    .query(BeeContract.BeehouseEntry.CONTENT_URI, null, null, null, null);
-            List<Beehouse> beehouses_with_ids = Beehouse.getBeehouses(beehousesCursor);
-            if (beehousesCursor.getCount() > 0) {
-                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "USER_DB_STATUS_BEEHOUSES_SYNC_DONE");
-                Utility.setUserDbStatus(getContext(), BeeSyncAdapter
-                        .USER_DB_STATUS_BEEHOUSES_SYNC_DONE);
+            if (usersCursor.getCount() > 0) {
+                Utility.setUserStatus(getContext(), BeeSyncAdapter
+                        .USER_DB_STATUS_USERS_SYNC_DONE);
+                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "USER_DB_STATUS_USERS_SYNC_DONE");
             }
 
-            for (Beehouse beehouse : beehouses_with_ids) {
-                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "beehouse.id: "+beehouse
-                        .getId());
-                List<Measure> measures = JsonCall.getLast30DaysMeasures(getContext(), beehouse
-                        .getId(), beehouse.getName());
-                Measure.syncDB(getContext(), measures);
-                measuresCursor = getContext().getContentResolver()
-                        .query(BeeContract.MeasureEntry.CONTENT_URI, null, null, null, null);
+            for (User user : users_with_ids) {
+                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "user.id: " + user.getId());
+                List<Beehouse> beehouses = JsonCall.getBeehouses(getContext(), user.getId());
+                Beehouse.syncDB(getContext(), beehouses);
+                beehousesCursor = getContext().getContentResolver()
+                        .query(BeeContract.BeehouseEntry.CONTENT_URI, null, null, null, null);
+                List<Beehouse> beehouses_with_ids = Beehouse.getBeehouses(beehousesCursor);
+                if (beehousesCursor.getCount() > 0) {
+                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "USER_DB_STATUS_BEEHOUSES_SYNC_DONE");
+                    Utility.setUserStatus(getContext(), BeeSyncAdapter
+                            .USER_DB_STATUS_BEEHOUSES_SYNC_DONE);
+                }
+
+                for (Beehouse beehouse : beehouses_with_ids) {
+                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "beehouse.id: " + beehouse
+                            .getId());
+                    List<Measure> measures = JsonCall.getLast30DaysMeasures(getContext(), beehouse
+                            .getId(), beehouse.getName());
+                    Measure.syncDB(getContext(), measures);
+                    measuresCursor = getContext().getContentResolver()
+                            .query(BeeContract.MeasureEntry.CONTENT_URI, null, null, null, null);
+                }
             }
-        }
 
 
-//        if (measuresCursor.getCount() > 0) Utility.setUserDbStatus(getContext(), BeeSyncAdapter
+//        if (measuresCursor.getCount() > 0) Utility.setUserStatus(getContext(), BeeSyncAdapter
 //                .USER_DB_STATUS_MEASURES_SYNC_DONE);
 
     }

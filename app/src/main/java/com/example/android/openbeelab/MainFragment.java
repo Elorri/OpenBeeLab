@@ -166,8 +166,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
     private void updateEmptyView() {
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         if (mMainAdapter.getCount() == 0) {
-            @BeeSyncAdapter.UserStatus int userStatus = Utility.getUserDbStatus
-                    (getActivity());
+            @BeeSyncAdapter.UserStatus int userStatus = Utility.getUserStatus(getActivity());
+            @BeeSyncAdapter.ServeurStatus int serverStatus = Utility.getServeurStatus(getActivity());
             if (userStatus == BeeSyncAdapter.USER_DB_STATUS_BEEHOUSES_SYNC_DONE) {
                 getLoaderManager().restartLoader(BEEHOUSES_LOADER, null, this);
                 Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "restartLoader");
@@ -178,26 +178,24 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             if (null != tv) {
                 // if cursor is empty, why? do we have an invalid location
                 int message = R.string.empty_beehouse_list;
-                switch (userStatus) {
-                    case BeeSyncAdapter.STATUS_USER_UNKNOWN:
-                        message = R.string.empty_beehouse_list_user_unknown;
-                        break;
-                    case BeeSyncAdapter.USER_DB_STATUS_SERVER_ERROR:
-                        message = R.string.empty_beehouse_list_server_error;
-                        break;
-                    default:
-                        if (!Utility.isNetworkAvailable(getActivity())) {
-                            message = R.string.empty_beehouse_list_no_network;
-                        }
+                if (userStatus == BeeSyncAdapter.STATUS_USER_UNKNOWN) {
+                    message = R.string.empty_beehouse_list_user_unknown;
+                    if (serverStatus == BeeSyncAdapter.STATUS_SERVEUR_NO_INTERNET)
+                        message = R.string.empty_beehouse_list_user_unknown_no_internet;
+                } else if (userStatus == BeeSyncAdapter.USER_DB_STATUS_SERVER_ERROR)
+                    message = R.string.empty_beehouse_list_server_error;
+                else if (!Utility.isNetworkAvailable(getActivity())) {
+                    message = R.string.empty_beehouse_list_no_network;
                 }
                 tv.setText(message);
             }
         }
     }
 
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(R.string.pref_user_db_status_key))) {
+        if (key.equals(getString(R.string.pref_user_status_key))) {
             updateEmptyView();
         }
     }

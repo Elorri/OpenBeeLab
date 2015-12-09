@@ -63,6 +63,7 @@ public class Utility {
      * @param c Context used to get the ConnectivityManager
      * @return true if the network is available
      */
+    //Should be called on main thread
     static public boolean isNetworkAvailable(Context c) {
         ConnectivityManager cm =  (ConnectivityManager)c.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
@@ -77,9 +78,9 @@ public class Utility {
      */
     @SuppressWarnings("ResourceType")
     @BeeSyncAdapter.UserStatus
-    public static int getUserDbStatus(Context c) {
+    public static int getUserStatus(Context c) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
-        return sp.getInt(c.getString(R.string.pref_user_db_status_key), BeeSyncAdapter
+        return sp.getInt(c.getString(R.string.pref_user_status_key), BeeSyncAdapter
                 .STATUS_USER_UNKNOWN);
     }
 
@@ -91,11 +92,46 @@ public class Utility {
      * @param c              Context to get the PreferenceManager from.
      * @param userDbStatus The IntDef value to set
      */
-    public static  void setUserDbStatus(Context c, @BeeSyncAdapter.UserStatus int userDbStatus) {
+    public static  void setUserStatus(Context c, @BeeSyncAdapter.UserStatus int userDbStatus) {
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor spe = sp.edit();
-        spe.putInt(c.getString(R.string.pref_user_db_status_key), userDbStatus);
+        spe.putInt(c.getString(R.string.pref_user_status_key), userDbStatus);
         spe.commit();
     }
+
+
+
+
+    /**
+     *
+     * @param c Context used to get the SharedPreferences
+     * @return the location status integer type
+     */
+    @SuppressWarnings("ResourceType")
+    @BeeSyncAdapter.ServeurStatus
+    public static int getServeurStatus(Context c) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        return sp.getInt(c.getString(R.string.pref_serveur_status_key), BeeSyncAdapter
+                .STATUS_SERVEUR_UNKNOWN);
+    }
+
+    /**
+     * Sets the location status into shared preference.  This function should not be called from
+     * the UI thread because it uses commit to write to the shared preferences. Nb:if call from
+     * UI thread use, apply instead.
+     *
+     * @param c              Context to get the PreferenceManager from.
+     * @param serveurStatus The IntDef value to set
+     */
+    public static  void setServeurStatus(Context c, @BeeSyncAdapter.ServeurStatus int
+            serveurStatus) {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putInt(c.getString(R.string.pref_serveur_status_key), serveurStatus);
+        spe.commit();
+    }
+    
+    
 }

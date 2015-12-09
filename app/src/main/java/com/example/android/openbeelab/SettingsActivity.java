@@ -66,8 +66,17 @@ public class SettingsActivity extends Activity {
             SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
             sp.registerOnSharedPreferenceChangeListener(this);
 
-            BeeSyncAdapter.initializeSyncAdapter(getActivity());
-            //TODO add this whenever we need a manual sync  BeeSyncAdapter.syncImmediately()
+            //We only want to call initializeSyncAdapter the very firsttime the app is launch,
+            // this means when userStatus = STATUS_USER_UNKNOWN
+            @BeeSyncAdapter.UserStatus int userStatus = Utility.getUserStatus(getActivity());
+            if (userStatus == BeeSyncAdapter.STATUS_USER_UNKNOWN) {
+                if (!Utility.isNetworkAvailable(getActivity()))
+                    Utility.setServeurStatus(getActivity(), BeeSyncAdapter
+                            .STATUS_SERVEUR_NO_INTERNET);
+                else {
+                    BeeSyncAdapter.initializeSyncAdapter(getActivity());
+                }
+            }
             super.onResume();
         }
 
@@ -125,8 +134,8 @@ public class SettingsActivity extends Activity {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-            if (key.equals(getString(R.string.pref_user_db_status_key))) {
-                @BeeSyncAdapter.UserStatus int userDbStatus = Utility.getUserDbStatus(getActivity());
+            if (key.equals(getString(R.string.pref_user_status_key))) {
+                @BeeSyncAdapter.UserStatus int userDbStatus = Utility.getUserStatus(getActivity());
                 switch (userDbStatus) {
                     case BeeSyncAdapter.USER_DB_STATUS_USERS_LOADING:
 //                        preference.setSummary(getString(R.string.pref_location_error_description, value.toString()));
@@ -155,10 +164,10 @@ public class SettingsActivity extends Activity {
                         userPref.setEntryValues(pref_userId_options_values);
 
                         //Set a new userPref default value
-                        String userPrefDefault=(String)pref_userId_options_values[0];
+                        String userPrefDefault = (String) pref_userId_options_values[0];
 
                         // Update the preference summary with new default value.
-                         setPreferenceSummary(userPref, userPrefDefault);
+                        setPreferenceSummary(userPref, userPrefDefault);
 
                         //Open alert dialog asking the user to change the value. For now nothing
                         // done
