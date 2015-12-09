@@ -129,26 +129,16 @@ public class SettingsActivity extends Activity {
                             BeeContract.UserEntry.COLUMN_DATABASE + "=?",
                             new String[]{database},
                             BeeContract.UserEntry.COLUMN_NAME + " ASC");
-                    if (cursor.getCount() == 0)
-                        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "cursor vide");
+
+                    //Make a copy of the cursor
                     Cursor[] cursors=new Cursor[1];
                     cursors[0]=cursor;
                     Cursor cursor2=new MergeCursor(cursors);
 
-//                    String[] array={"4","5","6"};
-
                     CharSequence[] pref_userId_options_values = User.toCharSequenceOptionValue
                             (cursor);
-
-
                     CharSequence[] pref_userName_options_label = User.toCharSequenceOptionLabel
                             (cursor2);
-
-//                    CharSequence[] pref_userId_options_values = array;
-//                    CharSequence[] pref_userName_options_label = array;
-
-                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "pref_userName_options_label" + pref_userName_options_label);
-                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "pref_userId_options_values" + pref_userId_options_values);
 
                     ListPreference user = (ListPreference) findPreference(getString(R.string.pref_userId_key));
                     user.setEntries(pref_userName_options_label);
