@@ -56,7 +56,19 @@ public class SettingsActivity extends Activity {
             // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
             // updated when the preference changes.
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_database_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_userId_key)));
+
+            ListPreference userPref = (ListPreference) findPreference(getString(R.string.pref_userId_key));
+            @BeeSyncAdapter.UserStatus int userDbStatus = Utility.getUserStatus(getActivity());
+            switch (userDbStatus) {
+                case BeeSyncAdapter.STATUS_USERS_LOADING:
+                    userPref.setSummary(getString(R.string.pref_userName_option_label_loading));
+                    break;
+                case BeeSyncAdapter.STATUS_USERS_SYNC_DONE:
+                    bindPreferenceSummaryToNewValue(userPref);
+                    break;
+                default:
+                bindPreferenceSummaryToValue(userPref);
+            }
         }
 
         // Registers a shared preference change listener that gets notified when preferences change
@@ -135,42 +147,14 @@ public class SettingsActivity extends Activity {
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
             if (key.equals(getString(R.string.pref_user_status_key))) {
+                ListPreference userPref = (ListPreference) findPreference(getString(R.string.pref_userId_key));
                 @BeeSyncAdapter.UserStatus int userDbStatus = Utility.getUserStatus(getActivity());
                 switch (userDbStatus) {
-                    case BeeSyncAdapter.USER_DB_STATUS_USERS_LOADING:
-//                        preference.setSummary(getString(R.string.pref_location_error_description, value.toString()));
+                    case BeeSyncAdapter.STATUS_USERS_LOADING:
+                        userPref.setSummary(getString(R.string.pref_userName_option_label_loading));
                         break;
-                    case BeeSyncAdapter.USER_DB_STATUS_USERS_SYNC_DONE: {
-                        String database = Utility.getPreferredDatabase(getActivity());
-                        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "" + database);
-                        Cursor cursor = getActivity().getContentResolver().query(
-                                BeeContract.UserEntry.CONTENT_URI,
-                                USERS_COLUMNS,
-                                BeeContract.UserEntry.COLUMN_DATABASE + "=?",
-                                new String[]{database},
-                                BeeContract.UserEntry.COLUMN_NAME + " ASC");
-
-                        //Make a copy of the cursor
-                        Cursor[] cursors = new Cursor[1];
-                        cursors[0] = cursor;
-                        Cursor cursor2 = new MergeCursor(cursors);
-
-
-                        CharSequence[] pref_userId_options_values = User.toStringOptionValue(cursor);
-                        CharSequence[] pref_userName_options_label = User.toStringOptionLabel(cursor2);
-
-                        ListPreference userPref = (ListPreference) findPreference(getString(R.string.pref_userId_key));
-                        userPref.setEntries(pref_userName_options_label);
-                        userPref.setEntryValues(pref_userId_options_values);
-
-                        //Set a new userPref default value
-                        String userPrefDefault = (String) pref_userId_options_values[0];
-
-                        // Update the preference summary with new default value.
-                        setPreferenceSummary(userPref, userPrefDefault);
-
-                        //Open alert dialog asking the user to change the value. For now nothing
-                        // done
+                    case BeeSyncAdapter.STATUS_USERS_SYNC_DONE: {
+                       bindPreferenceSummaryToNewValue(userPref);
                         break;
                     }
                     default:
@@ -180,6 +164,39 @@ public class SettingsActivity extends Activity {
 
                 }
             }
+        }
+
+        private void bindPreferenceSummaryToNewValue(ListPreference userPref) {
+            String database = Utility.getPreferredDatabase(getActivity());
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "" + database);
+            Cursor cursor = getActivity().getContentResolver().query(
+                    BeeContract.UserEntry.CONTENT_URI,
+                    USERS_COLUMNS,
+                    BeeContract.UserEntry.COLUMN_DATABASE + "=?",
+                    new String[]{database},
+                    BeeContract.UserEntry.COLUMN_NAME + " ASC");
+
+            //Make a copy of the cursor
+            Cursor[] cursors = new Cursor[1];
+            cursors[0] = cursor;
+            Cursor cursor2 = new MergeCursor(cursors);
+
+
+            CharSequence[] pref_userId_options_values = User.toStringOptionValue(cursor);
+            CharSequence[] pref_userName_options_label = User.toStringOptionLabel(cursor2);
+
+            userPref = (ListPreference) findPreference(getString(R.string.pref_userId_key));
+            userPref.setEntries(pref_userName_options_label);
+            userPref.setEntryValues(pref_userId_options_values);
+
+            //Set a new userPref default value
+            String userPrefDefault = (String) pref_userId_options_values[0];
+
+            // Update the preference summary with new default value.
+            setPreferenceSummary(userPref, userPrefDefault);
+
+            //Open alert dialog asking the user to change the value. For now nothing
+            // done
         }
     }
 

@@ -184,11 +184,8 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                         message = R.string.empty_beehouse_list_user_unknown_no_internet;
                     else if (serverStatus == BeeSyncAdapter.STATUS_SERVEUR_ERROR)
                         message = R.string.empty_beehouse_list_user_unknown_serveur_error;
-                } else if (userStatus == BeeSyncAdapter.USER_DB_STATUS_SERVER_ERROR)
-                    message = R.string.empty_beehouse_list_server_error;
-                else if (!Utility.isNetworkAvailable(getActivity())) {
-                    message = R.string.empty_beehouse_list_no_network;
-                }
+                } else if (userStatus == BeeSyncAdapter.STATUS_USERS_LOADING)
+                    message = R.string.empty_beehouse_list_user_unknown;
                 tv.setText(message);
             }
         }

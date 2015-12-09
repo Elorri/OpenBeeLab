@@ -15,6 +15,7 @@ import android.support.annotation.IntDef;
 import android.util.Log;
 
 import com.example.android.openbeelab.R;
+import com.example.android.openbeelab.Utility;
 import com.example.android.openbeelab.db.BeeContract;
 import com.example.android.openbeelab.pojo.Beehouse;
 import com.example.android.openbeelab.pojo.Measure;
@@ -34,8 +35,8 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({USER_DB_STATUS_SERVER_ERROR,
             STATUS_USER_UNKNOWN,
-            USER_DB_STATUS_USERS_LOADING,
-            USER_DB_STATUS_USERS_SYNC_DONE,
+            STATUS_USERS_LOADING,
+            STATUS_USERS_SYNC_DONE,
             USER_DB_STATUS_BEEHOUSES_SYNC_DONE,
             USER_DB_STATUS_MEASURES_SYNC_DONE})
     public @interface UserStatus {
@@ -43,8 +44,8 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public static final int USER_DB_STATUS_SERVER_ERROR = 0;
     public static final int STATUS_USER_UNKNOWN = 1;
-    public static final int USER_DB_STATUS_USERS_LOADING = 2;
-    public static final int USER_DB_STATUS_USERS_SYNC_DONE = 3;
+    public static final int STATUS_USERS_LOADING = 2;
+    public static final int STATUS_USERS_SYNC_DONE = 3;
     public static final int USER_DB_STATUS_BEEHOUSES_SYNC_DONE = 4;
     public static final int USER_DB_STATUS_MEASURES_SYNC_DONE = 5;
 
@@ -81,7 +82,7 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
                               ContentProviderClient provider, SyncResult syncResult) {
 
 //            Utility.setUserStatus(getContext(), BeeSyncAdapter
-//                    .USER_DB_STATUS_USERS_LOADING);
+//                    .STATUS_USERS_LOADING);
 
             Cursor usersCursor = null;
             Cursor beehousesCursor = null;
@@ -98,9 +99,9 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
             List<User> users_with_ids = User.getUsers(usersCursor);
 
             if (usersCursor.getCount() > 0) {
-//                Utility.setUserStatus(getContext(), BeeSyncAdapter
-//                        .USER_DB_STATUS_USERS_SYNC_DONE);
-                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "USER_DB_STATUS_USERS_SYNC_DONE");
+                Utility.setUserStatus(getContext(), BeeSyncAdapter
+                        .STATUS_USERS_SYNC_DONE);
+                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "STATUS_USERS_SYNC_DONE");
             }
 
             for (User user : users_with_ids) {

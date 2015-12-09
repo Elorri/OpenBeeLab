@@ -50,17 +50,10 @@ public class JsonCall {
 
     public static List<User> getUsers(Context context) {
 //        if (userResults != null) {
+        Utility.setUserStatus(context, BeeSyncAdapter.STATUS_USERS_LOADING);
 //            for (UserRowObject row : userResults.rows) {
 //                users.add(new User("global_weight", row.key, row.value[0], "Kg", beehouseId));
 //            }
-//        } else {
-//            if ErrorObject not null
-//            Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_ERROR);
-//             else
-//            Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_DOWN);
-//        }
-
-
         List<User> users = new ArrayList<>();
         users.add(new User("pierre", "la_mine"));
         users.add(new User("remy", "la_mine"));
@@ -68,6 +61,13 @@ public class JsonCall {
         users.add(new User("remy", "la_mine_dev"));
         users.add(new User("fred", "fred_db"));
         users.add(new User("pierre", "fred_db"));
+//        } else {
+//            if ErrorObject not null
+//            Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_ERROR);
+//             else
+//            Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_DOWN);
+//        }
+
         return users;
     }
 
