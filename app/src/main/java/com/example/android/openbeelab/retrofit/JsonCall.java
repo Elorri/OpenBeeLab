@@ -38,15 +38,29 @@ public class JsonCall {
 //                @Path("user_name") String userName);
 
         @GET("/{user_db}/_design/{beehouse_name}/_view/weight_by_week")
-        Call<MesureResults> getJsonWeekAverageMeasure(
+        Call<MeasureResults> getJsonWeekAverageMeasure(
                 @Path("user_db") String userDB,
                 @Path("beehouse_name") String beehouseName,
                 @Query("group") String owner,
                 @Query("limit") String repo);
+
+
     }
 
 
     public static List<User> getUsers(Context context) {
+//        if (userResults != null) {
+//            for (UserRowObject row : userResults.rows) {
+//                users.add(new User("global_weight", row.key, row.value[0], "Kg", beehouseId));
+//            }
+//        } else {
+//            if ErrorObject not null
+//            Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_ERROR);
+//             else
+//            Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_DOWN);
+//        }
+
+
         List<User> users = new ArrayList<>();
         users.add(new User("pierre", "la_mine"));
         users.add(new User("remy", "la_mine"));
@@ -87,18 +101,20 @@ public class JsonCall {
             String database = Utility.getPreferredDatabase(context);
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] +
                     "database/beehouse " + database + "/" + beehouseName);
-            Call<MesureResults> call = openBeelab.getJsonWeekAverageMeasure(database, beehouseName, "true", "30");
-            MesureResults retrofitResults = call.execute().body();
+            Call<MeasureResults> call = openBeelab.getJsonWeekAverageMeasure(database, beehouseName, "true", "30");
+            MeasureResults measureResults = call.execute().body();
             final List<Measure> measures = new ArrayList<>();
-            if (retrofitResults != null) {
-                for (MesureRowObject row : retrofitResults.rows) {
+            if (measureResults != null) {
+                for (MesureRowObject row : measureResults.rows) {
                     //TODO virer ce static string
                     measures.add(new Measure("global_weight", row.key, row.value[0], "Kg", beehouseId));
                 }
-                Utility.setUserStatus(context, BeeSyncAdapter.STATUS_USER_UNKNOWN);
             } else {
-                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "USER_DB_STATUS_SERVER_ERROR");
-                Utility.setUserStatus(context, BeeSyncAdapter.USER_DB_STATUS_SERVER_ERROR);
+               //TODO use ErrorObject somehow here
+                //if ErrorObject not null
+                Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_ERROR);
+                // else
+                //Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_DOWN);
             }
             return measures;
         } catch (IOException e) {

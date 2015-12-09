@@ -23,10 +23,10 @@
     <string name="pref_database_option_label_fred_db">fred db</string>
     <!-- stored in sharedpreferences -->
     <string name="pref_database_key">user_db</string>
-    <string name="pref_database_option_value_lamine">la_mine</string>
+    <string name="pref_database_option_value_lamine">la_minel</string>
     <string name="pref_database_option_value_lamine_dev">la_mine_dev</string>
     <string name="pref_database_option_value_fred_db">fred_db</string>
-    <string name="pref_database_option_default">la_mine</string>
+    <string name="pref_database_option_default">la_minel</string>
 
     <!-- shown on screen -->
     <string name="pref_userName_label">User</string>
@@ -39,7 +39,6 @@
     <!--<string name="pref_userId_option_value_remy">5</string>-->
     <string name="pref_userId_option_value_unknown">unknown</string>
     <string name="pref_userId_option_default">unknown</string>
-
 
 
     <!-- Key name for status stored in SharedPreferences -->
@@ -56,6 +55,8 @@
         <string name="empty_beehouse_list_user_unknown_no_internet">No beehouses information
             available. The user has not been specified in settings. The network is
         not available to fetch data.</string>
+            <string name="empty_beehouse_list_user_unknown_serveur_error">No beehouses information
+            available. The user has not been specified in settings. The server is not returning valid data. Please check for an updated version of OpenBeeLab.</string>
     <string name="empty_beehouse_list">No beehouses information available.</string>
     <string name="empty_beehouse_list_loading">Loading beehouses...</string>
     <string name="empty_beehouse_list_server_error">No beehouses information available. The server is not returning valid data. Please check for an updated version of OpenBeeLab.</string>
