@@ -32,12 +32,14 @@
     <string name="pref_userName_label">User</string>
     <!--<string name="pref_userName_option_label_pierre">Pierre</string>-->
     <!--<string name="pref_userName_option_label_remy">Remy</string>-->
+    <string name="pref_userName_option_label_unknown">Unknown</string>
     <!-- stored in sharedpreferences -->
     <string name="pref_userId_key">user_id</string>
     <!--<string name="pref_userId_option_value_pierre">4</string>-->
     <!--<string name="pref_userId_option_value_remy">5</string>-->
-    <string name="pref_userId_option_default">1</string>
-    <string name="pref_userName_option_label_value_default_unknown">Unknown</string>
+    <string name="pref_userId_option_value_unknown">0</string>
+    <string name="pref_userId_option_default">0</string>
+
 
 
     <!-- Key name for status stored in SharedPreferences -->

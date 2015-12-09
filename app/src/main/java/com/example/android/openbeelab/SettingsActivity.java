@@ -120,29 +120,54 @@ public class SettingsActivity extends Activity {
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
             if (key.equals(getString(R.string.pref_user_db_status_key))) {
-                if (Utility.getUserDbStatus(getActivity()) == BeeSyncAdapter.USER_DB_STATUS_USERS_SYNC_DONE) {
-                    String database = Utility.getPreferredDatabase(getActivity());
-                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "" + database);
-                    Cursor cursor = getActivity().getContentResolver().query(
-                            BeeContract.UserEntry.CONTENT_URI,
-                            USERS_COLUMNS,
-                            BeeContract.UserEntry.COLUMN_DATABASE + "=?",
-                            new String[]{database},
-                            BeeContract.UserEntry.COLUMN_NAME + " ASC");
+                @BeeSyncAdapter.UserDbStatus int userDbStatus = Utility.getUserDbStatus(getActivity());
+                switch (userDbStatus) {
+                    case BeeSyncAdapter.USER_DB_STATUS_USERS_LOADING:
+//                        preference.setSummary(getString(R.string.pref_location_error_description, value.toString()));
+//                        break;
+                    case BeeSyncAdapter.USER_DB_STATUS_USERS_SYNC_DONE: {
+                        String database = Utility.getPreferredDatabase(getActivity());
+                        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "" + database);
+                        Cursor cursor = getActivity().getContentResolver().query(
+                                BeeContract.UserEntry.CONTENT_URI,
+                                USERS_COLUMNS,
+                                BeeContract.UserEntry.COLUMN_DATABASE + "=?",
+                                new String[]{database},
+                                BeeContract.UserEntry.COLUMN_NAME + " ASC");
 
-                    //Make a copy of the cursor
-                    Cursor[] cursors=new Cursor[1];
-                    cursors[0]=cursor;
-                    Cursor cursor2=new MergeCursor(cursors);
+                        //Make a copy of the cursor
+                        Cursor[] cursors = new Cursor[1];
+                        cursors[0] = cursor;
+                        Cursor cursor2 = new MergeCursor(cursors);
 
-                    CharSequence[] pref_userId_options_values = User.toCharSequenceOptionValue
-                            (cursor);
-                    CharSequence[] pref_userName_options_label = User.toCharSequenceOptionLabel
-                            (cursor2);
+                        CharSequence[] pref_userId_options_values = User.toStringOptionValue(cursor);
+                        CharSequence[] pref_userName_options_label = User.toStringOptionLabel(cursor2);
 
-                    ListPreference user = (ListPreference) findPreference(getString(R.string.pref_userId_key));
-                    user.setEntries(pref_userName_options_label);
-                    user.setEntryValues(pref_userId_options_values);
+                        ListPreference userPref = (ListPreference) findPreference(getString(R.string.pref_userId_key));
+                        userPref.setEntries(pref_userName_options_label);
+                        userPref.setEntryValues(pref_userId_options_values);
+
+
+                        //Set a new userPref default value
+                        //String userPrefDefault = (String)pref_userId_options_values[0];
+                        String userPrefDefault=getString(R.string.pref_userId_option_default);
+                        userPref.setDefaultValue(userPrefDefault);
+
+                        // Trigger the listener immediately with the preference's
+                        // new default value.
+                        onPreferenceChange(userPref,
+                                PreferenceManager
+                                        .getDefaultSharedPreferences(userPref.getContext())
+                                        .getString(userPref.getKey(), userPrefDefault));
+
+                        //Open alert dialog asking the user to change the value.
+                        break;
+                    }
+                    default:
+                        // Note --- if the server is down we still assume the value
+                        // is valid
+//                        preference.setSummary(stringValue);
+
                 }
             }
         }

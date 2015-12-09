@@ -114,7 +114,7 @@ public class User {
      * @param cursor
      * @return List<User>
      */
-    public static String[] toCharSequenceOptionLabel(Cursor cursor) {
+    public static String[] toStringOptionLabel(Cursor cursor) {
         final int COL_USER_ID = 0;
         final int COL_USER_NAME = 1;
 
@@ -138,7 +138,7 @@ public class User {
      * @param cursor
      * @return List<User>
      */
-    public static String[] toCharSequenceOptionValue(Cursor cursor) {
+    public static String[] toStringOptionValue(Cursor cursor) {
         final int COL_USER_ID = 0;
         final int COL_USER_NAME = 1;
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "getCount "+cursor.getCount());

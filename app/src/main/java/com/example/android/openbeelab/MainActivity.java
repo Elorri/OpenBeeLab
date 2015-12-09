@@ -26,8 +26,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-
-        if (Utility.getUserDbStatus(this) == BeeSyncAdapter.USER_DB_STATUS_USERS_UNKNOWN)
+        @BeeSyncAdapter.UserDbStatus int userDbStatus =Utility.getUserDbStatus(this);
+        if (userDbStatus == BeeSyncAdapter.USER_DB_STATUS_USERS_UNKNOWN)
             startActivity(new Intent(this, SettingsActivity.class));
 
         if (savedInstanceState == null)

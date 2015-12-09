@@ -49,8 +49,11 @@ public class JsonCall {
     public static List<User> getUsers(Context context) {
         List<User> users = new ArrayList<>();
         users.add(new User("pierre", "la_mine"));
+        users.add(new User("remy", "la_mine"));
         users.add(new User("pierre", "la_mine_dev"));
+        users.add(new User("remy", "la_mine_dev"));
         users.add(new User("fred", "fred_db"));
+        users.add(new User("pierre", "fred_db"));
         return users;
     }
 
