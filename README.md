@@ -5,7 +5,8 @@ This repository will contains the Android App of [OpenBeeLab project] (http://op
 ## Features
 
 This will app allows : 
-- to check out behives weight per week
+- get an overview of all beehouses available to an user
+- check out the last 30 days average measure foreach beehouse
 
 
 ## Libraries used
