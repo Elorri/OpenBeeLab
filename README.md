@@ -7,7 +7,8 @@ This repository will contains the Android App of [OpenBeeLab project] (http://op
 This will app allows : 
 - get an overview of all beehouses available to an user
 - check out the last 30 days average measure foreach beehouse
-- sync data from the serveur during the first install and then sync every 12 hours.
+- sync data from the serveur during the first install and then sync every 12 hours
+- send notification when bees are in danger
 
 
 ## Libraries used

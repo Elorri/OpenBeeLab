@@ -135,12 +135,16 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
                 Measure.syncDB(getContext(), measures);
             }
         }
-        
-        int message = areBeesInDangerMessage();
-        notifyUserSyncDone(message);
+
+        //Send notification only if bees are in danger
+        boolean areBeesInDanger = areBeesInDanger();
+        if (areBeesInDanger) {
+            int message = areBeesInDangerMessage(areBeesInDanger);
+            notifyUserSyncDone(message);
+        }
     }
 
-    private int areBeesInDangerMessage() {
+    private boolean areBeesInDanger() {
         String database = Utility.getPreferredDatabase(getContext());
         String userId = Utility.getPreferredUserId(getContext());
         Cursor cursor = getContext().getContentResolver()
@@ -149,7 +153,12 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
                         BeeContract.BeehouseEntry.COLUMN_CURRENT_WEIGHT + "<=?",
                         new String[]{getContext().getString(R.string.dangerous_weight)},
                         null);
-        if (cursor.getCount() > 0) return R.string.bees_in_danger;
+        if (cursor.getCount() > 0) return true;
+        else return false;
+    }
+
+    private int areBeesInDangerMessage(boolean areBeesInDanger) {
+        if (areBeesInDanger) return R.string.bees_in_danger;
         else return R.string.bees_are_fine;
     }
 
