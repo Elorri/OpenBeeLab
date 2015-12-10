@@ -165,17 +165,16 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 */
     private void updateEmptyView() {
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+        TextView emptyTextView = (TextView) getView().findViewById(R.id.listview_apiaries_empty);
         if (mMainAdapter.getCount() == 0) {
             @BeeSyncAdapter.UserStatus int userStatus = Utility.getUserStatus(getActivity());
             @BeeSyncAdapter.ServeurStatus int serverStatus = Utility.getServeurStatus(getActivity());
-            if (userStatus == BeeSyncAdapter.USER_DB_STATUS_BEEHOUSES_SYNC_DONE) {
-                getLoaderManager().restartLoader(BEEHOUSES_LOADER, null, this);
-                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "restartLoader");
-                return;
-            }
-
-            TextView tv = (TextView) getView().findViewById(R.id.listview_apiaries_empty);
-            if (null != tv) {
+//            if (userStatus == BeeSyncAdapter.USER_DB_STATUS_BEEHOUSES_SYNC_DONE) {
+//                getLoaderManager().restartLoader(BEEHOUSES_LOADER, null, this);
+//                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "restartLoader");
+//                return;
+//            }
+            if (null != emptyTextView) {
                 // if cursor is empty, why? do we have an invalid location
                 int message = R.string.empty_beehouse_list;
                 if (userStatus == BeeSyncAdapter.STATUS_USERS_UNKNOWN) {
@@ -186,9 +185,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
                         message = R.string.empty_beehouse_list_user_unknown_serveur_error;
                 } else if (userStatus == BeeSyncAdapter.STATUS_USERS_LOADING)
                     message = R.string.empty_beehouse_list_user_unknown;
-                tv.setText(message);
+                emptyTextView.setText(message);
             }
-        }
+        }else emptyTextView.setText("");
     }
 
 

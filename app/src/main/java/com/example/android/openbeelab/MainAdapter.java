@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -19,11 +18,11 @@ public class MainAdapter extends CursorAdapter {
     }
 
     public static class ViewHolder {
-        public final ImageView beehouseImageView;
+        public final TextView beehouseImageView;
         public final TextView beehouseTextView;
 
         public ViewHolder(View view) {
-            beehouseImageView = (ImageView) view.findViewById(R.id.beehouse_img);
+            beehouseImageView = (TextView) view.findViewById(R.id.beehouse_img);
             beehouseTextView = (TextView) view.findViewById(R.id.beehouse_name);
         }
     }
@@ -42,6 +41,8 @@ public class MainAdapter extends CursorAdapter {
         viewHolder.beehouseImageView.setBackgroundDrawable(context.getResources()
                 .getDrawable(Utility.getIconResourceForBeehouseCondition(cursor.getDouble
                         (MainFragment.COL_BEEHOUSE_WEIGHT))));
+        viewHolder.beehouseImageView.setText(String.format(context.getString(R.string.weight),
+                cursor.getString(MainFragment.COL_BEEHOUSE_WEIGHT)));
 //        ((ImageView) view).setImageResource(Utility.getIconResourceForBeehouseCondition(cursor
 //                .getDouble(1)));
         viewHolder.beehouseTextView.setText(cursor.getString(MainFragment.COL_BEEHOUSE_NAME));

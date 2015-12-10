@@ -31,25 +31,6 @@ import java.util.List;
  */
 public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
 
-
-    @Retention(RetentionPolicy.SOURCE)
-    @IntDef({USER_DB_STATUS_SERVER_ERROR,
-            STATUS_USERS_UNKNOWN,
-            STATUS_USERS_LOADING,
-            STATUS_USERS_SYNC_DONE,
-            USER_DB_STATUS_BEEHOUSES_SYNC_DONE,
-            USER_DB_STATUS_MEASURES_SYNC_DONE})
-    public @interface UserStatus {
-    }
-
-    public static final int USER_DB_STATUS_SERVER_ERROR = 0;
-    public static final int STATUS_USERS_UNKNOWN = 1;
-    public static final int STATUS_USERS_LOADING = 2;
-    public static final int STATUS_USERS_SYNC_DONE = 3;
-    public static final int USER_DB_STATUS_BEEHOUSES_SYNC_DONE = 4;
-    public static final int USER_DB_STATUS_MEASURES_SYNC_DONE = 5;
-
-
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({
             STATUS_SERVEUR_UNKNOWN,
@@ -63,6 +44,18 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
     public static final int STATUS_SERVEUR_NO_INTERNET = 1;
     public static final int STATUS_SERVEUR_DOWN = 2;
     public static final int STATUS_SERVEUR_ERROR = 3;
+
+
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({STATUS_USERS_UNKNOWN,
+            STATUS_USERS_LOADING,
+            STATUS_USERS_SYNC_DONE})
+    public @interface UserStatus {
+    }
+
+    public static final int STATUS_USERS_UNKNOWN = 0;
+    public static final int STATUS_USERS_LOADING = 1;
+    public static final int STATUS_USERS_SYNC_DONE = 2;
 
 
     // Interval at which to sync with the openbeelab server, in seconds.
@@ -101,7 +94,7 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
         usersCursor = getContext().getContentResolver()
                 .query(BeeContract.UserEntry.CONTENT_URI, null, null, null, null);
         List<User> users_with_ids = User.getUsers(usersCursor);
-        
+
         if (usersCursor.getCount() > 0)
             Utility.setUserStatus(getContext(), BeeSyncAdapter
                     .STATUS_USERS_SYNC_DONE);
