@@ -21,7 +21,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.IntDef;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 
 import com.example.android.openbeelab.MainActivity;
 import com.example.android.openbeelab.R;
@@ -114,9 +113,8 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
         else Utility.setUserStatus(getContext(), BeeSyncAdapter
                 .STATUS_USERS_UNKNOWN);
 
-
+        //For each user charge data about their apiaries
         for (User user : users_with_ids) {
-            Log.e("Sync", Thread.currentThread().getStackTrace()[2] + "user.id: " + user.getId());
             List<Beehouse> beehouses = JsonCall.getBeehouses(getContext(), user.getId());
             Beehouse.syncDB(getContext(), beehouses);
             beehousesCursor = getContext().getContentResolver()
@@ -128,15 +126,13 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
             List<Beehouse> beehouses_with_ids = Beehouse.getBeehouses(beehousesCursor);
 
             for (Beehouse beehouse : beehouses_with_ids) {
-                Log.e("Sync", Thread.currentThread().getStackTrace()[2] + "beehouse.id: " + beehouse
-                        .getId());
                 List<Measure> measures = JsonCall.getLast30DaysMeasures(getContext(), beehouse
                         .getId(), beehouse.getName());
                 Measure.syncDB(getContext(), measures);
             }
         }
 
-        //Send notification only if bees are in danger
+        //Send notification only if the selected user have bees are in danger
         boolean areBeesInDanger = areBeesInDanger();
         if (areBeesInDanger) {
             int message = areBeesInDangerMessage(areBeesInDanger);
