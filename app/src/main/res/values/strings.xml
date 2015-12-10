@@ -69,4 +69,12 @@
     <string name="weight"><xliff:g>%s</xliff:g> kg</string>
 
 
+    <!-- Strings related to Notification  preference -->
+    <string name="pref_last_notification">last_notification</string>
+
+    <!-- Strings related to Notification  preference -->
+    <string name="bees_are_fine">Bees looks fine</string>
+    <string name="bees_in_danger">Bees in danger</string>
+    <string name="dangerous_weight">26</string>
+
 </resources>

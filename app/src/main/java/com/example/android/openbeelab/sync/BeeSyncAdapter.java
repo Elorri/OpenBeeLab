@@ -2,18 +2,28 @@ package com.example.android.openbeelab.sync;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SyncRequest;
 import android.content.SyncResult;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.IntDef;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
+import com.example.android.openbeelab.MainActivity;
 import com.example.android.openbeelab.R;
 import com.example.android.openbeelab.Utility;
 import com.example.android.openbeelab.db.BeeContract;
@@ -30,6 +40,7 @@ import java.util.List;
  * Created by Elorri on 01/12/2015.
  */
 public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
+
 
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({
@@ -64,6 +75,8 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
     //public static final int SYNC_INTERVAL = 60 * 180;
     public static final int SYNC_INTERVAL = 60 * 720;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
+    private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
+    private static final int BEE_NOTIFICATION_ID = 3004;
     private String LOG_TAG = BeeSyncAdapter.class.getSimpleName();
 
 
@@ -109,7 +122,7 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
             beehousesCursor = getContext().getContentResolver()
                     .query(BeeContract.BeehouseEntry.CONTENT_URI,
                             null,
-                            BeeContract.BeehouseEntry.COLUMN_USER_ID+"=?",
+                            BeeContract.BeehouseEntry.COLUMN_USER_ID + "=?",
                             new String[]{String.valueOf(user.getId())},
                             null);
             List<Beehouse> beehouses_with_ids = Beehouse.getBeehouses(beehousesCursor);
@@ -122,10 +135,71 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
                 Measure.syncDB(getContext(), measures);
             }
         }
+        
+        int message = areBeesInDangerMessage();
+        notifyUserSyncDone(message);
+    }
+
+    private int areBeesInDangerMessage() {
+        String database = Utility.getPreferredDatabase(getContext());
+        String userId = Utility.getPreferredUserId(getContext());
+        Cursor cursor = getContext().getContentResolver()
+                .query(BeeContract.BeehouseEntry.buildBeehousesViewUri(database, userId),
+                        null,
+                        BeeContract.BeehouseEntry.COLUMN_CURRENT_WEIGHT + "<=?",
+                        new String[]{getContext().getString(R.string.dangerous_weight)},
+                        null);
+        if (cursor.getCount() > 0) return R.string.bees_in_danger;
+        else return R.string.bees_are_fine;
+    }
 
 
-//        if (measuresCursor.getCount() > 0) Utility.setUserStatus(getContext(), BeeSyncAdapter
-//                .USER_DB_STATUS_MEASURES_SYNC_DONE);
+    private void notifyUserSyncDone(int message) {
+        Context context = getContext();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String lastNotificationKey = context.getString(R.string.pref_last_notification);
+        long lastSync = prefs.getLong(lastNotificationKey, 0);
+
+        if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
+            // Last sync was more than 1 day ago, let's send a notification for today
+
+            // NotificationCompatBuilder is a very convenient way to build backward-compatible
+            // notifications.  Just throw in some data.
+            Resources resources = context.getResources();
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(getContext())
+                            .setColor(resources.getColor(R.color.colorPrimary))
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setLargeIcon(BitmapFactory.decodeResource(context
+                                    .getResources(), R.mipmap.ic_launcher))
+                            .setContentTitle(context.getString(R.string.app_name))
+                            .setContentText(context.getString(message));
+
+            // Make something interesting happen when the user clicks on the notification.
+            // In this case, opening the app is sufficient.
+            Intent resultIntent = new Intent(context, MainActivity.class);
+
+            // The stack builder object will contain an artificial back stack for the
+            // started Activity.
+            // This ensures that navigating backward from the Activity leads out of
+            // your application to the Home screen.
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder.setContentIntent(resultPendingIntent);
+
+            NotificationManager mNotificationManager =
+                    (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+            // To allows use to  update the notification later on.
+            mNotificationManager.notify(BEE_NOTIFICATION_ID, mBuilder.build());
+
+            //refreshing last sync
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putLong(lastNotificationKey, System.currentTimeMillis());
+            editor.commit();
+        }
 
     }
 

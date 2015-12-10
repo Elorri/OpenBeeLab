@@ -169,11 +169,6 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         if (mMainAdapter.getCount() == 0) {
             @BeeSyncAdapter.UserStatus int userStatus = Utility.getUserStatus(getActivity());
             @BeeSyncAdapter.ServeurStatus int serverStatus = Utility.getServeurStatus(getActivity());
-//            if (userStatus == BeeSyncAdapter.USER_DB_STATUS_BEEHOUSES_SYNC_DONE) {
-//                getLoaderManager().restartLoader(BEEHOUSES_LOADER, null, this);
-//                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "restartLoader");
-//                return;
-//            }
             if (null != emptyTextView) {
                 // if cursor is empty, why? do we have an invalid location
                 int message = R.string.empty_beehouse_list;

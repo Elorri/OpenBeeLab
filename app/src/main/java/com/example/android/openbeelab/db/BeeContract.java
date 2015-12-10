@@ -55,9 +55,9 @@ public class BeeContract {
         public static final String COLUMN_CURRENT_WEIGHT = "current_weight";
 
 
-        public static Uri buildBeehousesViewUri(String userDB, String userId) {
+        public static Uri buildBeehousesViewUri(String database, String userId) {
             return BASE_CONTENT_URI.buildUpon()
-                    .appendPath(userDB)
+                    .appendPath(database)
                     .appendPath(userId)
                     .appendPath(PATH_BEEHOUSE)
                     .build();
