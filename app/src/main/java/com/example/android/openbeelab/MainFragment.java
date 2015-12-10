@@ -178,7 +178,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             if (null != tv) {
                 // if cursor is empty, why? do we have an invalid location
                 int message = R.string.empty_beehouse_list;
-                if (userStatus == BeeSyncAdapter.STATUS_USER_UNKNOWN) {
+                if (userStatus == BeeSyncAdapter.STATUS_USERS_UNKNOWN) {
                     message = R.string.empty_beehouse_list_user_unknown;
                     if (serverStatus == BeeSyncAdapter.STATUS_SERVEUR_NO_INTERNET)
                         message = R.string.empty_beehouse_list_user_unknown_no_internet;

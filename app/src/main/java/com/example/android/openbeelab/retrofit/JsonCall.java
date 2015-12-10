@@ -50,7 +50,7 @@ public class JsonCall {
 
     public static List<User> getUsers(Context context) {
 //        if (userResults != null) {
-        Utility.setUserStatus(context, BeeSyncAdapter.STATUS_USERS_LOADING);
+
 //            for (UserRowObject row : userResults.rows) {
 //                users.add(new User("global_weight", row.key, row.value[0], "Kg", beehouseId));
 //            }
@@ -68,7 +68,7 @@ public class JsonCall {
 //            Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_DOWN);
 //        }
 
-            Utility.setUserStatus(context, BeeSyncAdapter.STATUS_USERS_SYNC_DONE);
+
         return users;
     }
 

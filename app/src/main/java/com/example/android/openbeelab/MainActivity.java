@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         setContentView(R.layout.main_activity);
 
         @BeeSyncAdapter.UserStatus int userStatus =Utility.getUserStatus(this);
-        if (userStatus == BeeSyncAdapter.STATUS_USER_UNKNOWN)
+        if (userStatus == BeeSyncAdapter.STATUS_USERS_UNKNOWN)
             startActivity(new Intent(this, SettingsActivity.class));
 
         if (savedInstanceState == null)

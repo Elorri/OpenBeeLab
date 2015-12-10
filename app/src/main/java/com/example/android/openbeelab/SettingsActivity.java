@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.MergeCursor;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -13,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.example.android.openbeelab.db.BeeContract;
+import com.example.android.openbeelab.pojo.User;
 import com.example.android.openbeelab.sync.BeeSyncAdapter;
 
 /**
@@ -53,6 +56,8 @@ public class SettingsActivity extends Activity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+
             // Add 'general' preferences, defined in the XML file
             addPreferencesFromResource(R.xml.pref_general);
 
@@ -100,9 +105,9 @@ public class SettingsActivity extends Activity {
             sp.registerOnSharedPreferenceChangeListener(this);
 
             //We only want to call initializeSyncAdapter the very firsttime the app is launch,
-            // this means when userStatus = STATUS_USER_UNKNOWN
+            // this means when userStatus = STATUS_USERS_UNKNOWN
             @BeeSyncAdapter.UserStatus int userStatus = Utility.getUserStatus(getActivity());
-            if (userStatus == BeeSyncAdapter.STATUS_USER_UNKNOWN) {
+            if (userStatus == BeeSyncAdapter.STATUS_USERS_UNKNOWN) {
                 if (!Utility.isNetworkAvailable(getActivity()))
                     Utility.setServeurStatus(getActivity(), BeeSyncAdapter
                             .STATUS_SERVEUR_NO_INTERNET);
@@ -171,6 +176,7 @@ public class SettingsActivity extends Activity {
                 @BeeSyncAdapter.UserStatus int userStatus = Utility.getUserStatus(getActivity());
                 switch (userStatus) {
                     case BeeSyncAdapter.STATUS_USERS_LOADING:
+                        mUserPref.setSummary(getString(R.string.pref_userName_option_label_loading));
                         break;
                     case BeeSyncAdapter.STATUS_USERS_SYNC_DONE:
                         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
@@ -208,36 +214,32 @@ public class SettingsActivity extends Activity {
 
         private void setUpDynamicListPreference() {
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-            String[] arrayLabel = {"Pierre", "Paul", "Jacques"};
-            String[] arrayValues = {"4", "5", "6"};
-            CharSequence[] entries = arrayLabel;
-            CharSequence[] entryValues = arrayValues;
-            mUserPref.setEntries(entries);
-            mUserPref.setEntryValues(entryValues);
+            String database = Utility.getPreferredDatabase(getActivity());
+            Cursor cursor = getActivity().getContentResolver().query(
+                    BeeContract.UserEntry.CONTENT_URI,
+                    USERS_COLUMNS,
+                    BeeContract.UserEntry.COLUMN_DATABASE + "=?",
+                    new String[]{database},
+                    BeeContract.UserEntry.COLUMN_NAME + " ASC");
+
+            //Make a copy of the cursor
+            Cursor[] cursors = new Cursor[1];
+            cursors[0] = cursor;
+            Cursor cursor2 = new MergeCursor(cursors);
+
+            CharSequence[] pref_userId_options_values = User.toStringOptionValue(cursor);
+            CharSequence[] pref_userName_options_label = User.toStringOptionLabel(cursor2);
+            mUserPref.setEntries(pref_userName_options_label);
+            mUserPref.setEntryValues(pref_userId_options_values);
         }
 
 //        private void bindPreferenceSummaryToNewValue(ListPreference userPref) {
-//            String database = Utility.getPreferredDatabase(getActivity());
+//
 //            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "" + database);
-//            Cursor cursor = getActivity().getContentResolver().query(
-//                    BeeContract.UserEntry.CONTENT_URI,
-//                    USERS_COLUMNS,
-//                    BeeContract.UserEntry.COLUMN_DATABASE + "=?",
-//                    new String[]{database},
-//                    BeeContract.UserEntry.COLUMN_NAME + " ASC");
 //
-//            //Make a copy of the cursor
-//            Cursor[] cursors = new Cursor[1];
-//            cursors[0] = cursor;
-//            Cursor cursor2 = new MergeCursor(cursors);
-//
-//
-//            CharSequence[] pref_userId_options_values = User.toStringOptionValue(cursor);
-//            CharSequence[] pref_userName_options_label = User.toStringOptionLabel(cursor2);
 //
 //            userPref = (ListPreference) findPreference(getString(R.string.pref_userId_key));
-//            userPref.setEntries(pref_userName_options_label);
-//            userPref.setEntryValues(pref_userId_options_values);
+//
 //
 //            //Set a new userPref default value
 //            String userPrefDefault = (String) pref_userId_options_values[0];
