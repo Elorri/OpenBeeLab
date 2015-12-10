@@ -96,13 +96,13 @@ public class Utility {
      * UI thread use, apply instead.
      *
      * @param c              Context to get the PreferenceManager from.
-     * @param userDbStatus The IntDef value to set
+     * @param userStatus The IntDef value to set
      */
-    public static  void setUserStatus(Context c, @BeeSyncAdapter.UserStatus int userDbStatus) {
-        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+    public static  void setUserStatus(Context c, @BeeSyncAdapter.UserStatus int userStatus) {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+userStatus);
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor spe = sp.edit();
-        spe.putInt(c.getString(R.string.pref_user_status_key), userDbStatus);
+        spe.putInt(c.getString(R.string.pref_user_status_key), userStatus);
         spe.commit();
     }
 

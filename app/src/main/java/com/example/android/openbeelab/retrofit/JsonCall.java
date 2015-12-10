@@ -57,10 +57,10 @@ public class JsonCall {
         List<User> users = new ArrayList<>();
         users.add(new User("pierre", "la_mine"));
         users.add(new User("remy", "la_mine"));
-        users.add(new User("pierre", "la_mine_dev"));
-        users.add(new User("remy", "la_mine_dev"));
-        users.add(new User("fred", "fred_db"));
-        users.add(new User("pierre", "fred_db"));
+//        users.add(new User("pierre", "la_mine_dev"));
+//        users.add(new User("remy", "la_mine_dev"));
+//        users.add(new User("fred", "fred_db"));
+//        users.add(new User("pierre", "fred_db"));
 //        } else {
 //            if ErrorObject not null
 //            Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_ERROR);
@@ -69,7 +69,6 @@ public class JsonCall {
 //        }
 
             Utility.setUserStatus(context, BeeSyncAdapter.STATUS_USERS_SYNC_DONE);
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "STATUS_USERS_SYNC_DONE");
         return users;
     }
 
