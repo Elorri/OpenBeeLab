@@ -100,14 +100,13 @@ public class JsonCall {
 
             // Create a call instance for looking up OpenBeelab getJsonWeekAverageMeasure.
             String database = Utility.getPreferredDatabase(context);
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] +
-                    "database/beehouse " + database + "/" + beehouseName);
             Call<MeasureResults> call = openBeelab.getJsonWeekAverageMeasure(database, beehouseName, "true", "30");
             MeasureResults measureResults = call.execute().body();
             final List<Measure> measures = new ArrayList<>();
             if (measureResults != null) {
                 for (MesureRowObject row : measureResults.rows) {
                     //TODO virer ce static string
+                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] +"beehouse.id " + beehouseId);
                     measures.add(new Measure("global_weight", row.key, row.value[0], "Kg", beehouseId));
                 }
             } else {
