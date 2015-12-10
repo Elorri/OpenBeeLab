@@ -68,6 +68,8 @@ public class JsonCall {
 //            Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_DOWN);
 //        }
 
+            Utility.setUserStatus(context, BeeSyncAdapter.STATUS_USERS_SYNC_DONE);
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "STATUS_USERS_SYNC_DONE");
         return users;
     }
 

@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         mMainUri = newUri;
         mMainFragment.setMainUri(mMainUri);
         mMainFragment.onMainUriChange();
-        BeeSyncAdapter.syncImmediately(this);
+//        BeeSyncAdapter.syncImmediately(this);
 
 //        DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
 //        if (null != detailFragment) {

@@ -11,12 +11,10 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.example.android.openbeelab.db.BeeContract;
 import com.example.android.openbeelab.pojo.User;
-import com.example.android.openbeelab.sync.BeeSyncAdapter;
 
 /**
  * Created by Elorri on 03/12/2015.
@@ -39,6 +37,10 @@ public class SettingsActivity extends Activity {
     public static class SettingsFragment extends PreferenceFragment implements Preference
             .OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
+        ListPreference mDatabasePref;
+        ListPreference mUserPref;
+
+
         private static final String[] USERS_COLUMNS = {
                 BeeContract.UserEntry._ID,
                 BeeContract.UserEntry.COLUMN_NAME
@@ -53,82 +55,98 @@ public class SettingsActivity extends Activity {
             super.onCreate(savedInstanceState);
             // Add 'general' preferences, defined in the XML file
             addPreferencesFromResource(R.xml.pref_general);
+
             // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
             // updated when the preference changes.
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_database_key)));
+            mDatabasePref = (ListPreference) findPreference(getString(R.string.pref_database_key));
+            String defaultDatabasePref=getPrefStoredValue(mDatabasePref);
+            onPreferenceChange(mDatabasePref, defaultDatabasePref);
+            mDatabasePref.setOnPreferenceChangeListener(this);
 
-            ListPreference userPref = (ListPreference) findPreference(getString(R.string.pref_userId_key));
-            @BeeSyncAdapter.UserStatus int userDbStatus = Utility.getUserStatus(getActivity());
-            switch (userDbStatus) {
-                case BeeSyncAdapter.STATUS_USERS_LOADING:
-                    userPref.setSummary(getString(R.string.pref_userName_option_label_loading));
-                    break;
-                case BeeSyncAdapter.STATUS_USERS_SYNC_DONE:
-                    bindPreferenceSummaryToNewValue(userPref);
-                    break;
-                default:
-                bindPreferenceSummaryToValue(userPref);
-            }
+
+            mUserPref = (ListPreference) findPreference(getString(R.string.pref_userId_key));
+            String defaultUserPref=getPrefStoredValue(mUserPref);
+            onPreferenceChange(mUserPref, defaultUserPref);
+            mUserPref.setOnPreferenceChangeListener(this);
+
+//            @BeeSyncAdapter.UserStatus int userDbStatus = Utility.getUserStatus(getActivity());
+//            switch (userDbStatus) {
+//                case BeeSyncAdapter.STATUS_USERS_LOADING:
+//                    userPref.setSummary(getString(R.string.pref_userName_option_label_loading));
+//                    break;
+//                case BeeSyncAdapter.STATUS_USERS_SYNC_DONE:
+//                    bindPreferenceSummaryToNewValue(userPref);
+//                    break;
+//                default:
+//                bindPreferenceSummaryToValue(userPref);
+//            }
+        }
+
+        private String getPrefStoredValue(Preference pref) {
+            String defaultPref =
+                    Utility.getStringSharedPreference(getActivity(),
+                            pref.getKey(), "");
+            return defaultPref;
         }
 
         // Registers a shared preference change listener that gets notified when preferences change
         @Override
         public void onResume() {
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            sp.registerOnSharedPreferenceChangeListener(this);
-
-            //We only want to call initializeSyncAdapter the very firsttime the app is launch,
-            // this means when userStatus = STATUS_USER_UNKNOWN
-            @BeeSyncAdapter.UserStatus int userStatus = Utility.getUserStatus(getActivity());
-            if (userStatus == BeeSyncAdapter.STATUS_USER_UNKNOWN) {
-                if (!Utility.isNetworkAvailable(getActivity()))
-                    Utility.setServeurStatus(getActivity(), BeeSyncAdapter
-                            .STATUS_SERVEUR_NO_INTERNET);
-                else {
-                    BeeSyncAdapter.initializeSyncAdapter(getActivity());
-                }
-            }
+//            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//            sp.registerOnSharedPreferenceChangeListener(this);
+//
+//            //We only want to call initializeSyncAdapter the very firsttime the app is launch,
+//            // this means when userStatus = STATUS_USER_UNKNOWN
+//            @BeeSyncAdapter.UserStatus int userStatus = Utility.getUserStatus(getActivity());
+//            if (userStatus == BeeSyncAdapter.STATUS_USER_UNKNOWN) {
+//                if (!Utility.isNetworkAvailable(getActivity()))
+//                    Utility.setServeurStatus(getActivity(), BeeSyncAdapter
+//                            .STATUS_SERVEUR_NO_INTERNET);
+//                else {
+//                    BeeSyncAdapter.initializeSyncAdapter(getActivity());
+//                }
+//            }
             super.onResume();
         }
 
         // Unregisters a shared preference change listener
         @Override
         public void onPause() {
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            sp.unregisterOnSharedPreferenceChangeListener(this);
+//            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+//            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//            sp.unregisterOnSharedPreferenceChangeListener(this);
             super.onPause();
         }
 
-        /**
-         * Attaches a listener so the summary is always updated with the preference value.
-         * Also fires the listener once, to initialize the summary (so it shows up before the value
-         * is changed.)
-         */
-        private void bindPreferenceSummaryToValue(Preference preference) {
-            // Set the listener to watch for value changes.
-            preference.setOnPreferenceChangeListener(this);
-
-            // Trigger the listener immediately with the preference's
-            // current value.
-            onPreferenceChange(preference,
-                    PreferenceManager
-                            .getDefaultSharedPreferences(preference.getContext())
-                            .getString(preference.getKey(), ""));
-        }
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object value) {
-            setPreferenceSummary(preference, value);
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "" + value);
+
+            Utility.setStringSharedPreference(getActivity(), preference.getKey(), value
+                    .toString());
+
+            String defaultPref = getPrefStoredValue(preference);
+            Log.e("Lifecycle", "" + defaultPref);
+
+            int prefIndex = ((ListPreference)preference).findIndexOfValue(value.toString());
+            if (prefIndex >= 0) {
+                preference.setSummary(((ListPreference)preference).getEntries()[prefIndex]);
+                ((ListPreference)preference).setValueIndex(prefIndex);
+            }
             return true;
         }
 
         private void setPreferenceSummary(Preference preference, Object value) {
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
             String stringValue = value.toString();
+            String key = preference.getKey();
 
             if (preference instanceof ListPreference) {
+                if (key.equals(getString(R.string.pref_userId_key))) {
+                    Utility.setPreferredUserId(getActivity(), stringValue);
+                }
                 // For list preferences, look up the correct display value in
                 // the preference's 'entries' list (since they have separate labels/values).
                 ListPreference listPreference = (ListPreference) preference;
@@ -145,25 +163,25 @@ public class SettingsActivity extends Activity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-            if (key.equals(getString(R.string.pref_user_status_key))) {
-                ListPreference userPref = (ListPreference) findPreference(getString(R.string.pref_userId_key));
-                @BeeSyncAdapter.UserStatus int userDbStatus = Utility.getUserStatus(getActivity());
-                switch (userDbStatus) {
-                    case BeeSyncAdapter.STATUS_USERS_LOADING:
-                        userPref.setSummary(getString(R.string.pref_userName_option_label_loading));
-                        break;
-                    case BeeSyncAdapter.STATUS_USERS_SYNC_DONE: {
-                       bindPreferenceSummaryToNewValue(userPref);
-                        break;
-                    }
-                    default:
-                        // Note --- if the server is down we still assume the value
-                        // is valid
-//                        preference.setSummary(stringValue);
-
-                }
-            }
+//            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+//            if (key.equals(getString(R.string.pref_user_status_key))) {
+//                ListPreference userPref = (ListPreference) findPreference(getString(R.string.pref_userId_key));
+//                @BeeSyncAdapter.UserStatus int userDbStatus = Utility.getUserStatus(getActivity());
+//                switch (userDbStatus) {
+//                    case BeeSyncAdapter.STATUS_USERS_LOADING:
+//                        userPref.setSummary(getString(R.string.pref_userName_option_label_loading));
+//                        break;
+//                    case BeeSyncAdapter.STATUS_USERS_SYNC_DONE: {
+//                       bindPreferenceSummaryToNewValue(userPref);
+//                        break;
+//                    }
+//                    default:
+//                        // Note --- if the server is down we still assume the value
+//                        // is valid
+////                        preference.setSummary(stringValue);
+//
+//                }
+//            }
         }
 
         private void bindPreferenceSummaryToNewValue(ListPreference userPref) {
@@ -191,6 +209,7 @@ public class SettingsActivity extends Activity {
 
             //Set a new userPref default value
             String userPrefDefault = (String) pref_userId_options_values[0];
+            Utility.setPreferredUserId(getActivity(), userPrefDefault);
 
             // Update the preference summary with new default value.
             setPreferenceSummary(userPref, userPrefDefault);

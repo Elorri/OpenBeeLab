@@ -27,6 +27,12 @@ public class Utility {
                 context.getString(R.string.pref_userId_option_default));
     }
 
+    public static  void setPreferredUserId(Context c, String userId) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putString(c.getString(R.string.pref_userId_key), userId);
+        spe.commit();
+    }
 
     /**
      * Helper method to provide the icon resource id according to the behouse weight condition
@@ -132,6 +138,23 @@ public class Utility {
         spe.putInt(c.getString(R.string.pref_serveur_status_key), serveurStatus);
         spe.commit();
     }
-    
-    
+
+
+    public static String getStringSharedPreference(Context context, String key, String
+            defaultValue) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        return sp.getString(key, defaultValue);
+    }
+
+    /**
+     * This function should not be called from the UI thread because it uses commit to write
+     * to the shared preferences. Nb:if call from
+     * UI thread use, apply instead.
+     */
+    public static void setStringSharedPreference(Context context, String key, String value) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor spe = sp.edit();
+        spe.putString(key, value);
+        spe.commit();
+    }
 }

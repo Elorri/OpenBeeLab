@@ -15,7 +15,6 @@ import android.support.annotation.IntDef;
 import android.util.Log;
 
 import com.example.android.openbeelab.R;
-import com.example.android.openbeelab.Utility;
 import com.example.android.openbeelab.db.BeeContract;
 import com.example.android.openbeelab.pojo.Beehouse;
 import com.example.android.openbeelab.pojo.Measure;
@@ -98,11 +97,7 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
                     .query(BeeContract.UserEntry.CONTENT_URI, null, null, null, null);
             List<User> users_with_ids = User.getUsers(usersCursor);
 
-            if (usersCursor.getCount() > 0) {
-                Utility.setUserStatus(getContext(), BeeSyncAdapter
-                        .STATUS_USERS_SYNC_DONE);
-                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "STATUS_USERS_SYNC_DONE");
-            }
+
 
             for (User user : users_with_ids) {
                 Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "user.id: " + user.getId());
