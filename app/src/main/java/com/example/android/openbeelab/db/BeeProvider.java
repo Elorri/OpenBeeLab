@@ -99,6 +99,7 @@ public class BeeProvider extends ContentProvider {
                 String[] cursorCursorEmpty_columns = {"_id", "first_column"};
                 cursorEmpty = new MatrixCursor(cursorCursorEmpty_columns);
                 cursorEmpty.addRow(new Object[]{1, "dummy"});
+                cursorEmpty.addRow(new Object[]{2, "dummy"});
                 retCursor = cursorEmpty;
                 break;
             }
