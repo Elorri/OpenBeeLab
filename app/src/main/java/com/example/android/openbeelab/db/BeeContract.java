@@ -17,6 +17,7 @@ public class BeeContract {
 
     public static final String PATH_USER = "user";
     public static final String PATH_BEEHOUSE = "beehouse";
+    public static final String PATH_BEEHOUSE_VIEW = "beehouse_view";
     public static final String PATH_WEIGHT_OVER_PERIOD = "weight_over_period";
     public static final String PATH_MEASURE = "measure";
 

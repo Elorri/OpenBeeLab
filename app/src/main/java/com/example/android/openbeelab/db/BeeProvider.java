@@ -31,6 +31,9 @@ public class BeeProvider extends ContentProvider {
     //will match content://com.example.android.openbeelab/{userDb}/{userId}/beehouse/
     public static final int USER_BEEHOUSES = 202;
 
+    //will match /{userDb}/{userId}/{beehouseId}/beehouse_view/
+    public static final int BEEHOUSE_VIEW = 203;
+
 
     //will match content://com.example.android.openbeelab/measure/
     public static final int MEASURE = 300;
@@ -48,6 +51,7 @@ public class BeeProvider extends ContentProvider {
         matcher.addURI(authority, BeeContract.PATH_USER, USER);
         matcher.addURI(authority, BeeContract.PATH_BEEHOUSE, BEEHOUSE);
         matcher.addURI(authority, BeeContract.PATH_MEASURE, MEASURE);
+        matcher.addURI(authority, "*/#/#/" + BeeContract.PATH_BEEHOUSE_VIEW, BEEHOUSE_VIEW);
         matcher.addURI(authority, "*/#/#/" + BeeContract.PATH_MEASURE + "/" + BeeContract
                 .PATH_WEIGHT_OVER_PERIOD, WEIGHT_OVER_PERIOD);
         matcher.addURI(authority, "*/" + UNKNOWN + "/" + BeeContract.PATH_BEEHOUSE, USER_BEEHOUSES_UNKNOWN);
@@ -90,6 +94,15 @@ public class BeeProvider extends ContentProvider {
                 );
                 break;
             }
+            case BEEHOUSE_VIEW: {
+                MatrixCursor cursorEmpty = null;
+                String[] cursorCursorEmpty_columns = {"_id", "first_column"};
+                cursorEmpty = new MatrixCursor(cursorCursorEmpty_columns);
+                cursorEmpty.addRow(new Object[]{1, "dummy"});
+                retCursor = cursorEmpty;
+                break;
+            }
+
             case WEIGHT_OVER_PERIOD: {
                 String beehouseId = BeeContract.MeasureEntry
                         .getBeehouseIdFromWeightOverPeriodViewUri(uri);
