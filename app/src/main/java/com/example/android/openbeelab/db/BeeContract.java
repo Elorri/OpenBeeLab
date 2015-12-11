@@ -64,9 +64,25 @@ public class BeeContract {
                     .build();
         }
 
-        //will match content://com.example.android.openbeelab/{userDb}/{userId}/beehouse/
+        //will match content://com.example.android.openbeelab/{database}/{userId}/beehouse/
         public static String getUserIdFromBeehousesViewUri(Uri uri) {
             return uri.getPathSegments().get(1);
+        }
+
+
+        public static Uri buildBeehouseDetailViewUri(String database, String userId, String
+                beehouseId) {
+            return BASE_CONTENT_URI.buildUpon()
+                    .appendPath(database)
+                    .appendPath(userId)
+                    .appendPath(beehouseId)
+                    .appendPath(PATH_BEEHOUSE_VIEW)
+                    .build();
+        }
+
+        //will match /{userDb}/{userId}/{beehouseId}/beehouse_view/
+        public static String getBeehouseIdFromBeehouseDetailViewUri(Uri uri) {
+            return uri.getPathSegments().get(2);
         }
 
 

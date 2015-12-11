@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         mMainFragment.onMainUriChange();
 //        BeeSyncAdapter.syncImmediately(this);
 
-//        DetailFragment detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
+//        DatawizOverLast30DaysFragment detailFragment = (DatawizOverLast30DaysFragment) getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
 //        if (null != detailFragment) {
 //            detailFragment.onMainUriChange();
 //        }
@@ -69,8 +69,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
 
 
     @Override
-    public void onItemSelected(Uri uri, boolean firstDisplay) {
-        Intent intent = new Intent(this, DetailActivity.class);
+    public void onItemSelected(Uri uri) {
+        Intent intent = new Intent(this, BeehouseViewActivity.class);
         intent.setData(uri);
         startActivity(intent);
     }

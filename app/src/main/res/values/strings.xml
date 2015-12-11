@@ -49,6 +49,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_detail">Beehouse details</string>
+    <string name="title_activity_measures">Beehouse measures</string>
 
     <!-- Empty Beehouses Database -->
     <string name="empty_beehouse_list_user_unknown">No beehouses information available. The

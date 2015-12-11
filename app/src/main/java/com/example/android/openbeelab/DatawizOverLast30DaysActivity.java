@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 /**
  * Created by Elorri on 03/12/2015.
  */
-public class DetailActivity extends AppCompatActivity {
+public class DatawizOverLast30DaysActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,9 +15,9 @@ public class DetailActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             Bundle arguments = new Bundle();
-            arguments.putParcelable(DetailFragment.DETAIL_URI, getIntent().getData());
+            arguments.putParcelable(DatawizOverLast30DaysFragment.DETAIL_URI, getIntent().getData());
 
-            DetailFragment fragment = new DetailFragment();
+            DatawizOverLast30DaysFragment fragment = new DatawizOverLast30DaysFragment();
             fragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()

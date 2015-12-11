@@ -27,9 +27,9 @@ import lecho.lib.hellocharts.view.LineChartView;
 /**
  * Created by Elorri on 03/12/2015.
  */
-public class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DatawizOverLast30DaysFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final String DETAIL_URI = "URI";
-    private static final String LOG_TAG = DetailFragment.class.getSimpleName();
+    private static final String LOG_TAG = DatawizOverLast30DaysFragment.class.getSimpleName();
 
     private static final int BEEHOUSE_LOADER = 0;
 

@@ -14,8 +14,8 @@ public class BeehouseViewAdapter extends CursorAdapter {
 
     private static final int VIEW_TYPE_COUNT = 2;
 
-    private static final int VIEW_TYPE_INFO = 0;
-    private static final int VIEW_TYPE_DATAWIZ_OVER_LAST_30_DAYS = 1;
+    public static final int VIEW_TYPE_INFO = 0;
+    public static final int VIEW_TYPE_DATAWIZ_OVER_LAST_30_DAYS = 1;
 
 
     public BeehouseViewAdapter(Context context, Cursor c, int flags) {

@@ -46,7 +46,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
 
 
     public interface Callback {
-        void onItemSelected(Uri uri, boolean firstDisplay);
+        void onItemSelected(Uri uri);
     }
 
 
@@ -98,9 +98,9 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
             String database = Utility.getPreferredDatabase(getContext());
             String userId = Utility.getPreferredUserId(getContext());
             String beehouseId = cursor.getString(COL_BEEHOUSE_ID);
-            Uri uri = BeeContract.MeasureEntry.buildWeightOverPeriodViewUri(database, userId,
+            Uri uri = BeeContract.BeehouseEntry.buildBeehouseDetailViewUri(database, userId,
                     beehouseId);
-            ((Callback) getActivity()).onItemSelected(uri, false);
+            ((Callback) getActivity()).onItemSelected(uri);
         }
     }
 
