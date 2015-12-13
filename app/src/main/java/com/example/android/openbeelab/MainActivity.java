@@ -21,6 +21,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
     private Uri mMainUri;
     static final String MAIN_URI = "mMainUri";
     private MainFragment mMainFragment;
+    static final String BEEHOUSE_URI = "mBeehouseViewUri";
+    private Uri mBeehouseViewUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +37,10 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
             mMainUri = BeeContract.BeehouseEntry
                     .buildBeehousesViewUri(Utility.getPreferredDatabase(this), Utility
                             .getPreferredUserId(this));
-        else
+        else{
             mMainUri = savedInstanceState.getParcelable(MAIN_URI);
+            mBeehouseViewUri = savedInstanceState.getParcelable(BEEHOUSE_URI);
+        }
         mMainFragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.main_fragment);
         mMainFragment.setMainUri(mMainUri);
 
@@ -71,7 +75,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
     @Override
     public void onItemSelected(Uri uri) {
         Intent intent = new Intent(this, BeehouseViewActivity.class);
+        mBeehouseViewUri=uri;
         intent.setData(uri);
+       // intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         startActivity(intent);
     }
 
@@ -102,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(MAIN_URI, mMainUri);
+        outState.putParcelable(BEEHOUSE_URI, mBeehouseViewUri);
     }
 
 }

@@ -11,16 +11,19 @@ import android.util.Log;
  */
 public class BeehouseViewActivity extends AppCompatActivity implements BeehouseViewFragment.Callback {
 
+    Uri mUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+savedInstanceState);
         setContentView(R.layout.beehouse_view_activity);
 
         if (savedInstanceState == null) {
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
             Bundle arguments = new Bundle();
-            arguments.putParcelable(BeehouseViewFragment.BEEHOUSE_VIEW_URI, getIntent().getData());
+            mUri = getIntent().getData();
+            arguments.putParcelable(BeehouseViewFragment.BEEHOUSE_VIEW_URI, mUri);
 
             BeehouseViewFragment fragment = new BeehouseViewFragment();
             fragment.setArguments(arguments);
@@ -28,7 +31,7 @@ public class BeehouseViewActivity extends AppCompatActivity implements BeehouseV
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.beehouse_view_fragment_container, fragment)
                     .commit();
-        }
+        } else mUri = savedInstanceState.getParcelable(BeehouseViewFragment.BEEHOUSE_VIEW_URI);
 
     }
 
@@ -37,6 +40,14 @@ public class BeehouseViewActivity extends AppCompatActivity implements BeehouseV
         Intent intent = new Intent(this, DatawizOverLast30DaysActivity.class);
         intent.setData(uri);
         startActivity(intent);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+outState);
+        outState.putParcelable(BeehouseViewFragment.BEEHOUSE_VIEW_URI, mUri);
+
     }
 }
 

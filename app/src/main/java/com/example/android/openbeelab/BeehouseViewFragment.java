@@ -39,11 +39,11 @@ public class BeehouseViewFragment extends Fragment implements LoaderManager.Load
         super.onCreate(savedInstanceState);
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         mAdapter = new BeehouseViewAdapter(getActivity(), null, 0);
-        if (savedInstanceState != null) {
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-            mUri = savedInstanceState.getParcelable(BEEHOUSE_VIEW_URI);
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+mUri);
-        }
+//        if (savedInstanceState != null) {
+//            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+//            mUri = savedInstanceState.getParcelable(BEEHOUSE_VIEW_URI);
+//            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+mUri);
+//        }
     }
 
 
@@ -139,13 +139,14 @@ public class BeehouseViewFragment extends Fragment implements LoaderManager.Load
     }
 
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-        outState.putParcelable(BEEHOUSE_VIEW_URI, mUri);
-        outState.putString("bundle","nnn");
-        mUri=outState.getParcelable(BEEHOUSE_VIEW_URI);
-        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+mUri);
-        super.onSaveInstanceState(outState);
-    }
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+//        outState.putParcelable(BEEHOUSE_VIEW_URI, mUri);
+//        outState.putString("bundle","nnn");
+//        mUri=outState.getParcelable(BEEHOUSE_VIEW_URI);
+//        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+mUri);
+//
+//    }
 }
