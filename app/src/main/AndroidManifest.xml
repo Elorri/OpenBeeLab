@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".StethoApplication">
-        <activity android:name=".MainActivity" >
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,20 +23,28 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BeehouseViewActivity"
+            android:name=".BeehouseMasterViewActivity"
             android:label="@string/title_activity_detail"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity" android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.openbeelab.MainActivity" />
         </activity>
         <activity
-            android:name=".DatawizOverLast30DaysActivity"
-            android:label="@string/title_activity_measures"
-            android:parentActivityName=".BeehouseViewActivity">
+            android:name=".BeehouseDetailViewActivity"
+            android:label="@string/title_activity_detail"
+            android:parentActivityName=".BeehouseMasterViewActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.openbeelab.BeehouseViewActivity" />
+                android:value=".BeehouseMasterViewActivity" />
+        </activity>
+        <activity
+            android:name=".DatawizOverLast30DaysActivity"
+            android:label="@string/title_activity_measures"
+            android:parentActivityName=".BeehouseMasterViewActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".BeehouseMasterViewActivity" />
         </activity>
 
         <activity

@@ -19,10 +19,10 @@ import com.example.android.openbeelab.db.BeeContract;
 /**
  * Created by Elorri on 11/12/2015.
  */
-public class BeehouseViewFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class BeehouseMasterViewFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String BEEHOUSE_VIEW_URI = "beehouse_view_uri";
-    private BeehouseViewAdapter mAdapter;
+    private BeehouseMasterViewAdapter mAdapter;
     private ListView mListView;
     private Uri mUri;
 
@@ -30,7 +30,7 @@ public class BeehouseViewFragment extends Fragment implements LoaderManager.Load
 
 
     public interface Callback {
-        void onItemSelected(Uri uri);
+        void onItemSelected(Uri uri, int position);
     }
 
 
@@ -38,7 +38,7 @@ public class BeehouseViewFragment extends Fragment implements LoaderManager.Load
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-        mAdapter = new BeehouseViewAdapter(getActivity(), null, 0);
+        mAdapter = new BeehouseMasterViewAdapter(getActivity(), null, 0);
 //        if (savedInstanceState != null) {
 //            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
 //            mUri = savedInstanceState.getParcelable(BEEHOUSE_VIEW_URI);
@@ -69,20 +69,23 @@ public class BeehouseViewFragment extends Fragment implements LoaderManager.Load
     }
 
     private void onItemClicked(AdapterView<?> parent, int position) {
+        String database = Utility.getPreferredDatabase(getContext());
+        String userId = Utility.getPreferredUserId(getContext());
+        String beehouseId = BeeContract.BeehouseEntry
+                .getBeehouseIdFromBeehouseDetailViewUri(mUri);
+        Uri uri=null;
         switch (position) {
-            case BeehouseViewAdapter.VIEW_TYPE_INFO:
-                break;
-            case BeehouseViewAdapter.VIEW_TYPE_DATAWIZ_OVER_LAST_30_DAYS:
-                String database = Utility.getPreferredDatabase(getContext());
-                String userId = Utility.getPreferredUserId(getContext());
-                String beehouseId = BeeContract.BeehouseEntry
-                        .getBeehouseIdFromBeehouseDetailViewUri(mUri);
-                Uri uri = BeeContract.MeasureEntry.buildWeightOverPeriodViewUri(database, userId,
+            case BeehouseMasterViewAdapter.VIEW_TYPE_INFO:
+                uri = BeeContract.BeehouseEntry.buildBeehouseViewUri(database, userId,
                         beehouseId);
-                ((Callback) getActivity()).onItemSelected(uri);
+                break;
+            case BeehouseMasterViewAdapter.VIEW_TYPE_DATAWIZ_OVER_LAST_30_DAYS:
 
+                uri = BeeContract.MeasureEntry.buildWeightOverPeriodViewUri(database, userId,
+                        beehouseId);
                 break;
         }
+        ((Callback) getActivity()).onItemSelected(uri, position);
     }
 
     @Override
@@ -139,6 +142,9 @@ public class BeehouseViewFragment extends Fragment implements LoaderManager.Load
     }
 
 
+
+
+
 //    @Override
 //    public void onSaveInstanceState(Bundle outState) {
 //        super.onSaveInstanceState(outState);
@@ -149,4 +155,23 @@ public class BeehouseViewFragment extends Fragment implements LoaderManager.Load
 //        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+mUri);
 //
 //    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+    }
 }

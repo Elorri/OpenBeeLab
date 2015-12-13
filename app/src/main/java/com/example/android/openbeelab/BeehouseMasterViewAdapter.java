@@ -10,7 +10,7 @@ import android.widget.CursorAdapter;
 /**
  * Created by Elorri on 11/12/2015.
  */
-public class BeehouseViewAdapter extends CursorAdapter {
+public class BeehouseMasterViewAdapter extends CursorAdapter {
 
     private static final int VIEW_TYPE_COUNT = 2;
 
@@ -18,7 +18,7 @@ public class BeehouseViewAdapter extends CursorAdapter {
     public static final int VIEW_TYPE_DATAWIZ_OVER_LAST_30_DAYS = 1;
 
 
-    public BeehouseViewAdapter(Context context, Cursor c, int flags) {
+    public BeehouseMasterViewAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
 

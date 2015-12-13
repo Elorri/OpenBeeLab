@@ -9,7 +9,7 @@ import android.util.Log;
 /**
  * Created by Elorri on 11/12/2015.
  */
-public class BeehouseViewActivity extends AppCompatActivity implements BeehouseViewFragment.Callback {
+public class BeehouseMasterViewActivity extends AppCompatActivity implements BeehouseMasterViewFragment.Callback {
 
     Uri mUri;
 
@@ -23,31 +23,55 @@ public class BeehouseViewActivity extends AppCompatActivity implements BeehouseV
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
             Bundle arguments = new Bundle();
             mUri = getIntent().getData();
-            arguments.putParcelable(BeehouseViewFragment.BEEHOUSE_VIEW_URI, mUri);
+            arguments.putParcelable(BeehouseMasterViewFragment.BEEHOUSE_VIEW_URI, mUri);
 
-            BeehouseViewFragment fragment = new BeehouseViewFragment();
+            BeehouseMasterViewFragment fragment = new BeehouseMasterViewFragment();
             fragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.beehouse_view_fragment_container, fragment)
                     .commit();
-        } else mUri = savedInstanceState.getParcelable(BeehouseViewFragment.BEEHOUSE_VIEW_URI);
+        } else mUri = savedInstanceState.getParcelable(BeehouseMasterViewFragment.BEEHOUSE_VIEW_URI);
 
     }
 
     @Override
-    public void onItemSelected(Uri uri) {
+    public void onItemSelected(Uri uri, int position) {
+        if(position==0){
+            Intent intent = new Intent(this, BeehouseDetailViewActivity.class);
+            intent.setData(uri);
+            startActivity(intent);
+        }
+        else{
         Intent intent = new Intent(this, DatawizOverLast30DaysActivity.class);
         intent.setData(uri);
-        startActivity(intent);
+        startActivity(intent);}
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+outState);
-        outState.putParcelable(BeehouseViewFragment.BEEHOUSE_VIEW_URI, mUri);
+        outState.putParcelable(BeehouseMasterViewFragment.BEEHOUSE_VIEW_URI, mUri);
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
     }
 }
 

@@ -85,6 +85,15 @@ public class BeeContract {
             return uri.getPathSegments().get(2);
         }
 
+        public static Uri buildBeehouseViewUri(String database, String userId, String
+                beehouseId) {
+            return BASE_CONTENT_URI.buildUpon()
+                    .appendPath(database)
+                    .appendPath(userId)
+                    .appendPath(beehouseId)
+                    .build();
+        }
+
 
     }
 

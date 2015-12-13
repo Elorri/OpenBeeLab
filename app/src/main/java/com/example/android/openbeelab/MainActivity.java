@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
     @Override
     protected void onResume() {
         super.onResume();
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         Uri currentMainUri = BeeContract.BeehouseEntry
                 .buildBeehousesViewUri(Utility.getPreferredDatabase(this), Utility.getPreferredUserId(this));
         if (!Utility.compareUris(mMainUri, currentMainUri)) {
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
 
     @Override
     public void onItemSelected(Uri uri) {
-        Intent intent = new Intent(this, BeehouseViewActivity.class);
+        Intent intent = new Intent(this, BeehouseMasterViewActivity.class);
         mBeehouseViewUri=uri;
         intent.setData(uri);
        // intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
@@ -109,6 +111,24 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         super.onSaveInstanceState(outState);
         outState.putParcelable(MAIN_URI, mMainUri);
         outState.putParcelable(BEEHOUSE_URI, mBeehouseViewUri);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
     }
 
 }

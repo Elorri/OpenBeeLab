@@ -193,5 +193,23 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         }
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+    }
+
 
 }
