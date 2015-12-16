@@ -11,7 +11,6 @@ import android.util.Log;
  */
 public class BeehouseMasterViewActivity extends AppCompatActivity implements BeehouseMasterViewFragment.Callback {
 
-    Uri mUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,8 +21,7 @@ public class BeehouseMasterViewActivity extends AppCompatActivity implements Bee
         if (savedInstanceState == null) {
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
             Bundle arguments = new Bundle();
-            mUri = getIntent().getData();
-            arguments.putParcelable(BeehouseMasterViewFragment.BEEHOUSE_VIEW_URI, mUri);
+            arguments.putParcelable(BeehouseMasterViewFragment.BEEHOUSE_VIEW_URI, getIntent().getData());
 
             BeehouseMasterViewFragment fragment = new BeehouseMasterViewFragment();
             fragment.setArguments(arguments);
@@ -31,7 +29,7 @@ public class BeehouseMasterViewActivity extends AppCompatActivity implements Bee
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.beehouse_view_fragment_container, fragment)
                     .commit();
-        } else mUri = savedInstanceState.getParcelable(BeehouseMasterViewFragment.BEEHOUSE_VIEW_URI);
+        }
 
     }
 
@@ -48,13 +46,6 @@ public class BeehouseMasterViewActivity extends AppCompatActivity implements Bee
         startActivity(intent);}
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+outState);
-        outState.putParcelable(BeehouseMasterViewFragment.BEEHOUSE_VIEW_URI, mUri);
-
-    }
 
     @Override
     public void onPause() {

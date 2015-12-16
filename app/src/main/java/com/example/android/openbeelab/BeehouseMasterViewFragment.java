@@ -39,11 +39,6 @@ public class BeehouseMasterViewFragment extends Fragment implements LoaderManage
         super.onCreate(savedInstanceState);
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         mAdapter = new BeehouseMasterViewAdapter(getActivity(), null, 0);
-//        if (savedInstanceState != null) {
-//            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-//            mUri = savedInstanceState.getParcelable(BEEHOUSE_VIEW_URI);
-//            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+mUri);
-//        }
     }
 
 
@@ -73,7 +68,7 @@ public class BeehouseMasterViewFragment extends Fragment implements LoaderManage
         String userId = Utility.getPreferredUserId(getContext());
         String beehouseId = BeeContract.BeehouseEntry
                 .getBeehouseIdFromBeehouseDetailViewUri(mUri);
-        Uri uri=null;
+        Uri uri = null;
         switch (position) {
             case BeehouseMasterViewAdapter.VIEW_TYPE_INFO:
                 uri = BeeContract.BeehouseEntry.buildBeehouseViewUri(database, userId,
@@ -113,11 +108,8 @@ public class BeehouseMasterViewFragment extends Fragment implements LoaderManage
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         Bundle arguments = getArguments();
         if (arguments != null) {
-            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-            if (mUri == null)
-                mUri = arguments.getParcelable(BEEHOUSE_VIEW_URI);
+            mUri = arguments.getParcelable(BEEHOUSE_VIEW_URI);
             if (mUri != null) {
-                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
                 cursorLoader = new CursorLoader(getActivity(),
                         mUri,
                         null,
@@ -140,21 +132,6 @@ public class BeehouseMasterViewFragment extends Fragment implements LoaderManage
         mAdapter.swapCursor(null);
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
     }
-
-
-
-
-
-//    @Override
-//    public void onSaveInstanceState(Bundle outState) {
-//        super.onSaveInstanceState(outState);
-//        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-//        outState.putParcelable(BEEHOUSE_VIEW_URI, mUri);
-//        outState.putString("bundle","nnn");
-//        mUri=outState.getParcelable(BEEHOUSE_VIEW_URI);
-//        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+mUri);
-//
-//    }
 
 
     @Override
