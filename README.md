@@ -5,9 +5,10 @@ This repository will contains the Android App of [OpenBeeLab project] (http://op
 ## Features
 
 This will app allows : 
-- get an overview of all beehouses available to an user
+- get an overview of user's apiaries
+- get an overview of user's beehouses
 - check out the last 30 days average measure foreach beehouse
-- sync data from the serveur during the first install and then sync every 12 hours
+- sync data from the serveur during the first install and then sync every 12 hours since then
 - send notification when bees are in danger
 
 
@@ -19,8 +20,9 @@ This will app allows :
 	Licensed under the Apache License, Version 2.0 
 	
 ## Screenshots
-![screen](../master/screenshot/Screenshot_2015-12-03-18-24-36_iphone6plus_spacegrey_portrait.png "apiaries overview")
-![screen](../master/screenshot/Screenshot_2015-11-25-20-06-30_iphone6plus_spacegrey_portrait.png "weight per week overthe last 30 days")
+![screen](../master/screenshot/Screenshot_2015-12-16-23-16-09_ipadair2_spacegrey_portrait.png "apiaries overview")
+![screen](../master/screenshot/Screenshot_2015-12-16-23-17-05_ipadair2_spacegrey_portrait.png "beehouse overview")
+![screen](../master/screenshot/Screenshot_2015-12-16-23-18-10_ipadair2_spacegrey_portrait.png "weight per week overthe last 30 days")
 
 ## Apk
 The apk realease can be found under the app directory
