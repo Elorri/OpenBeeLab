@@ -258,4 +258,5 @@ public class SettingsActivity extends Activity {
     public Intent getParentActivityIntent() {
         return super.getParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
+
 }

@@ -86,8 +86,7 @@ public class Utility {
     @BeeSyncAdapter.UserStatus
     public static int getUserStatus(Context c) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
-        return sp.getInt(c.getString(R.string.pref_user_status_key), BeeSyncAdapter
-                .STATUS_USERS_UNKNOWN);
+        return sp.getInt(c.getString(R.string.pref_user_status_key), BeeSyncAdapter.STATUS_USERS_UNKNOWN);
     }
 
     /**

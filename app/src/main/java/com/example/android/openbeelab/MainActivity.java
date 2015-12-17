@@ -29,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         setContentView(R.layout.main_activity);
 
         @BeeSyncAdapter.UserStatus int userStatus =Utility.getUserStatus(this);
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "(userStatus == " +
+                "BeeSyncAdapter.STATUS_USERS_UNKNOWN) "+(userStatus == BeeSyncAdapter
+                .STATUS_USERS_UNKNOWN)+" "+userStatus);
         if (userStatus == BeeSyncAdapter.STATUS_USERS_UNKNOWN)
             startActivity(new Intent(this, SettingsActivity.class));
 
@@ -75,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
     public void onItemSelected(Uri uri) {
         Intent intent = new Intent(this, BeehouseMasterViewActivity.class);
         intent.setData(uri);
-       // intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         startActivity(intent);
     }
 
