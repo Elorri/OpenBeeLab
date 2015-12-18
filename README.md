@@ -8,7 +8,7 @@ This will app allows :
 - get an overview of user's apiaries
 - get an overview of user's beehouses
 - check out the last 30 days average measure foreach beehouse
-- sync data from the serveur during the first install and then sync every 12 hours since then
+- sync data from the serveur during the first install and then sync every 3 hours
 - send notification when bees are in danger
 
 

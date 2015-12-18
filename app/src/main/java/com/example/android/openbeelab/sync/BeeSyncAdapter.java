@@ -71,8 +71,8 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
     // Interval at which to sync with the openbeelab server, in seconds.
     // 60 seconds (1 minute) * 180 = 3 hours
     // 60 seconds (1 minute) * 720 = 12 hours
-    //public static final int SYNC_INTERVAL = 60 * 180;
-    public static final int SYNC_INTERVAL = 60 * 720;
+    public static final int SYNC_INTERVAL = 60 * 180;
+    //public static final int SYNC_INTERVAL = 60 * 720;
     public static final int SYNC_FLEXTIME = SYNC_INTERVAL / 3;
     private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
     private static final int BEE_NOTIFICATION_ID = 3004;
