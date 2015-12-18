@@ -39,6 +39,10 @@ public class User {
         return name;
     }
 
+    public String getDatabase() {
+        return database;
+    }
+
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues();
         contentValues.put(BeeContract.UserEntry.COLUMN_NAME, this.name);

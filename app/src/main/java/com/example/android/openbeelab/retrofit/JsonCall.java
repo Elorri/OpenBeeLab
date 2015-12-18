@@ -28,6 +28,8 @@ public class JsonCall {
     public static final String API_URL = "http://dev.openbeelab.org:5984";
 
 
+
+
     public interface OpenBeelab {
 //        @GET("/{user_db}/_design/_view/users")
 //        Call<UserResults> getJsonUsers(
@@ -47,6 +49,13 @@ public class JsonCall {
 
     }
 
+//    public static String[] getDatabases(Context context) {
+//        return new String[]{
+//                context.getResources().getString(R.string.pref_database_option_value_lamine),
+//                context.getResources().getString(R.string.pref_database_option_value_lamine_dev),
+//                context.getResources().getString(R.string.pref_database_option_value_fred_db)
+//        };
+//    }
 
     public static List<User> getUsers(Context context) {
 //        if (userResults != null) {
@@ -59,8 +68,8 @@ public class JsonCall {
         users.add(new User("remy", "la_mine"));
 //        users.add(new User("pierre", "la_mine_dev"));
 //        users.add(new User("remy", "la_mine_dev"));
-//        users.add(new User("fred", "fred_db"));
-//        users.add(new User("pierre", "fred_db"));
+        users.add(new User("fred", "fred_db"));
+        users.add(new User("pierre", "fred_db"));
 //        } else {
 //            if ErrorObject not null
 //            Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_ERROR);
@@ -73,7 +82,9 @@ public class JsonCall {
     }
 
 
-    public static List<Beehouse> getBeehouses(Context context, long user_id) {
+
+
+    public static List<Beehouse> getBeehouses(Context context, String database, long user_id) {
         List<Beehouse> beehouses = new ArrayList<>();
         beehouses.add(new Beehouse("ruche_01", user_id, "la_mine_rucher_01", 23.5d));
         beehouses.add(new Beehouse("ruche_02", user_id, "la_mine_rucher_01", 43.6d));
@@ -86,7 +97,7 @@ public class JsonCall {
     }
 
 
-    public static List<Measure> getLast30DaysMeasures(Context context, long beehouseId, String
+    public static List<Measure> getLast30DaysMeasures(Context context, String database, long beehouseId, String
             beehouseName) {
         try {
             Retrofit retrofit = new Retrofit.Builder()
@@ -99,8 +110,7 @@ public class JsonCall {
                     .class);
 
             // Create a call instance for looking up OpenBeelab getJsonWeekAverageMeasure.
-            String database = Utility.getPreferredDatabase(context);
-            Call<MeasureResults> call = openBeelab.getJsonWeekAverageMeasure(database, beehouseName, "true", "30");
+                Call<MeasureResults> call = openBeelab.getJsonWeekAverageMeasure(database, beehouseName, "true", "30");
             MeasureResults measureResults = call.execute().body();
             final List<Measure> measures = new ArrayList<>();
             if (measureResults != null) {

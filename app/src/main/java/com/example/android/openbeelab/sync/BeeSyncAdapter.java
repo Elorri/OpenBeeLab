@@ -99,7 +99,7 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
         Beehouse.resetDB(getContext());
         Measure.resetDB(getContext());
 
-
+        //String[] databases = JsonCall.getDatabases(getContext());
 
         Utility.setUserStatus(getContext(), BeeSyncAdapter.STATUS_USERS_LOADING);
 
@@ -117,7 +117,8 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
 
         //For each user charge data about their apiaries
         for (User user : users_with_ids) {
-            List<Beehouse> beehouses = JsonCall.getBeehouses(getContext(), user.getId());
+            List<Beehouse> beehouses = JsonCall.getBeehouses(getContext(), user.getDatabase(),
+                    user.getId());
             Beehouse.syncDB(getContext(), beehouses);
             beehousesCursor = getContext().getContentResolver()
                     .query(BeeContract.BeehouseEntry.CONTENT_URI,
@@ -128,8 +129,8 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
             List<Beehouse> beehouses_with_ids = Beehouse.getBeehouses(beehousesCursor);
 
             for (Beehouse beehouse : beehouses_with_ids) {
-                List<Measure> measures = JsonCall.getLast30DaysMeasures(getContext(), beehouse
-                        .getId(), beehouse.getName());
+                List<Measure> measures = JsonCall.getLast30DaysMeasures(getContext(), user
+                        .getDatabase(),beehouse.getId(), beehouse.getName());
                 Measure.syncDB(getContext(), measures);
             }
         }
