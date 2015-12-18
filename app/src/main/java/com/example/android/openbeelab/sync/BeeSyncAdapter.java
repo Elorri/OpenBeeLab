@@ -99,6 +99,8 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
         Beehouse.resetDB(getContext());
         Measure.resetDB(getContext());
 
+
+
         Utility.setUserStatus(getContext(), BeeSyncAdapter.STATUS_USERS_LOADING);
 
         List<User> users = JsonCall.getUsers(getContext());

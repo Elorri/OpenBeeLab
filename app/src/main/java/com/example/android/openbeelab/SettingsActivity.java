@@ -143,7 +143,7 @@ public class SettingsActivity extends Activity {
             if (prefIndex >= 0) {
                 preference.setSummary(((ListPreference) preference).getEntries()[prefIndex]);
                 ((ListPreference) preference).setValueIndex(prefIndex);
-            }
+            } else preference.setSummary("");
             return true;
         }
 
@@ -172,8 +172,11 @@ public class SettingsActivity extends Activity {
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            if (key.equals(getActivity().getString(R.string.pref_user_status_key))) {
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+            if ((key.equals(getActivity().getString(R.string.pref_user_status_key)))
+                    || (key.equals(getActivity().getString(R.string.pref_database_key)))) {
                 @BeeSyncAdapter.UserStatus int userStatus = Utility.getUserStatus(getActivity());
+                Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "userStatus " + userStatus);
                 switch (userStatus) {
                     case BeeSyncAdapter.STATUS_USERS_LOADING:
                         mUserPref.setSummary(getString(R.string.pref_userName_option_label_loading));
@@ -181,7 +184,11 @@ public class SettingsActivity extends Activity {
                     case BeeSyncAdapter.STATUS_USERS_SYNC_DONE:
                         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
                         setUpDynamicListPreference();
-                        onPreferenceChange(mUserPref, mUserPref.getEntryValues()[0]);
+                        if (mUserPref.getEntryValues().length > 0)
+                            onPreferenceChange(mUserPref, mUserPref.getEntryValues()[0]);
+                        else
+                            onPreferenceChange(mUserPref, getActivity().getResources().getString
+                                    (R.string.pref_userId_option_value_unknown));
                         Utility.setStringSharedPreference(getActivity(),
                                 USER_PREF_LIST_STORED_KEY, "true");
                         break;
