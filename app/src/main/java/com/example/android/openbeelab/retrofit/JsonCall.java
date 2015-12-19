@@ -7,6 +7,7 @@ package com.example.android.openbeelab.retrofit;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.android.openbeelab.R;
 import com.example.android.openbeelab.Utility;
 import com.example.android.openbeelab.pojo.Beehouse;
 import com.example.android.openbeelab.pojo.Measure;
@@ -28,12 +29,9 @@ public class JsonCall {
     public static final String API_URL = "http://dev.openbeelab.org:5984";
 
 
-
-
     public interface OpenBeelab {
-//        @GET("/{user_db}/_design/_view/users")
-//        Call<UserResults> getJsonUsers(
-//                @Path("user_db") String userDB);
+        @GET("/{user_db}/_design/users/_view/all")
+        Call<UserResults> getJsonUsers(@Path("user_db") String userDB);
 
 //        @GET("/{user_db}/_design/_view/{user_name}/beehouses")
 //        Call<UserResults> getJsonUsers(
@@ -49,39 +47,46 @@ public class JsonCall {
 
     }
 
-//    public static String[] getDatabases(Context context) {
-//        return new String[]{
-//                context.getResources().getString(R.string.pref_database_option_value_lamine),
-//                context.getResources().getString(R.string.pref_database_option_value_lamine_dev),
-//                context.getResources().getString(R.string.pref_database_option_value_fred_db)
-//        };
-//    }
-
-    public static List<User> getUsers(Context context) {
-//        if (userResults != null) {
-
-//            for (UserRowObject row : userResults.rows) {
-//                users.add(new User("global_weight", row.key, row.value[0], "Kg", beehouseId));
-//            }
-        List<User> users = new ArrayList<>();
-        users.add(new User("pierre", "la_mine"));
-        users.add(new User("remy", "la_mine"));
-//        users.add(new User("pierre", "la_mine_dev"));
-//        users.add(new User("remy", "la_mine_dev"));
-        users.add(new User("fred", "fred_db"));
-        users.add(new User("pierre", "fred_db"));
-//        } else {
-//            if ErrorObject not null
-//            Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_ERROR);
-//             else
-//            Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_DOWN);
-//        }
-
-
-        return users;
+    public static String[] getDatabases(Context context) {
+        return new String[]{
+                context.getResources().getString(R.string.pref_database_option_value_lamine),
+                context.getResources().getString(R.string.pref_database_option_value_lamine_dev),
+                context.getResources().getString(R.string.pref_database_option_value_fred_db)
+        };
     }
 
+    public static List<User> getUsers(Context context, String database) {
+        try {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(JsonCall.API_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
 
+            // Create an instance of our OpenBeelab API interface.
+            OpenBeelab openBeelab = retrofit.create(OpenBeelab.class);
+
+            // Create a call instance for looking up OpenBeelab getJsonWeekAverageMeasure.
+            Call<UserResults> call = openBeelab.getJsonUsers(database);
+            UserResults userResults = call.execute().body();
+            final List<User> users = new ArrayList<>();
+            if (userResults != null) {
+                for (UserRowObject row : userResults.rows) {
+                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+                    users.add(new User(row.value.name, database));
+                }
+            } else {
+                //TODO use ErrorObject somehow here
+                //if ErrorObject not null
+                Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_ERROR);
+                // else
+                //Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_DOWN);
+            }
+            return users;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
     public static List<Beehouse> getBeehouses(Context context, String database, long user_id) {
@@ -110,17 +115,17 @@ public class JsonCall {
                     .class);
 
             // Create a call instance for looking up OpenBeelab getJsonWeekAverageMeasure.
-                Call<MeasureResults> call = openBeelab.getJsonWeekAverageMeasure(database, beehouseName, "true", "30");
+            Call<MeasureResults> call = openBeelab.getJsonWeekAverageMeasure(database, beehouseName, "true", "30");
             MeasureResults measureResults = call.execute().body();
             final List<Measure> measures = new ArrayList<>();
             if (measureResults != null) {
                 for (MesureRowObject row : measureResults.rows) {
                     //TODO virer ce static string
-                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] +"beehouse.id " + beehouseId);
+                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "beehouse.id " + beehouseId);
                     measures.add(new Measure("global_weight", row.key, row.value[0], "Kg", beehouseId));
                 }
             } else {
-               //TODO use ErrorObject somehow here
+                //TODO use ErrorObject somehow here
                 //if ErrorObject not null
                 Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_ERROR);
                 // else
