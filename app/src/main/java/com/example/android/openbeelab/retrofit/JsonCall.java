@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.example.android.openbeelab.R;
 import com.example.android.openbeelab.Utility;
+import com.example.android.openbeelab.pojo.Apiary;
 import com.example.android.openbeelab.pojo.Beehouse;
 import com.example.android.openbeelab.pojo.Measure;
 import com.example.android.openbeelab.pojo.User;
@@ -29,9 +30,14 @@ public class JsonCall {
     public static final String API_URL = "http://dev.openbeelab.org:5984";
 
 
+
+
     public interface OpenBeelab {
         @GET("/{user_db}/_design/users/_view/all")
         Call<UserResults> getJsonUsers(@Path("user_db") String userDB);
+
+        @GET("/{user_db}/_design/apiaries/_view/by_name")
+        Call<ApiaryResults> getJsonApiaries(@Path("user_db") String userDB);
 
 //        @GET("/{user_db}/_design/_view/{user_name}/beehouses")
 //        Call<UserResults> getJsonUsers(
@@ -82,6 +88,40 @@ public class JsonCall {
                 //Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_DOWN);
             }
             return users;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public static List<Apiary> getApiaries(Context context, String database, String name) {
+        try {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(JsonCall.API_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            // Create an instance of our OpenBeelab API interface.
+            OpenBeelab openBeelab = retrofit.create(OpenBeelab.class);
+
+
+            Call<ApiaryResults> call = openBeelab.getJsonApiaries(database);
+            ApiaryResults apiaryResults = call.execute().body();
+            final List<Apiary> apiaries = new ArrayList<>();
+            if (apiaryResults != null) {
+                for (ApiaryRowObject row : apiaryResults.rows) {
+                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+                    apiaries.add(new Apiary(row.value.name));
+                }
+            } else {
+                //TODO use ErrorObject somehow here
+                //if ErrorObject not null
+                Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_ERROR);
+                // else
+                //Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_DOWN);
+            }
+            return apiaries;
         } catch (IOException e) {
             e.printStackTrace();
             return null;

@@ -16,6 +16,7 @@ public class BeeContract {
 
 
     public static final String PATH_USER = "user";
+    public static final String PATH_APIARY = "apiary";
     public static final String PATH_BEEHOUSE = "beehouse";
     public static final String PATH_BEEHOUSE_VIEW = "beehouse_view";
     public static final String PATH_WEIGHT_OVER_PERIOD = "weight_over_period";
@@ -39,6 +40,22 @@ public class BeeContract {
     }
 
 
+    public static final class ApiaryEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_APIARY)
+                .build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_APIARY;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_APIARY;
+
+        public static final String TABLE_NAME = "apiary";
+
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_USER_ID = "user_id";
+    }
+
+
     public static final class BeehouseEntry implements BaseColumns {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_BEEHOUSE)
                 .build();
@@ -52,7 +69,7 @@ public class BeeContract {
 
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_USER_ID = "user_id";
-        public static final String COLUMN_APIARY_NAME = "apiary_name";
+        public static final String COLUMN_APIARY_ID = "apiary_id";
         public static final String COLUMN_CURRENT_WEIGHT = "current_weight";
 
 

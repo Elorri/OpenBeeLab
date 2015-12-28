@@ -26,6 +26,7 @@ import com.example.android.openbeelab.MainActivity;
 import com.example.android.openbeelab.R;
 import com.example.android.openbeelab.Utility;
 import com.example.android.openbeelab.db.BeeContract;
+import com.example.android.openbeelab.pojo.Apiary;
 import com.example.android.openbeelab.pojo.Beehouse;
 import com.example.android.openbeelab.pojo.Measure;
 import com.example.android.openbeelab.pojo.User;
@@ -104,9 +105,16 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
 
         Utility.setUserStatus(getContext(), BeeSyncAdapter.STATUS_USERS_LOADING);
 
-        for(String database:databases) {
+        for (String database : databases) {
             List<User> users = JsonCall.getUsers(getContext(), database);
             User.syncDB(getContext(), users);
+
+            for (User user :    users) {
+                List<Apiary> apiaries = JsonCall.getApiaries(getContext(),
+                        database, user.getName());
+                Apiary.syncDB(getContext(), apiaries);
+            }
+
         }
 
         usersCursor = getContext().getContentResolver()
@@ -134,7 +142,7 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
 
             for (Beehouse beehouse : beehouses_with_ids) {
                 List<Measure> measures = JsonCall.getLast30DaysMeasures(getContext(), user
-                        .getDatabase(),beehouse.getId(), beehouse.getName());
+                        .getDatabase(), beehouse.getId(), beehouse.getName());
                 Measure.syncDB(getContext(), measures);
             }
         }

@@ -24,13 +24,19 @@ public class BeeDbHelper extends SQLiteOpenHelper {
                 +BeeContract.UserEntry.COLUMN_NAME+" TEXT(50) NOT NULL, "
                 +BeeContract.UserEntry.COLUMN_DATABASE+" TEXT(50) NOT NULL)";
 
+        final String SQL_CREATE_APIARY_TABLE = "CREATE TABLE " + BeeContract.ApiaryEntry
+                .TABLE_NAME +
+                "(" +BeeContract.ApiaryEntry._ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                +BeeContract.ApiaryEntry.COLUMN_NAME+" TEXT(50) NOT NULL, "
+                +BeeContract.ApiaryEntry.COLUMN_USER_ID+" INTEGER NOT NULL)";
+
 
         final String SQL_CREATE_BEEHOUSE_TABLE = "CREATE TABLE " + BeeContract.BeehouseEntry
                 .TABLE_NAME +
                 "(" +BeeContract.BeehouseEntry._ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 +BeeContract.BeehouseEntry.COLUMN_NAME+" TEXT(50) NOT NULL, "
                 +BeeContract.BeehouseEntry.COLUMN_USER_ID+" INTEGER NOT NULL, "
-                +BeeContract.BeehouseEntry.COLUMN_APIARY_NAME +" TEXT(50) NOT NULL, "
+                +BeeContract.BeehouseEntry.COLUMN_APIARY_ID +" INTEGER NOT NULL, "
                 +BeeContract.BeehouseEntry.COLUMN_CURRENT_WEIGHT+" REAL NOT NULL)";
         
         
@@ -44,6 +50,7 @@ public class BeeDbHelper extends SQLiteOpenHelper {
                 +BeeContract.MeasureEntry.COLUMN_BEEHOUSE_ID+" INTEGER NOT NULL)";
 
         db.execSQL(SQL_CREATE_USER_TABLE);
+        db.execSQL(SQL_CREATE_APIARY_TABLE);
         db.execSQL(SQL_CREATE_BEEHOUSE_TABLE);
         db.execSQL(SQL_CREATE_MEASURE_TABLE);
     }

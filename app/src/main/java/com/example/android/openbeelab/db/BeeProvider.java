@@ -23,23 +23,26 @@ public class BeeProvider extends ContentProvider {
     public static final int USER = 100;
 
     //will match content://com.example.android.openbeelab/beehouse/
-    public static final int BEEHOUSE = 200;
+    public static final int APIARY = 200;
+
+    //will match content://com.example.android.openbeelab/beehouse/
+    public static final int BEEHOUSE = 300;
 
     //will match content://com.example.android.openbeelab/{userDb}/unknown/beehouse/
-    public static final int USER_BEEHOUSES_UNKNOWN = 201;
+    public static final int USER_BEEHOUSES_UNKNOWN = 301;
 
     //will match content://com.example.android.openbeelab/{userDb}/{userId}/beehouse/
-    public static final int USER_BEEHOUSES = 202;
+    public static final int USER_BEEHOUSES = 302;
 
     //will match /{userDb}/{userId}/{beehouseId}/beehouse_view/
-    public static final int BEEHOUSE_VIEW = 203;
+    public static final int BEEHOUSE_VIEW = 303;
 
 
     //will match content://com.example.android.openbeelab/measure/
-    public static final int MEASURE = 300;
+    public static final int MEASURE = 400;
 
     //will match /{userDb}/{userId}/{beehouseId}/measure/weight_over_period
-    public static final int WEIGHT_OVER_PERIOD = 301;
+    public static final int WEIGHT_OVER_PERIOD = 401;
 
     public static final String UNKNOWN = "unknown";
 
@@ -49,6 +52,7 @@ public class BeeProvider extends ContentProvider {
 
         // For each type of URI you want to add, create a corresponding code.
         matcher.addURI(authority, BeeContract.PATH_USER, USER);
+        matcher.addURI(authority, BeeContract.PATH_APIARY, APIARY);
         matcher.addURI(authority, BeeContract.PATH_BEEHOUSE, BEEHOUSE);
         matcher.addURI(authority, BeeContract.PATH_MEASURE, MEASURE);
         matcher.addURI(authority, "*/#/#/" + BeeContract.PATH_BEEHOUSE_VIEW, BEEHOUSE_VIEW);
@@ -121,6 +125,18 @@ public class BeeProvider extends ContentProvider {
             case USER: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         BeeContract.UserEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder
+                );
+                break;
+            }
+            case APIARY: {
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        BeeContract.BeehouseEntry.TABLE_NAME,
                         projection,
                         selection,
                         selectionArgs,

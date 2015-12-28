@@ -34,7 +34,7 @@ public class TestUtilities extends AndroidTestCase {
             BeeContract.BeehouseEntry._ID,
             BeeContract.BeehouseEntry.COLUMN_NAME,
             BeeContract.BeehouseEntry.COLUMN_USER_ID,
-            BeeContract.BeehouseEntry.COLUMN_APIARY_NAME,
+            BeeContract.BeehouseEntry.COLUMN_APIARY_ID,
             BeeContract.BeehouseEntry.COLUMN_CURRENT_WEIGHT
     };
 
@@ -120,7 +120,7 @@ public static final int BULK_INSERT_RECORDS_TO_INSERT=3;
                     + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry._ID)) + "|" 
                     + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry.COLUMN_NAME)) + "|"
                     + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry.COLUMN_USER_ID)) + "|"
-                    + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry.COLUMN_APIARY_NAME)) + "|"
+                    + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry.COLUMN_APIARY_ID)) + "|"
                     + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry.COLUMN_CURRENT_WEIGHT))));
             i++;
         }

@@ -53,7 +53,7 @@ public class Beehouse {
         ContentValues contentValues = new ContentValues();
         contentValues.put(BeeContract.BeehouseEntry.COLUMN_NAME, this.name);
         contentValues.put(BeeContract.BeehouseEntry.COLUMN_USER_ID, this.userId);
-        contentValues.put(BeeContract.BeehouseEntry.COLUMN_APIARY_NAME, this.apiaryName);
+        contentValues.put(BeeContract.BeehouseEntry.COLUMN_APIARY_ID, this.apiaryName);
         contentValues.put(BeeContract.BeehouseEntry.COLUMN_CURRENT_WEIGHT, this.currentWeight);
         return contentValues;
     }
@@ -91,7 +91,7 @@ public class Beehouse {
      * 0 : COLUMN_ID
      * 1 : COLUMN_NAME
      * 2 : COLUMN_USER_ID
-     * 3 : COLUMN_APIARY_NAME
+     * 3 : COLUMN_APIARY_ID
      * 4 : COLUMN_CURRENT_WEIGHT
      *
      * @param cursor
