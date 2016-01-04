@@ -24,6 +24,11 @@ public class BeeDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+        final String SQL_CREATE_DATABASE_TABLE = "CREATE TABLE "
+                + BeeContract.DatabaseEntry.TABLE_NAME +
+                "(" +BeeContract.DatabaseEntry._ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                +BeeContract.DatabaseEntry.COLUMN_NAME+" TEXT(50) NOT NULL)";
+
         final String SQL_CREATE_USER_TABLE = "CREATE TABLE " + BeeContract.UserEntry.TABLE_NAME +
                 "(" +BeeContract.UserEntry._ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 +BeeContract.UserEntry.COLUMN_NAME+" TEXT(50) NOT NULL, "
@@ -34,15 +39,19 @@ public class BeeDbHelper extends SQLiteOpenHelper {
                 .TABLE_NAME +
                 "(" +BeeContract.ApiaryUserEntry._ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 +BeeContract.ApiaryUserEntry.COLUMN_USER_ID+" INTEGER NOT NULL, "
-                +BeeContract.ApiaryUserEntry.COLUMN_APIARY_ID+" INTEGER NOT NULL)";
+                +BeeContract.ApiaryUserEntry.COLUMN_APIARY_ID+" INTEGER NOT NULL,"
+                +"UNIQUE (" + BeeContract.ApiaryUserEntry.COLUMN_USER_ID + ", " +
+                BeeContract.ApiaryUserEntry.COLUMN_APIARY_ID + ") ON CONFLICT REPLACE)";
 
         final String SQL_CREATE_APIARY_TABLE = "CREATE TABLE " + BeeContract.ApiaryEntry
                 .TABLE_NAME +
                 "(" +BeeContract.ApiaryEntry._ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 +BeeContract.ApiaryEntry.COLUMN_JSON_ID +" TEXT(50) NOT NULL, "
-                +BeeContract.ApiaryEntry.COLUMN_NAME+" TEXT(50) NOT NULL,"
-                +"UNIQUE (" + BeeContract.ApiaryEntry.COLUMN_JSON_ID + ", " +
-                BeeContract.ApiaryEntry.COLUMN_NAME + ") ON CONFLICT REPLACE)";
+                +BeeContract.ApiaryEntry.COLUMN_NAME+" TEXT(50) NOT NULL, "
+                +BeeContract.ApiaryEntry.COLUMN_DATABASE+" TEXT(50) NOT NULL, "
+                +"UNIQUE (" + BeeContract.ApiaryEntry.COLUMN_JSON_ID + ", "
+                +BeeContract.ApiaryEntry.COLUMN_NAME +", "
+                +BeeContract.ApiaryEntry.COLUMN_DATABASE+ ") ON CONFLICT REPLACE)";
 
 
         final String SQL_CREATE_BEEHOUSE_TABLE = "CREATE TABLE " + BeeContract.BeehouseEntry
@@ -53,7 +62,14 @@ public class BeeDbHelper extends SQLiteOpenHelper {
                 //TODO uncomment this line
                 //+BeeContract.BeehouseEntry.COLUMN_APIARY_ID +" INTEGER NOT NULL, "
                 +BeeContract.BeehouseEntry.COLUMN_APIARY_ID +" INTEGER, "
-                +BeeContract.BeehouseEntry.COLUMN_JSON_APIARY_ID +" TEXT(50))";
+                +BeeContract.BeehouseEntry.COLUMN_JSON_APIARY_ID +" TEXT(50),"
+                +BeeContract.BeehouseEntry.COLUMN_DATABASE+" TEXT(50) NOT NULL, "
+                +"UNIQUE ("
+                +BeeContract.BeehouseEntry.COLUMN_JSON_ID +", "
+                +BeeContract.BeehouseEntry.COLUMN_NAME+", "
+                +BeeContract.BeehouseEntry.COLUMN_APIARY_ID +", "
+                +BeeContract.BeehouseEntry.COLUMN_JSON_APIARY_ID+", "
+                +BeeContract.ApiaryEntry.COLUMN_DATABASE+ ") ON CONFLICT REPLACE)";
         
         
         final String SQL_CREATE_MEASURE_TABLE = "CREATE TABLE " + BeeContract.MeasureEntry.TABLE_NAME +
@@ -65,6 +81,9 @@ public class BeeDbHelper extends SQLiteOpenHelper {
                 +BeeContract.MeasureEntry.COLUMN_UNIT+" TEXT(10) NOT NULL, "
                 +BeeContract.MeasureEntry.COLUMN_BEEHOUSE_ID+" INTEGER NOT NULL)";
 
+
+
+        db.execSQL(SQL_CREATE_DATABASE_TABLE);
         db.execSQL(SQL_CREATE_USER_TABLE);
         db.execSQL(SQL_CREATE_APIARY_TABLE);
         db.execSQL(SQL_CREATE_APIARY_USER_TABLE);
@@ -74,6 +93,7 @@ public class BeeDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + BeeContract.DatabaseEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + BeeContract.UserEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + BeeContract.ApiaryEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + BeeContract.ApiaryUserEntry.TABLE_NAME);

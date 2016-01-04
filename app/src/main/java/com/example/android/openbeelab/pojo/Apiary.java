@@ -20,19 +20,22 @@ public class Apiary {
     public final String name;
     public List<Long> usersIds;
     private final String[] usersJsonIds;
+    private final String database;
 
 
-    public Apiary(long id, String jsonId, String name, String[] usersJsonIds) {
+    public Apiary(long id, String jsonId, String name, String[] usersJsonIds, String database) {
         this.id = id;
         this.jsonId = jsonId;
         this.name = name;
         this.usersJsonIds = usersJsonIds;
+        this.database=database;
     }
 
-    public Apiary(String jsonId, String name, String[] usersJsonIds) {
+    public Apiary(String jsonId, String name, String[] usersJsonIds, String database) {
         this.jsonId = jsonId;
         this.name = name;
         this.usersJsonIds = usersJsonIds;
+        this.database=database;
     }
 
     public static void syncDB(Context context, List<Apiary> apiaries) {
@@ -59,6 +62,7 @@ public class Apiary {
         ContentValues contentValues = new ContentValues();
         contentValues.put(BeeContract.ApiaryEntry.COLUMN_JSON_ID, this.jsonId);
         contentValues.put(BeeContract.ApiaryEntry.COLUMN_NAME, this.name);
+        contentValues.put(BeeContract.ApiaryEntry.COLUMN_DATABASE, this.database);
         return contentValues;
     }
 

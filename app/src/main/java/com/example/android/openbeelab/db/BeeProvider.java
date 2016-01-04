@@ -110,6 +110,7 @@ public class BeeProvider extends ContentProvider {
                 Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] +
                         "USER_APIARIES");
                 String userId = BeeContract.ApiaryEntry.getUserIdFromApiariesViewUri(uri);
+                String database = BeeContract.ApiaryEntry.getDatabaseFromApiariesViewUri(uri);
                 Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "" + userId);
                 retCursor = mOpenHelper.getReadableDatabase().query(BeeContract.ApiaryEntry.TABLE_NAME + " inner join "
                                 + BeeContract.ApiaryUserEntry.TABLE_NAME + " on "
@@ -118,8 +119,9 @@ public class BeeProvider extends ContentProvider {
                                 + BeeContract.ApiaryUserEntry.TABLE_NAME + "."
                                 + BeeContract.ApiaryUserEntry.COLUMN_APIARY_ID,
                         projection,
-                        BeeContract.ApiaryUserEntry.COLUMN_USER_ID + "=?",
-                        new String[]{userId},
+                        BeeContract.ApiaryUserEntry.COLUMN_USER_ID + "=? and "
+                        +BeeContract.ApiaryEntry.COLUMN_DATABASE + "=?",
+                        new String[]{userId, database},
                         null,
                         null,
                         BeeContract.ApiaryEntry.COLUMN_NAME + " asc"
@@ -140,11 +142,13 @@ public class BeeProvider extends ContentProvider {
                 Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] +
                         "USER_BEEHOUSES_BY_APIARY");
                 String apiaryId = BeeContract.BeehouseEntry.getApiaryIdFromBeehousesViewUri(uri);
+                String database = BeeContract.BeehouseEntry.getDatabaseFromBeehousesViewUri(uri);
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         BeeContract.BeehouseEntry.TABLE_NAME,
                         projection,
-                        BeeContract.BeehouseEntry.COLUMN_APIARY_ID + "=? ",
-                        new String[]{apiaryId},
+                        BeeContract.BeehouseEntry.COLUMN_APIARY_ID + "=? and "
+                        +BeeContract.BeehouseEntry.COLUMN_DATABASE + "=?",
+                        new String[]{apiaryId, database},
                         null,
                         null,
                         BeeContract.BeehouseEntry.COLUMN_NAME + " asc"

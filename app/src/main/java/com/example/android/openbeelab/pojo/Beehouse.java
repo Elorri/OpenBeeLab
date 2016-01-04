@@ -19,22 +19,25 @@ public class Beehouse {
     public final String name;
     public final String jsonApiaryId;
     public Long apiaryId;
+    private final String database;
 
 
     private static String LOG_TAG = Beehouse.class.getSimpleName();
 
 
-    public Beehouse(long id, String jsonId, String name, String jsonApiaryId) {
+    public Beehouse(long id, String jsonId, String name, String jsonApiaryId, String database) {
         this.id = id;
         this.jsonId = jsonId;
         this.name = name;
         this.jsonApiaryId = jsonApiaryId;
+        this.database=database;
     }
 
-    public Beehouse(String jsonId, String name, String jsonApiaryId) {
+    public Beehouse(String jsonId, String name, String jsonApiaryId, String database) {
         this.jsonId = jsonId;
         this.name = name;
         this.jsonApiaryId = jsonApiaryId;
+        this.database=database;
     }
 
 
@@ -56,6 +59,7 @@ public class Beehouse {
         //TODO list
         if (this.apiaryId != null)
             contentValues.put(BeeContract.BeehouseEntry.COLUMN_APIARY_ID, this.apiaryId);
+        contentValues.put(BeeContract.BeehouseEntry.COLUMN_DATABASE, this.database);
         return contentValues;
     }
 
@@ -93,6 +97,7 @@ public class Beehouse {
      * 1 : COLUMN_NAME
      * 2 : COLUMN_USER_ID
      * 3 : COLUMN_APIARY_ID
+     * 4 : COLUMN_DATABASE
      *
      * @param cursor
      * @return List<Beehouse>
@@ -102,6 +107,7 @@ public class Beehouse {
         final int COLUMN_JSON_ID = 1;
         final int COLUMN_NAME = 2;
         final int COLUMN_JSON_APIARY_ID = 3;
+        final int COLUMN_DATABASE = 3;
 
 
         List<Beehouse> beehouses = new ArrayList<>(cursor.getCount());
@@ -110,7 +116,8 @@ public class Beehouse {
             String jsonId = cursor.getString(COLUMN_JSON_ID);
             String name = cursor.getString(COLUMN_NAME);
             String jsonApiaryId = cursor.getString(COLUMN_JSON_APIARY_ID);
-            beehouses.add(new Beehouse(id, jsonId, name, jsonApiaryId));
+            String database = cursor.getString(COLUMN_DATABASE);
+            beehouses.add(new Beehouse(id, jsonId, name, jsonApiaryId, database));
         }
         return beehouses;
     }

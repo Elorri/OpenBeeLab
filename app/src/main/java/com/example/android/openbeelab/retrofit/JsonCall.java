@@ -114,7 +114,8 @@ public class JsonCall {
                     //TODO right now apiaries without beekeepers mentionned are not added in my db. See with Remy
                     if ((row.value._id != null) && (row.value.name != null)
                             && (row.value.beekeepers != null))
-                        apiaries.add(new Apiary(row.value._id, row.value.name, row.value.beekeepers));
+                        apiaries.add(new Apiary(row.value._id, row.value.name, row.value
+                                .beekeepers, database));
                 }
             } else {
                 //TODO use ErrorObject somehow here
@@ -151,7 +152,8 @@ public class JsonCall {
                     //TODO right now beehouses without name mentionned are not added in my db.
                     if ((row.value._id != null) && (row.value.name != null)
                             && (row.value.apiary_id != null))
-                        beehouses.add(new Beehouse(row.value._id, row.value.name, row.value.apiary_id));
+                        beehouses.add(new Beehouse(row.value._id, row.value.name, row.value
+                                .apiary_id, database));
                 }
             } else {
                 //TODO use ErrorObject somehow here

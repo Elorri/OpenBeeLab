@@ -14,7 +14,7 @@ public class BeeContract {
 
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
-
+    public static final String PATH_DATABASE = "user";
     public static final String PATH_USER = "user";
     public static final String PATH_APIARY = "apiary";
     public static final String PATH_APIARY_USER = "apiary_user";
@@ -23,6 +23,21 @@ public class BeeContract {
     public static final String PATH_WEIGHT_OVER_PERIOD = "weight_over_period";
     public static final String PATH_MEASURE = "measure";
 
+
+
+    public static final class DatabaseEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_DATABASE)
+                .build();
+
+        public static final String CONTENT_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_DATABASE;
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_DATABASE;
+
+        public static final String TABLE_NAME = "database";
+
+        public static final String COLUMN_NAME = "name";
+    }
 
 
     public static final class UserEntry implements BaseColumns {
@@ -55,6 +70,7 @@ public class BeeContract {
 
         public static final String COLUMN_JSON_ID = "json_id";
         public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_DATABASE = "database";
 
         //USER_APIARIES
         public static Uri buildApiariesViewUri(String database, String userId) {
@@ -64,7 +80,9 @@ public class BeeContract {
                     .appendPath(PATH_APIARY)
                     .build();
         }
-
+        public static String getDatabaseFromApiariesViewUri(Uri uri) {
+            return uri.getPathSegments().get(0);
+        }
         public static String getUserIdFromApiariesViewUri(Uri uri) {
             return uri.getPathSegments().get(1);
         }
@@ -101,9 +119,11 @@ public class BeeContract {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_APIARY_ID = "apiary_id";
         public static final String COLUMN_JSON_APIARY_ID = "json_apiary_id";
+        public static final String COLUMN_DATABASE = "database";
         public static final String VIEW_CURRENT_WEIGHT = "current_weight";
 
 
+        //USER_BEEHOUSES_BY_APIARY
         public static Uri buildBeehousesByApiaryViewUri(String database, String userId, String apiaryId) {
             return BASE_CONTENT_URI.buildUpon()
                     .appendPath(database)
@@ -113,6 +133,7 @@ public class BeeContract {
                     .build();
         }
 
+        //USER_BEEHOUSES
         public static Uri buildBeehousesViewUri(String database, String userId) {
             return BASE_CONTENT_URI.buildUpon()
                     .appendPath(database)
@@ -121,6 +142,7 @@ public class BeeContract {
                     .build();
         }
 
+        //BEEHOUSE_BY_DATABASE
         public static Uri buildBeehousesByDatabaseViewUri(String database) {
             return BASE_CONTENT_URI.buildUpon()
                     .appendPath(database)
@@ -140,6 +162,9 @@ public class BeeContract {
             return uri.getPathSegments().get(0);
         }
 
+        public static String getDatabaseFromBeehousesViewUri(Uri uri) {
+            return uri.getPathSegments().get(0);
+        }
 
 
         public static String getApiaryIdFromBeehousesViewUri(Uri uri) {
