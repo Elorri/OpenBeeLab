@@ -120,7 +120,7 @@ public class BeeProvider extends ContentProvider {
                                 + BeeContract.ApiaryUserEntry.COLUMN_APIARY_ID,
                         projection,
                         BeeContract.ApiaryUserEntry.COLUMN_USER_ID + "=? and "
-                        +BeeContract.ApiaryEntry.COLUMN_DATABASE + "=?",
+                                + BeeContract.ApiaryEntry.COLUMN_DATABASE + "=?",
                         new String[]{userId, database},
                         null,
                         null,
@@ -143,16 +143,45 @@ public class BeeProvider extends ContentProvider {
                         "USER_BEEHOUSES_BY_APIARY");
                 String apiaryId = BeeContract.BeehouseEntry.getApiaryIdFromBeehousesViewUri(uri);
                 String database = BeeContract.BeehouseEntry.getDatabaseFromBeehousesViewUri(uri);
-                retCursor = mOpenHelper.getReadableDatabase().query(
-                        BeeContract.BeehouseEntry.TABLE_NAME,
-                        projection,
-                        BeeContract.BeehouseEntry.COLUMN_APIARY_ID + "=? and "
-                        +BeeContract.BeehouseEntry.COLUMN_DATABASE + "=?",
-                        new String[]{apiaryId, database},
-                        null,
-                        null,
-                        BeeContract.BeehouseEntry.COLUMN_NAME + " asc"
+//                retCursor = mOpenHelper.getReadableDatabase().query(
+//                        BeeContract.BeehouseEntry.TABLE_NAME,
+//                        projection,
+//                        BeeContract.BeehouseEntry.COLUMN_APIARY_ID + "=? and "
+//                                + BeeContract.BeehouseEntry.COLUMN_DATABASE + "=?",
+//                        new String[]{apiaryId, database},
+//                        null,
+//                        null,
+//                        BeeContract.BeehouseEntry.COLUMN_NAME + " asc"
+//                );
+
+
+                retCursor = mOpenHelper.getReadableDatabase().rawQuery(
+                        "select * from "
+                                + BeeContract.BeehouseEntry.TABLE_NAME + " inner join (select "
+                                + BeeContract.MeasureEntry.COLUMN_BEEHOUSE_ID + ", max("
+                                + BeeContract.MeasureEntry.COLUMN_WEEK_ID + ")as "
+                                + BeeContract.MeasureEntry.COLUMN_WEEK_ID + ", "
+                                + BeeContract.BeehouseEntry.VIEW_CURRENT_WEIGHT + " as "
+                                + BeeContract.BeehouseEntry.VIEW_CURRENT_WEIGHT + " from(select b."
+                                + BeeContract.BeehouseEntry._ID + ", "
+                                + BeeContract.MeasureEntry.COLUMN_BEEHOUSE_ID + ", "
+                                + BeeContract.MeasureEntry.COLUMN_WEEK_ID + ", "
+                                + BeeContract.MeasureEntry.COLUMN_VALUE + " as "
+                                + BeeContract.BeehouseEntry.VIEW_CURRENT_WEIGHT + " from "
+                                + BeeContract.MeasureEntry.TABLE_NAME + "  inner join(select  "
+                                + BeeContract.BeehouseEntry.TABLE_NAME + ".* from "
+                                + BeeContract.BeehouseEntry.TABLE_NAME + " where "
+                                + BeeContract.BeehouseEntry.COLUMN_APIARY_ID + " =? and "
+                                + BeeContract.BeehouseEntry.COLUMN_DATABASE + " =?) b on "
+                                + BeeContract.MeasureEntry.COLUMN_BEEHOUSE_ID + " =b."
+                                + BeeContract.BeehouseEntry._ID + ") group by "
+                                + BeeContract.MeasureEntry.COLUMN_BEEHOUSE_ID + ") w on "
+                                + BeeContract.BeehouseEntry._ID + "=w."
+                                + BeeContract.MeasureEntry.COLUMN_BEEHOUSE_ID,
+                        new String[]{apiaryId, database}
                 );
+//                select * from beehouse inner join (select beehouse_id, max(weekId) as weekId, weight as weight from (select b._id, beehouse_id, weekId, value as weight from measure inner join (select beehouse.* from beehouse where apiary_id=9 and database='la_mine') b on beehouse_id=b._id) group by beehouse_id) w on beehouse._id=w.beehouse_id
+
                 break;
             }
             case USER_BEEHOUSES: {
@@ -160,7 +189,7 @@ public class BeeProvider extends ContentProvider {
                         "USER_BEEHOUSES");
                 String userId = BeeContract.BeehouseEntry.getUserIdFromBeehousesViewUri(uri);
                 Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "" + userId);
-                retCursor = mOpenHelper.getReadableDatabase().rawQuery("Select 36 as "
+                retCursor = mOpenHelper.getReadableDatabase().rawQuery("Select 89 as "
                                 + BeeContract.BeehouseEntry.VIEW_CURRENT_WEIGHT + " from "
                                 + BeeContract.BeehouseEntry.TABLE_NAME + " inner join "
                                 + BeeContract.ApiaryEntry.TABLE_NAME + " on "
@@ -212,7 +241,7 @@ public class BeeProvider extends ContentProvider {
                                 + BeeContract.BeehouseEntry.COLUMN_APIARY_ID + "= a."
                                 + BeeContract.ApiaryUserEntry.COLUMN_APIARY_ID,
                         new String[]{database});
-                   break;
+                break;
             }
 
             case WEIGHT_OVER_PERIOD: {

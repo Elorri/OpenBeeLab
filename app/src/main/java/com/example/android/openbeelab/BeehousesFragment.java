@@ -35,14 +35,14 @@ public class BeehousesFragment  extends Fragment implements LoaderManager.Loader
     private static final String[] BEEHOUSES_COLUMNS = {
             BeeContract.BeehouseEntry._ID,
             BeeContract.BeehouseEntry.COLUMN_NAME,
-            "36 as "+BeeContract.BeehouseEntry.VIEW_CURRENT_WEIGHT
+            BeeContract.BeehouseEntry.VIEW_CURRENT_WEIGHT
     };
 
     // These indices are tied to BEEHOUSES_COLUMNS.  If BEEHOUSES_COLUMNS changes, these
     // must change.
     static final int COL_BEEHOUSE_ID = 0;
-    static final int COL_BEEHOUSE_NAME = 1;
-    static final int COL_BEEHOUSE_WEIGHT = 2;
+    static final int COL_BEEHOUSE_NAME = 2;
+    static final int COL_BEEHOUSE_WEIGHT = 8;
 
 
     public interface Callback {
