@@ -40,7 +40,9 @@ public class BeeDbHelper extends SQLiteOpenHelper {
                 .TABLE_NAME +
                 "(" +BeeContract.ApiaryEntry._ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 +BeeContract.ApiaryEntry.COLUMN_JSON_ID +" TEXT(50) NOT NULL, "
-                +BeeContract.ApiaryEntry.COLUMN_NAME+" TEXT(50) NOT NULL)";
+                +BeeContract.ApiaryEntry.COLUMN_NAME+" TEXT(50) NOT NULL,"
+                +"UNIQUE (" + BeeContract.ApiaryEntry.COLUMN_JSON_ID + ", " +
+                BeeContract.ApiaryEntry.COLUMN_NAME + ") ON CONFLICT REPLACE)";
 
 
         final String SQL_CREATE_BEEHOUSE_TABLE = "CREATE TABLE " + BeeContract.BeehouseEntry

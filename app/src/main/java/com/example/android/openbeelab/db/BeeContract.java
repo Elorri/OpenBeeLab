@@ -56,7 +56,7 @@ public class BeeContract {
         public static final String COLUMN_JSON_ID = "json_id";
         public static final String COLUMN_NAME = "name";
 
-
+        //USER_APIARIES
         public static Uri buildApiariesViewUri(String database, String userId) {
             return BASE_CONTENT_URI.buildUpon()
                     .appendPath(database)

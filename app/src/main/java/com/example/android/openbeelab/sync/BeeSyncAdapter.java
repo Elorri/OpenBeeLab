@@ -21,6 +21,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.IntDef;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 
 import com.example.android.openbeelab.MainActivity;
 import com.example.android.openbeelab.R;
@@ -142,7 +143,10 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
                             null,
                             null,
                             null);
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "beehouses.getCount " +
+                    "" + beehousesCursor.getCount());
             beehouses = Beehouse.getBeehouses(beehousesCursor);
+
 
             //Get and sync Measures for each beehouses
             for (Beehouse beehouse : beehouses) {

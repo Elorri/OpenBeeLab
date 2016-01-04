@@ -170,6 +170,7 @@ public class JsonCall {
 
     public static List<Measure> getLast30DaysMeasures(Context context, String database, long beehouseId, String
             beehouseName) {
+        Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "beehouseName " + beehouseName);
         try {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(JsonCall.API_URL)

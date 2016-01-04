@@ -200,14 +200,15 @@ public class BeeProvider extends ContentProvider {
                                 + BeeContract.ApiaryUserEntry.TABLE_NAME + " inner join (select "
                                 + BeeContract.UserEntry._ID + " from "
                                 + BeeContract.UserEntry.TABLE_NAME + " where  "
-                                + BeeContract.UserEntry.COLUMN_DATABASE + "=?) u on "
+                                + BeeContract.UserEntry.COLUMN_DATABASE + "='la_mine') u on "
                                 + BeeContract.ApiaryUserEntry.TABLE_NAME + "."
                                 + BeeContract.ApiaryUserEntry.COLUMN_USER_ID + "= u."
                                 + BeeContract.UserEntry._ID + ") a on "
                                 + BeeContract.BeehouseEntry.TABLE_NAME + "."
                                 + BeeContract.BeehouseEntry.COLUMN_APIARY_ID + "= a."
                                 + BeeContract.ApiaryUserEntry.COLUMN_APIARY_ID,
-                        new String[]{database});
+                       // new String[]{database});
+                        new String[]{});
                 break;
             }
 
