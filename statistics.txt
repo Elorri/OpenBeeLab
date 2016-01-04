@@ -13,7 +13,7 @@
 | Test provider     | 0|0|++|
 | Sync Adapter     | 0|0|++|
 | Sync notifications      | 0|0|++|
-| Debug  | 0|0|++|
+| Debug  | 72|0|++|
 | Improve tablette design    | 0|0|++|
 
 
@@ -24,7 +24,7 @@
 
 | LOC    | Hours | 
 | ------ | ----- |
-| 8569  |      |
+| 8641  |      |
 
 - Expected complete project
 
