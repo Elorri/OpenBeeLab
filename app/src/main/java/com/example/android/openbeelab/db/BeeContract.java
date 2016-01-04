@@ -137,7 +137,7 @@ public class BeeContract {
 
         //will match content://com.example.android.openbeelab/{userDb}/beehouse/
         public static String getDatabaseFromBeehousesByDatabaseViewUri(Uri uri) {
-            return uri.getPathSegments().get(1);
+            return uri.getPathSegments().get(0);
         }
 
 
