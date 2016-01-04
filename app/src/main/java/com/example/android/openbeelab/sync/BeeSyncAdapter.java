@@ -27,6 +27,7 @@ import com.example.android.openbeelab.R;
 import com.example.android.openbeelab.Utility;
 import com.example.android.openbeelab.db.BeeContract;
 import com.example.android.openbeelab.pojo.Apiary;
+import com.example.android.openbeelab.pojo.ApiaryUser;
 import com.example.android.openbeelab.pojo.Beehouse;
 import com.example.android.openbeelab.pojo.Measure;
 import com.example.android.openbeelab.pojo.User;
@@ -91,68 +92,88 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
 //            Utility.setUserStatus(getContext(), BeeSyncAdapter
 //                    .STATUS_USERS_LOADING);
 
-        Cursor usersCursor = null;
-        Cursor beehousesCursor = null;
-        Cursor measuresCursor = null;
+
 
 
         User.resetDB(getContext());
+        Apiary.resetDB(getContext());
+        ApiaryUser.resetDB(getContext());
         Beehouse.resetDB(getContext());
         Measure.resetDB(getContext());
 
-        String[] databases = JsonCall.getDatabases(getContext());
-
-
         Utility.setUserStatus(getContext(), BeeSyncAdapter.STATUS_USERS_LOADING);
 
+        String[] databases = JsonCall.getDatabases(getContext());
         for (String database : databases) {
+
             List<User> users = JsonCall.getUsers(getContext(), database);
             User.syncDB(getContext(), users);
 
-            for (User user :    users) {
-                List<Apiary> apiaries = JsonCall.getApiaries(getContext(),
-                        database, user.getName());
-                Apiary.syncDB(getContext(), apiaries);
+            //Apiaries returned have a list of userJsonIds but not userIds
+            List<Apiary> apiaries = JsonCall.getApiaries(getContext(), database);
+            Apiary.syncDB(getContext(), apiaries);
+
+            //Apiaries have now their list of userIds (userJsonIds is needed for that, User.syncDB
+            // must have been done before)
+            apiaries = Apiary.fetchUsersIds(getContext(), apiaries);
+
+            //Apiaries have now their ids
+            apiaries = Apiary.fetchIds(getContext(), apiaries);
+
+            //Now that I have my usersId and apiariesId I can sync ApiaryUser
+            for (Apiary apiary : apiaries) {
+                ApiaryUser.syncDB(getContext(), apiary);
+            }
+
+            //Beehouses returned have a their jsonApiaries but not their apiaryId
+            List<Beehouse> beehouses = JsonCall.getBeehouses(getContext(), database);
+
+            //Beehouses have now their apiaryId(Apiary.syncDB must have been done before)
+            beehouses = Beehouse.fetchApiaryId(getContext(), beehouses);
+
+
+            //Beehouse are completed we can sync
+            Beehouse.syncDB(getContext(), beehouses);
+
+            //Now beehouses have ids
+            Cursor beehousesCursor = getContext().getContentResolver()
+                    .query(BeeContract.BeehouseEntry.buildBeehousesByDatabaseViewUri(database),
+                            null,
+                            null,
+                            null,
+                            null);
+            beehouses = Beehouse.getBeehouses(beehousesCursor);
+
+            //Get and sync Measures for each beehouses
+            for (Beehouse beehouse : beehouses) {
+                List<Measure> measures = JsonCall.getLast30DaysMeasures(getContext(), database, beehouse
+                        .getId(), beehouse.getName());
+                Measure.syncDB(getContext(), measures);
             }
 
         }
 
-        usersCursor = getContext().getContentResolver()
-                .query(BeeContract.UserEntry.CONTENT_URI, null, null, null, null);
-        List<User> users_with_ids = User.getUsers(usersCursor);
-
+        //At that point sync should be done for all tables.
+        //TODO rename USERS_SYNC to just SYNC
+        Cursor usersCursor=getContext().getContentResolver().query(
+                BeeContract.UserEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                null);
         if (usersCursor.getCount() > 0)
             Utility.setUserStatus(getContext(), BeeSyncAdapter
                     .STATUS_USERS_SYNC_DONE);
         else Utility.setUserStatus(getContext(), BeeSyncAdapter
                 .STATUS_USERS_UNKNOWN);
 
-        //For each user charge data about their apiaries
-        for (User user : users_with_ids) {
-            List<Beehouse> beehouses = JsonCall.getBeehouses(getContext(), user.getDatabase(),
-                    user.getId());
-            Beehouse.syncDB(getContext(), beehouses);
-            beehousesCursor = getContext().getContentResolver()
-                    .query(BeeContract.BeehouseEntry.CONTENT_URI,
-                            null,
-                            BeeContract.BeehouseEntry.COLUMN_USER_ID + "=?",
-                            new String[]{String.valueOf(user.getId())},
-                            null);
-            List<Beehouse> beehouses_with_ids = Beehouse.getBeehouses(beehousesCursor);
-
-            for (Beehouse beehouse : beehouses_with_ids) {
-                List<Measure> measures = JsonCall.getLast30DaysMeasures(getContext(), user
-                        .getDatabase(), beehouse.getId(), beehouse.getName());
-                Measure.syncDB(getContext(), measures);
-            }
-        }
-
+        //TODO uncomment this
         //Send notification only if the selected user have bees are in danger
-        boolean areBeesInDanger = areBeesInDanger();
-        if (areBeesInDanger) {
-            int message = areBeesInDangerMessage(areBeesInDanger);
-            notifyUserSyncDone(message);
-        }
+//        boolean areBeesInDanger = areBeesInDanger();
+//        if (areBeesInDanger) {
+//            int message = areBeesInDangerMessage(areBeesInDanger);
+//            notifyUserSyncDone(message);
+//        }
     }
 
     private boolean areBeesInDanger() {
@@ -161,7 +182,7 @@ public class BeeSyncAdapter extends AbstractThreadedSyncAdapter {
         Cursor cursor = getContext().getContentResolver()
                 .query(BeeContract.BeehouseEntry.buildBeehousesViewUri(database, userId),
                         null,
-                        BeeContract.BeehouseEntry.COLUMN_CURRENT_WEIGHT + "<=?",
+                        BeeContract.BeehouseEntry.VIEW_CURRENT_WEIGHT + "<=?",
                         new String[]{getContext().getString(R.string.dangerous_weight)},
                         null);
         if (cursor.getCount() > 0) return true;

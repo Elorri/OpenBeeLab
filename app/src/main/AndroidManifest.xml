@@ -15,20 +15,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".StethoApplication">
-        <activity android:name=".MainActivity">
+        <activity android:label="@string/apiaries" android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".BeehouseMasterViewActivity"
-            android:label="@string/title_activity_detail"
-            android:parentActivityName=".MainActivity" android:launchMode="singleTop">
+        <activity android:name=".BeehousesActivity"
+                  android:label="@string/beehouses"
+                  android:parentActivityName=".MainActivity" android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.openbeelab.MainActivity" />
+        </activity>
+        <activity
+            android:name=".BeehouseMasterViewActivity"
+            android:label="@string/title_activity_detail"
+            android:parentActivityName=".BeehousesActivity" android:launchMode="singleTop">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.openbeelab.BeehousesActivity" />
         </activity>
         <activity
             android:name=".BeehouseDetailViewActivity"

@@ -76,18 +76,6 @@ public class SettingsActivity extends Activity {
                 setUpDynamicListPreference();
             onPreferenceChange(mUserPref, defaultUserPref);
             mUserPref.setOnPreferenceChangeListener(this);
-
-//            @BeeSyncAdapter.UserStatus int userDbStatus = Utility.getUserStatus(getActivity());
-//            switch (userDbStatus) {
-//                case BeeSyncAdapter.STATUS_USERS_LOADING:
-//                    userPref.setSummary(getString(R.string.pref_userName_option_label_loading));
-//                    break;
-//                case BeeSyncAdapter.STATUS_USERS_SYNC_DONE:
-//                    bindPreferenceSummaryToNewValue(userPref);
-//                    break;
-//                default:
-//                bindPreferenceSummaryToValue(userPref);
-//            }
         }
 
         private String getPrefStoredValue(Preference pref) {
@@ -147,28 +135,6 @@ public class SettingsActivity extends Activity {
             return true;
         }
 
-//        private void setPreferenceSummary(Preference preference, Object value) {
-//            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-//            String stringValue = value.toString();
-//            String key = preference.getKey();
-//
-//            if (preference instanceof ListPreference) {
-//                if (key.equals(getString(R.string.pref_userId_key))) {
-//                    Utility.setPreferredUserId(getActivity(), stringValue);
-//                }
-//                // For list preferences, look up the correct display value in
-//                // the preference's 'entries' list (since they have separate labels/values).
-//                ListPreference listPreference = (ListPreference) preference;
-//                int prefIndex = listPreference.findIndexOfValue(stringValue);
-//                if (prefIndex >= 0) {
-//                    preference.setSummary(listPreference.getEntries()[prefIndex]);
-//                    ((ListPreference) preference).setValueIndex(prefIndex);
-//                }
-//            } else {
-//                // For other preferences, set the summary to the value's simple string representation.
-//                preference.setSummary(stringValue);
-//            }
-//        }
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -196,27 +162,6 @@ public class SettingsActivity extends Activity {
                         break;
                 }
             }
-
-
-//            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-//            if (key.equals(getString(R.string.pref_user_status_key))) {
-//                ListPreference userPref = (ListPreference) findPreference(getString(R.string.pref_userId_key));
-//                @BeeSyncAdapter.UserStatus int userDbStatus = Utility.getUserStatus(getActivity());
-//                switch (userDbStatus) {
-//                    case BeeSyncAdapter.STATUS_USERS_LOADING:
-//                        userPref.setSummary(getString(R.string.pref_userName_option_label_loading));
-//                        break;
-//                    case BeeSyncAdapter.STATUS_USERS_SYNC_DONE: {
-//                       bindPreferenceSummaryToNewValue(userPref);
-//                        break;
-//                    }
-//                    default:
-//                        // Note --- if the server is down we still assume the value
-//                        // is valid
-////                        preference.setSummary(stringValue);
-//
-//                }
-//            }
         }
 
         private void setUpDynamicListPreference() {
@@ -240,24 +185,6 @@ public class SettingsActivity extends Activity {
             mUserPref.setEntryValues(pref_userId_options_values);
         }
 
-//        private void bindPreferenceSummaryToNewValue(ListPreference userPref) {
-//
-//            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "" + database);
-//
-//
-//            userPref = (ListPreference) findPreference(getString(R.string.pref_userId_key));
-//
-//
-//            //Set a new userPref default value
-//            String userPrefDefault = (String) pref_userId_options_values[0];
-//            Utility.setPreferredUserId(getActivity(), userPrefDefault);
-//
-//            // Update the preference summary with new default value.
-//            setPreferenceSummary(userPref, userPrefDefault);
-//
-//            //Open alert dialog asking the user to change the value. For now nothing
-//            // done
-//        }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

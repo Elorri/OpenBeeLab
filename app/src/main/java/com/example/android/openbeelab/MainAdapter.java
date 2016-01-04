@@ -18,12 +18,10 @@ public class MainAdapter extends CursorAdapter {
     }
 
     public static class ViewHolder {
-        public final TextView beehouseImageView;
-        public final TextView beehouseTextView;
+        public final TextView apiaryTextView;
 
         public ViewHolder(View view) {
-            beehouseImageView = (TextView) view.findViewById(R.id.beehouse_img);
-            beehouseTextView = (TextView) view.findViewById(R.id.beehouse_name);
+            apiaryTextView = (TextView) view.findViewById(R.id.apiary_img);
         }
     }
 
@@ -38,13 +36,6 @@ public class MainAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
-        viewHolder.beehouseImageView.setBackgroundDrawable(context.getResources()
-                .getDrawable(Utility.getIconResourceForBeehouseCondition(cursor.getDouble
-                        (MainFragment.COL_BEEHOUSE_WEIGHT))));
-        viewHolder.beehouseImageView.setText(String.format(context.getString(R.string.weight),
-                cursor.getString(MainFragment.COL_BEEHOUSE_WEIGHT)));
-//        ((ImageView) view).setImageResource(Utility.getIconResourceForBeehouseCondition(cursor
-//                .getDouble(1)));
-        viewHolder.beehouseTextView.setText(cursor.getString(MainFragment.COL_BEEHOUSE_NAME));
+        viewHolder.apiaryTextView.setText(cursor.getString(MainFragment.COL_APIARY_NAME));
     }
 }

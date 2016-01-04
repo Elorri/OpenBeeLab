@@ -7,15 +7,23 @@
     xmlns:tool="http://schemas.android.com/tools">
 
     <TextView
-        android:id="@+id/apiary_img"
+        android:id="@+id/beehouse_img"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_margin="@dimen/medium_margin"
         android:padding="@dimen/medium_margin"
         android:scaleType="centerCrop"
-        tool:text="Marmande"
+        tool:text="45.0 kg"
         android:gravity="center|bottom"
         android:textAppearance="?android:textAppearanceMedium"
-        tool:background="@drawable/apiary"/>
+        tool:background="@drawable/ic_weight_critical"/>
 
+    <TextView
+        android:id="@+id/beehouse_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       android:layout_below="@id/beehouse_img"
+        android:gravity="center"
+        android:textAppearance="?android:textAppearanceMedium"
+        tool:text="A beehouse"/>
 </RelativeLayout>

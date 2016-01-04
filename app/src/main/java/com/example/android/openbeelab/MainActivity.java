@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
             startActivity(new Intent(this, SettingsActivity.class));
 
         if (savedInstanceState == null)
-            mMainUri = BeeContract.BeehouseEntry
-                    .buildBeehousesViewUri(Utility.getPreferredDatabase(this), Utility
+            mMainUri = BeeContract.ApiaryEntry
+                    .buildApiariesViewUri(Utility.getPreferredDatabase(this), Utility
                             .getPreferredUserId(this));
         else{
             mMainUri = savedInstanceState.getParcelable(MAIN_URI);
@@ -53,8 +53,9 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
     protected void onResume() {
         super.onResume();
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-        Uri currentMainUri = BeeContract.BeehouseEntry
-                .buildBeehousesViewUri(Utility.getPreferredDatabase(this), Utility.getPreferredUserId(this));
+        Uri currentMainUri = BeeContract.ApiaryEntry
+                .buildApiariesViewUri(Utility.getPreferredDatabase(this), Utility.getPreferredUserId
+                        (this));
         if (!Utility.compareUris(mMainUri, currentMainUri)) {
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
             onMainUriChange(currentMainUri);
@@ -65,18 +66,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.Call
         mMainUri = newUri;
         mMainFragment.setMainUri(mMainUri);
         mMainFragment.onMainUriChange();
-//        BeeSyncAdapter.syncImmediately(this);
-
-//        DatawizOverLast30DaysFragment detailFragment = (DatawizOverLast30DaysFragment) getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
-//        if (null != detailFragment) {
-//            detailFragment.onMainUriChange();
-//        }
     }
 
 
     @Override
     public void onItemSelected(Uri uri) {
-        Intent intent = new Intent(this, BeehouseMasterViewActivity.class);
+        Intent intent = new Intent(this, BeehousesActivity.class);
         intent.setData(uri);
         startActivity(intent);
     }

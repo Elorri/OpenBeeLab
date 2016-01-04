@@ -15,28 +15,26 @@ import java.util.List;
  */
 public class Beehouse {
     public long id; //can be null
+    public final String jsonId;
     public final String name;
-    public final long userId;
-    public final String apiaryName;
-    public final double currentWeight;
+    public final String jsonApiaryId;
+    public Long apiaryId;
 
 
     private static String LOG_TAG = Beehouse.class.getSimpleName();
 
 
-    public Beehouse(long id, String name, long userId, String apiaryName, double currentWeight) {
+    public Beehouse(long id, String jsonId, String name, String jsonApiaryId) {
         this.id = id;
+        this.jsonId = jsonId;
         this.name = name;
-        this.userId = userId;
-        this.apiaryName = apiaryName;
-        this.currentWeight = currentWeight;
+        this.jsonApiaryId = jsonApiaryId;
     }
 
-    public Beehouse(String name, long userId, String apiaryName, double currentWeight) {
+    public Beehouse(String jsonId, String name, String jsonApiaryId) {
+        this.jsonId = jsonId;
         this.name = name;
-        this.userId = userId;
-        this.apiaryName = apiaryName;
-        this.currentWeight = currentWeight;
+        this.jsonApiaryId = jsonApiaryId;
     }
 
 
@@ -51,10 +49,13 @@ public class Beehouse {
 
     public ContentValues toContentValues() {
         ContentValues contentValues = new ContentValues();
+        contentValues.put(BeeContract.BeehouseEntry.COLUMN_JSON_ID, this.jsonId);
         contentValues.put(BeeContract.BeehouseEntry.COLUMN_NAME, this.name);
-        contentValues.put(BeeContract.BeehouseEntry.COLUMN_USER_ID, this.userId);
-        contentValues.put(BeeContract.BeehouseEntry.COLUMN_APIARY_ID, this.apiaryName);
-        contentValues.put(BeeContract.BeehouseEntry.COLUMN_CURRENT_WEIGHT, this.currentWeight);
+        contentValues.put(BeeContract.BeehouseEntry.COLUMN_JSON_APIARY_ID, this.jsonApiaryId);
+        //TODO remove this if when we will force every beehouse apiary_id to exist in the apiary
+        //TODO list
+        if (this.apiaryId != null)
+            contentValues.put(BeeContract.BeehouseEntry.COLUMN_APIARY_ID, this.apiaryId);
         return contentValues;
     }
 
@@ -68,7 +69,7 @@ public class Beehouse {
         return values;
     }
 
-    public static void resetDB(Context context){
+    public static void resetDB(Context context) {
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
         context.getContentResolver().delete(BeeContract.BeehouseEntry
                 .CONTENT_URI, null, null);
@@ -92,30 +93,36 @@ public class Beehouse {
      * 1 : COLUMN_NAME
      * 2 : COLUMN_USER_ID
      * 3 : COLUMN_APIARY_ID
-     * 4 : COLUMN_CURRENT_WEIGHT
      *
      * @param cursor
      * @return List<Beehouse>
      */
     public static List<Beehouse> getBeehouses(Cursor cursor) {
         final int COLUMN_ID = 0;
-        final int COLUMN_NAME = 1;
-        final int COLUMN_USER_ID = 2;
-        final int COLUMN_APIARY_NAME = 3;
-        final int COLUMN_CURRENT_WEIGHT = 4;
+        final int COLUMN_JSON_ID = 1;
+        final int COLUMN_NAME = 2;
+        final int COLUMN_JSON_APIARY_ID = 3;
 
 
         List<Beehouse> beehouses = new ArrayList<>(cursor.getCount());
         while (cursor.moveToNext()) {
             long id = cursor.getLong(COLUMN_ID);
+            String jsonId = cursor.getString(COLUMN_JSON_ID);
             String name = cursor.getString(COLUMN_NAME);
-            long userId = cursor.getLong(COLUMN_USER_ID);
-            String apiaryName = cursor.getString(COLUMN_APIARY_NAME);
-            double currentWeight = cursor.getDouble(COLUMN_CURRENT_WEIGHT);
-            beehouses.add(new Beehouse(id, name, userId, apiaryName, currentWeight));
+            String jsonApiaryId = cursor.getString(COLUMN_JSON_APIARY_ID);
+            beehouses.add(new Beehouse(id, jsonId, name, jsonApiaryId));
         }
         return beehouses;
     }
 
 
+    public static List<Beehouse> fetchApiaryId(Context context, List<Beehouse> beehouses) {
+        for (Beehouse beehouse : beehouses) {
+            Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2]
+                    + "beehouse.jsonApiaryId " + beehouse.jsonApiaryId);
+            beehouse.apiaryId = Apiary.findIdByJsonId(context, beehouse.jsonApiaryId);
+        }
+        return beehouses;
+
+    }
 }

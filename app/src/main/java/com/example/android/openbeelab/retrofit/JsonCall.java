@@ -30,8 +30,6 @@ public class JsonCall {
     public static final String API_URL = "http://dev.openbeelab.org:5984";
 
 
-
-
     public interface OpenBeelab {
         @GET("/{user_db}/_design/users/_view/all")
         Call<UserResults> getJsonUsers(@Path("user_db") String userDB);
@@ -39,9 +37,8 @@ public class JsonCall {
         @GET("/{user_db}/_design/apiaries/_view/by_name")
         Call<ApiaryResults> getJsonApiaries(@Path("user_db") String userDB);
 
-//        @GET("/{user_db}/_design/_view/{user_name}/beehouses")
-//        Call<UserResults> getJsonUsers(
-//                @Path("user_name") String userName);
+        @GET("/{user_db}/_design/beehouses/_view/by_apiary")
+        Call<BeehouseResults> getJsonBeehouses(@Path("user_db") String userDB);
 
         @GET("/{user_db}/_design/{beehouse_name}/_view/weight_by_week")
         Call<MeasureResults> getJsonWeekAverageMeasure(
@@ -78,7 +75,9 @@ public class JsonCall {
             if (userResults != null) {
                 for (UserRowObject row : userResults.rows) {
                     Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-                    users.add(new User(row.value.name, database));
+                    //TODO right now users without name mentionned are not added in my db.
+                    if ((row.value._id != null) && (row.value.name != null))
+                        users.add(new User(row.value._id, row.value.name, database));
                 }
             } else {
                 //TODO use ErrorObject somehow here
@@ -95,7 +94,7 @@ public class JsonCall {
     }
 
 
-    public static List<Apiary> getApiaries(Context context, String database, String name) {
+    public static List<Apiary> getApiaries(Context context, String database) {
         try {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(JsonCall.API_URL)
@@ -112,7 +111,10 @@ public class JsonCall {
             if (apiaryResults != null) {
                 for (ApiaryRowObject row : apiaryResults.rows) {
                     Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-                    apiaries.add(new Apiary(row.value.name));
+                    //TODO right now apiaries without beekeepers mentionned are not added in my db. See with Remy
+                    if ((row.value._id != null) && (row.value.name != null)
+                            && (row.value.beekeepers != null))
+                        apiaries.add(new Apiary(row.value._id, row.value.name, row.value.beekeepers));
                 }
             } else {
                 //TODO use ErrorObject somehow here
@@ -129,16 +131,40 @@ public class JsonCall {
     }
 
 
-    public static List<Beehouse> getBeehouses(Context context, String database, long user_id) {
-        List<Beehouse> beehouses = new ArrayList<>();
-        beehouses.add(new Beehouse("ruche_01", user_id, "la_mine_rucher_01", 23.5d));
-        beehouses.add(new Beehouse("ruche_02", user_id, "la_mine_rucher_01", 43.6d));
-        beehouses.add(new Beehouse("ruche_03", user_id, "la_mine_rucher_01", 78.5d));
-        beehouses.add(new Beehouse("ruche_04", user_id, "la_mine_rucher_01", 98.2d));
-        beehouses.add(new Beehouse("ruche_01", user_id, "la_mine_rucher_02", 54.5d));
-        beehouses.add(new Beehouse("ruche_02", user_id, "la_mine_rucher_02", 22.8d));
-        beehouses.add(new Beehouse("ruche_03", user_id, "la_mine_rucher_02", 37.5d));
-        return beehouses;
+    public static List<Beehouse> getBeehouses(Context context, String database) {
+        try {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl(JsonCall.API_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+
+            // Create an instance of our OpenBeelab API interface.
+            OpenBeelab openBeelab = retrofit.create(OpenBeelab.class);
+
+
+            Call<BeehouseResults> call = openBeelab.getJsonBeehouses(database);
+            BeehouseResults beehouseResults = call.execute().body();
+            final List<Beehouse> beehouses = new ArrayList<>();
+            if (beehouseResults != null) {
+                for (BeehouseRowObject row : beehouseResults.rows) {
+                    Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
+                    //TODO right now beehouses without name mentionned are not added in my db.
+                    if ((row.value._id != null) && (row.value.name != null)
+                            && (row.value.apiary_id != null))
+                        beehouses.add(new Beehouse(row.value._id, row.value.name, row.value.apiary_id));
+                }
+            } else {
+                //TODO use ErrorObject somehow here
+                //if ErrorObject not null
+                Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_ERROR);
+                // else
+                //Utility.setServeurStatus(context, BeeSyncAdapter.STATUS_SERVEUR_DOWN);
+            }
+            return beehouses;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 
@@ -162,7 +188,9 @@ public class JsonCall {
                 for (MesureRowObject row : measureResults.rows) {
                     //TODO virer ce static string
                     Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "beehouse.id " + beehouseId);
-                    measures.add(new Measure("global_weight", row.key, row.value[0], "Kg", beehouseId));
+                    //TODO right now measure without key and values mentionned are not added in my db.
+                    if ((row.key != null) && (row.value != null))
+                        measures.add(new Measure("global_weight", row.key, row.value[0], "Kg", beehouseId));
                 }
             } else {
                 //TODO use ErrorObject somehow here

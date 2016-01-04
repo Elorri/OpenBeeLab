@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-import com.example.android.openbeelab.db.BeeContract;
 import com.example.android.openbeelab.db.BeeContract.MeasureEntry;
 import com.example.android.openbeelab.db.BeeProvider;
 
@@ -26,8 +25,8 @@ public class TestUriMatcher extends AndroidTestCase {
         Uri uri = MeasureEntry.buildWeightOverPeriodViewUri(USER_ID, APIARY_ID, BEHOUSE_ID);
         Log.e("jj", uri.toString());
         assertEquals("Error:", testMatcher.match(uri),BeeProvider.WEIGHT_OVER_PERIOD);
-        uri = BeeContract.BeehouseEntry.buildBeehousesViewUri(DATABASE,USER_ID);
+        //uri = BeeContract.BeehouseEntry.buildBeehousesByApiaryViewUri(DATABASE, USER_ID);
         Log.e("jj", uri.toString());
-        assertEquals("Error:", testMatcher.match(uri), BeeProvider.USER_BEEHOUSES);
+        assertEquals("Error:", testMatcher.match(uri), BeeProvider.USER_BEEHOUSES_BY_APIARY);
     }
 }

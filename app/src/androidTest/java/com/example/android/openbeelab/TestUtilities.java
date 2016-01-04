@@ -33,7 +33,6 @@ public class TestUtilities extends AndroidTestCase {
     private static final String[] BEEHOUSES_COLUMNS = {
             BeeContract.BeehouseEntry._ID,
             BeeContract.BeehouseEntry.COLUMN_NAME,
-            BeeContract.BeehouseEntry.COLUMN_USER_ID,
             BeeContract.BeehouseEntry.COLUMN_APIARY_ID,
             BeeContract.BeehouseEntry.COLUMN_CURRENT_WEIGHT
     };
@@ -75,9 +74,9 @@ public class TestUtilities extends AndroidTestCase {
 public static final int BULK_INSERT_RECORDS_TO_INSERT=3;
     public static ContentValues[] createListUserWithoutIdContentValues() {
         List<User> users=new ArrayList<>(3);
-        users.add(new User("Pierre","la_mine"));
-        users.add(new User("Pierre","la_mine_dev"));
-        users.add(new User("Fred","fred_db"));
+//        users.add(new User("Pierre","la_mine"));
+//        users.add(new User("Pierre","la_mine_dev"));
+//        users.add(new User("Fred","fred_db"));
         return User.getContentValuesArray(users);
     }
 
@@ -119,7 +118,6 @@ public static final int BULK_INSERT_RECORDS_TO_INSERT=3;
             Log.e("Lifecycle", i + ("$" 
                     + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry._ID)) + "|" 
                     + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry.COLUMN_NAME)) + "|"
-                    + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry.COLUMN_USER_ID)) + "|"
                     + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry.COLUMN_APIARY_ID)) + "|"
                     + cursor.getString(cursor.getColumnIndex(BeeContract.BeehouseEntry.COLUMN_CURRENT_WEIGHT))));
             i++;

@@ -77,5 +77,7 @@
     <string name="bees_are_fine">Bees looks fine</string>
     <string name="bees_in_danger">Bees in danger</string>
     <string name="dangerous_weight">26</string>
+    <string name="apiaries">Apiaries</string>
+    <string name="beehouses">Beehouses</string>
 
 </resources>
