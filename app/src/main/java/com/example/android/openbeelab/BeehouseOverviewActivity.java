@@ -9,7 +9,7 @@ import android.util.Log;
 /**
  * Created by Elorri on 11/12/2015.
  */
-public class BeehouseMasterViewActivity extends AppCompatActivity implements BeehouseMasterViewFragment.Callback {
+public class BeehouseOverviewActivity extends AppCompatActivity implements BeehouseOverviewFragment.Callback {
 
 
     @Override
@@ -21,9 +21,9 @@ public class BeehouseMasterViewActivity extends AppCompatActivity implements Bee
         if (savedInstanceState == null) {
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
             Bundle arguments = new Bundle();
-            arguments.putParcelable(BeehouseMasterViewFragment.BEEHOUSE_VIEW_URI, getIntent().getData());
+            arguments.putParcelable(BeehouseOverviewFragment.BEEHOUSE_VIEW_URI, getIntent().getData());
 
-            BeehouseMasterViewFragment fragment = new BeehouseMasterViewFragment();
+            BeehouseOverviewFragment fragment = new BeehouseOverviewFragment();
             fragment.setArguments(arguments);
 
             getSupportFragmentManager().beginTransaction()
@@ -36,7 +36,7 @@ public class BeehouseMasterViewActivity extends AppCompatActivity implements Bee
     @Override
     public void onItemSelected(Uri uri, int position) {
         if(position==0){
-            Intent intent = new Intent(this, BeehouseDetailViewActivity.class);
+            Intent intent = new Intent(this, BeehouseInfoActivity.class);
             intent.setData(uri);
             startActivity(intent);
         }

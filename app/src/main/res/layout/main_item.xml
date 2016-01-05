@@ -16,6 +16,6 @@
         tool:text="Marmande"
         android:gravity="center|bottom"
         android:textAppearance="?android:textAppearanceMedium"
-        tool:background="@drawable/apiary"/>
+        android:background="@drawable/apiary"/>
 
 </RelativeLayout>

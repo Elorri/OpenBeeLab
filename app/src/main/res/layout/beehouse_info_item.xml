@@ -5,7 +5,8 @@
               android:gravity="center_vertical"
               android:minHeight="?android:attr/listPreferredItemHeight"
               android:orientation="horizontal"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+              xmlns:tool="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_height="wrap_content"
@@ -18,29 +19,29 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/today"
+            android:id="@+id/beehouseLastUpdate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceLarge"
             android:fontFamily="sans-serif-condensed"
-            android:text="Aujourd'hui"/>
+            tool:text="Aujourd'hui"/>
 
         <TextView
-            android:id="@+id/current_weight"
+            android:id="@+id/currentWeight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="72sp"
             android:fontFamily="sans-serif-light"
-            android:text="43,0"/>
+            tool:text="43,0"/>
 
         <TextView
-            android:id="@+id/list_item_low_textview"
+            android:id="@+id/currentWeightUnit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="36sp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
-            android:text="kg"/>
+            tool:text="kg"/>
     </LinearLayout>
 
 <FrameLayout
@@ -48,12 +49,12 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/medium_margin">
         <TextView
-            android:id="@+id/list_item_icon"
+            android:id="@+id/beehouseNameApiaryName"
             android:layout_width="120dp"
             android:layout_height="150dp"
             android:background="@drawable/ic_weight_medium"
             android:gravity="center"
             android:textAppearance="?android:textAppearanceMedium"
-            android:text="Ruche 03\nMarmande"/>
+            tool:text="Ruche 03\nMarmande"/>
 </FrameLayout>
 </LinearLayout>

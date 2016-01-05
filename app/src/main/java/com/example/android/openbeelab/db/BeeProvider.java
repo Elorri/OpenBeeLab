@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.MatrixCursor;
+import android.database.MergeCursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -43,8 +44,8 @@ public class BeeProvider extends ContentProvider {
     //will match content://com.example.android.openbeelab/{userDb}/{userId}/beehouse/
     public static final int USER_BEEHOUSES = 303;
 
-    //will match /{userDb}/{userId}/{beehouseId}/beehouse_view/
-    public static final int BEEHOUSE_VIEW = 304;
+    //will match /{userDb}/{userId}/{beehouseId}/overview/
+    public static final int BEEHOUSE_OVERVIEW = 304;
 
     //will match content://com.example.android.openbeelab/{userDb}/beehouse/
     public static final int BEEHOUSE_BY_DATABASE = 305;
@@ -72,7 +73,7 @@ public class BeeProvider extends ContentProvider {
         matcher.addURI(authority, BeeContract.PATH_APIARY_USER, APIARY_USER);
         matcher.addURI(authority, BeeContract.PATH_BEEHOUSE, BEEHOUSE);
         matcher.addURI(authority, BeeContract.PATH_MEASURE, MEASURE);
-        matcher.addURI(authority, "*/#/#/" + BeeContract.PATH_BEEHOUSE_VIEW, BEEHOUSE_VIEW);
+        matcher.addURI(authority, "*/#/#/" + BeeContract.PATH_OVERVIEW, BEEHOUSE_OVERVIEW);
         matcher.addURI(authority, "*/#/#/" + BeeContract.PATH_MEASURE + "/" + BeeContract.PATH_WEIGHT_OVER_PERIOD, WEIGHT_OVER_PERIOD);
         matcher.addURI(authority, "*/#/#/" + BeeContract.PATH_BEEHOUSE, USER_BEEHOUSES_BY_APIARY);
         matcher.addURI(authority, "*/#/" + BeeContract.PATH_APIARY, USER_APIARIES);
@@ -143,21 +144,8 @@ public class BeeProvider extends ContentProvider {
                         "USER_BEEHOUSES_BY_APIARY");
                 String apiaryId = BeeContract.BeehouseEntry.getApiaryIdFromBeehousesViewUri(uri);
                 String database = BeeContract.BeehouseEntry.getDatabaseFromBeehousesViewUri(uri);
-//                retCursor = mOpenHelper.getReadableDatabase().query(
-//                        BeeContract.BeehouseEntry.TABLE_NAME,
-//                        projection,
-//                        BeeContract.BeehouseEntry.COLUMN_APIARY_ID + "=? and "
-//                                + BeeContract.BeehouseEntry.COLUMN_DATABASE + "=?",
-//                        new String[]{apiaryId, database},
-//                        null,
-//                        null,
-//                        BeeContract.BeehouseEntry.COLUMN_NAME + " asc"
-//                );
-
-
-                retCursor = mOpenHelper.getReadableDatabase().rawQuery(
-                        "select * from "
-                                + BeeContract.BeehouseEntry.TABLE_NAME + " inner join (select "
+                retCursor = mOpenHelper.getReadableDatabase().query(
+                        BeeContract.BeehouseEntry.TABLE_NAME + " inner join (select "
                                 + BeeContract.MeasureEntry.COLUMN_BEEHOUSE_ID + ", max("
                                 + BeeContract.MeasureEntry.COLUMN_WEEK_ID + ")as "
                                 + BeeContract.MeasureEntry.COLUMN_WEEK_ID + ", "
@@ -178,10 +166,13 @@ public class BeeProvider extends ContentProvider {
                                 + BeeContract.MeasureEntry.COLUMN_BEEHOUSE_ID + ") w on "
                                 + BeeContract.BeehouseEntry._ID + "=w."
                                 + BeeContract.MeasureEntry.COLUMN_BEEHOUSE_ID,
-                        new String[]{apiaryId, database}
+                        projection,
+                        null,
+                        new String[]{apiaryId, database},
+                        null,
+                        null,
+                        null
                 );
-//                select * from beehouse inner join (select beehouse_id, max(weekId) as weekId, weight as weight from (select b._id, beehouse_id, weekId, value as weight from measure inner join (select beehouse.* from beehouse where apiary_id=9 and database='la_mine') b on beehouse_id=b._id) group by beehouse_id) w on beehouse._id=w.beehouse_id
-
                 break;
             }
             case USER_BEEHOUSES: {
@@ -203,15 +194,13 @@ public class BeeProvider extends ContentProvider {
                 break;
             }
 
-            case BEEHOUSE_VIEW: {
+            case BEEHOUSE_OVERVIEW: {
                 Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] +
-                        "BEEHOUSE_VIEW");
-                MatrixCursor cursorEmpty = null;
-                String[] cursorCursorEmpty_columns = {"_id", "first_column"};
-                cursorEmpty = new MatrixCursor(cursorCursorEmpty_columns);
-                cursorEmpty.addRow(new Object[]{1, "dummy"});
-                cursorEmpty.addRow(new Object[]{2, "dummy"});
-                retCursor = cursorEmpty;
+                        "BEEHOUSE_OVERVIEW");
+                Cursor[] cursors = new Cursor[2];
+                cursors[0] = getCursorBeehouseInfo(uri);
+                cursors[1] = getCursorBeehouseDatawizLast30Days();
+                retCursor = new MergeCursor(cursors);
                 break;
             }
 
@@ -318,6 +307,53 @@ public class BeeProvider extends ContentProvider {
         }
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;
+    }
+
+    private Cursor getCursorBeehouseInfo(Uri uri) {
+        String beehouseId = BeeContract.BeehouseEntry
+                .getBeehouseIdFromBeehouseOverviewUri(uri);
+        return mOpenHelper.getReadableDatabase().rawQuery(
+                "select b."
+                        + BeeContract.BeehouseEntry._ID + " as "
+                        + BeeContract.BeehouseEntry._ID + ", max("
+                        + BeeContract.MeasureEntry.COLUMN_WEEK_ID + ") as "
+                        + BeeContract.BeehouseEntry.VIEW_LAST_UPDATE + ", "
+                        + BeeContract.MeasureEntry.COLUMN_VALUE + " as "
+                        + BeeContract.BeehouseEntry.VIEW_CURRENT_WEIGHT + ", "
+                        + BeeContract.MeasureEntry.COLUMN_UNIT + " as "
+                        + BeeContract.BeehouseEntry.VIEW_WEIGHT_UNIT + ", b."
+                        + BeeContract.BeehouseEntry.COLUMN_NAME + ", b."
+                        + BeeContract.BeehouseEntry.VIEW_APIARY_NAME + " from "
+                        + BeeContract.MeasureEntry.TABLE_NAME + " inner join (select b."
+                        + BeeContract.BeehouseEntry._ID + ", b."
+                        + BeeContract.BeehouseEntry.COLUMN_NAME + ", "
+                        + BeeContract.ApiaryEntry.TABLE_NAME + "."
+                        + BeeContract.ApiaryEntry.COLUMN_NAME + " as "
+                        + BeeContract.BeehouseEntry.VIEW_APIARY_NAME + " from "
+                        + BeeContract.ApiaryEntry.TABLE_NAME + " inner join (select "
+                        + BeeContract.BeehouseEntry._ID + ", "
+                        + BeeContract.BeehouseEntry.COLUMN_NAME + ", "
+                        + BeeContract.BeehouseEntry.COLUMN_APIARY_ID + " from "
+                        + BeeContract.BeehouseEntry.TABLE_NAME + " where "
+                        + BeeContract.BeehouseEntry._ID + "=?) b on "
+                        + BeeContract.ApiaryEntry.TABLE_NAME + "."
+                        + BeeContract.ApiaryEntry._ID + "=b."
+                        + BeeContract.BeehouseEntry.COLUMN_APIARY_ID + ") b on "
+                        + BeeContract.MeasureEntry.TABLE_NAME + "."
+                        + BeeContract.MeasureEntry.COLUMN_BEEHOUSE_ID + "=b."
+                        + BeeContract.BeehouseEntry._ID,
+                new String[]{beehouseId}
+        );
+
+
+    }
+
+    private Cursor getCursorBeehouseDatawizLast30Days() {
+        MatrixCursor cursorEmpty = null;
+        String[] cursorCursorEmpty_columns = {"_id", "first_column"};
+        cursorEmpty = new MatrixCursor(cursorCursorEmpty_columns);
+        cursorEmpty.addRow(new Object[]{1, "dummy"});
+        return cursorEmpty;
     }
 
     @Nullable

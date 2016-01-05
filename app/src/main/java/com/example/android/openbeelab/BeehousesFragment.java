@@ -41,8 +41,8 @@ public class BeehousesFragment  extends Fragment implements LoaderManager.Loader
     // These indices are tied to BEEHOUSES_COLUMNS.  If BEEHOUSES_COLUMNS changes, these
     // must change.
     static final int COL_BEEHOUSE_ID = 0;
-    static final int COL_BEEHOUSE_NAME = 2;
-    static final int COL_BEEHOUSE_WEIGHT = 8;
+    static final int COL_BEEHOUSE_NAME = 1;
+    static final int COL_BEEHOUSE_WEIGHT = 2;
 
 
     public interface Callback {
@@ -90,7 +90,7 @@ public class BeehousesFragment  extends Fragment implements LoaderManager.Loader
             String database = Utility.getPreferredDatabase(getContext());
             String userId = Utility.getPreferredUserId(getContext());
             String beehouseId = cursor.getString(COL_BEEHOUSE_ID);
-            Uri uri = BeeContract.BeehouseEntry.buildBeehouseDetailViewUri(database, userId,
+            Uri uri = BeeContract.BeehouseEntry.buildBeehouseOverviewUri(database, userId,
                     beehouseId);
             ((Callback) getActivity()).onItemSelected(uri);
         }

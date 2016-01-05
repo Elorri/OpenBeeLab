@@ -7,7 +7,7 @@ import android.util.Log;
 /**
  * Created by Elorri on 13/12/2015.
  */
-public class BeehouseDetailViewActivity extends AppCompatActivity {
+public class BeehouseInfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");

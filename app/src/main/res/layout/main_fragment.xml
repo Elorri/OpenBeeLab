@@ -13,8 +13,6 @@
         android:numColumns="auto_fit"
         android:stretchMode="columnWidth"
         android:choiceMode="singleChoice"
-        android:layout_marginRight="@dimen/medium_margin"
-        android:layout_marginLeft="@dimen/medium_margin"
         android:gravity="center"
         android:horizontalSpacing="@dimen/medium_margin"
         android:verticalSpacing="@dimen/large_margin"

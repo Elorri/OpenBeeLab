@@ -36,14 +36,14 @@ public class BeehousesAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+        String beehouseName=cursor.getString(BeehousesFragment.COL_BEEHOUSE_NAME);
+        float weight=cursor.getFloat(BeehousesFragment.COL_BEEHOUSE_WEIGHT);
+        String weightString=String.format(context.getString(R.string.beehouses_weight), weight);
+        int weightDrawableId=Utility.getIconResourceForBeehouseCondition(weight);
+
         ViewHolder viewHolder = (ViewHolder) view.getTag();
-        viewHolder.beehouseImageView.setBackgroundDrawable(context.getResources()
-                .getDrawable(Utility.getIconResourceForBeehouseCondition(cursor.getDouble
-                        (BeehousesFragment.COL_BEEHOUSE_WEIGHT))));
-        viewHolder.beehouseImageView.setText(String.format(context.getString(R.string.weight),
-                cursor.getString(BeehousesFragment.COL_BEEHOUSE_WEIGHT)));
-//        ((ImageView) view).setImageResource(Utility.getIconResourceForBeehouseCondition(cursor
-//                .getDouble(1)));
-        viewHolder.beehouseTextView.setText(cursor.getString(BeehousesFragment.COL_BEEHOUSE_NAME));
+        viewHolder.beehouseImageView.setBackgroundDrawable(context.getResources().getDrawable(weightDrawableId));
+        viewHolder.beehouseImageView.setText(weightString);
+        viewHolder.beehouseTextView.setText(beehouseName);
     }
 }

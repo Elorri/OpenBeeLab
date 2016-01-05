@@ -19,14 +19,15 @@ import com.example.android.openbeelab.db.BeeContract;
 /**
  * Created by Elorri on 11/12/2015.
  */
-public class BeehouseMasterViewFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class BeehouseOverviewFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String BEEHOUSE_VIEW_URI = "beehouse_view_uri";
-    private BeehouseMasterViewAdapter mAdapter;
+    private BeehouseOverviewAdapter mAdapter;
     private ListView mListView;
     private Uri mUri;
 
     private static final int BEEHOUSE_LOADER = 0;
+
 
 
     public interface Callback {
@@ -38,7 +39,7 @@ public class BeehouseMasterViewFragment extends Fragment implements LoaderManage
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-        mAdapter = new BeehouseMasterViewAdapter(getActivity(), null, 0);
+        mAdapter = new BeehouseOverviewAdapter(getActivity(), null, 0);
     }
 
 
@@ -67,14 +68,14 @@ public class BeehouseMasterViewFragment extends Fragment implements LoaderManage
         String database = Utility.getPreferredDatabase(getContext());
         String userId = Utility.getPreferredUserId(getContext());
         String beehouseId = BeeContract.BeehouseEntry
-                .getBeehouseIdFromBeehouseDetailViewUri(mUri);
+                .getBeehouseIdFromBeehouseOverviewUri(mUri);
         Uri uri = null;
         switch (position) {
-            case BeehouseMasterViewAdapter.VIEW_TYPE_INFO:
-                uri = BeeContract.BeehouseEntry.buildBeehouseViewUri(database, userId,
+            case BeehouseOverviewAdapter.VIEW_TYPE_INFO:
+                uri = BeeContract.BeehouseEntry.buildBeehouseInfoUri(database, userId,
                         beehouseId);
                 break;
-            case BeehouseMasterViewAdapter.VIEW_TYPE_DATAWIZ_OVER_LAST_30_DAYS:
+            case BeehouseOverviewAdapter.VIEW_TYPE_DATAWIZ_OVER_LAST_30_DAYS:
 
                 uri = BeeContract.MeasureEntry.buildWeightOverPeriodViewUri(database, userId,
                         beehouseId);

@@ -156,4 +156,9 @@ public class Utility {
         spe.putString(key, value);
         spe.commit();
     }
+
+    //TODO should have an int parameter representing the date
+    public static String getFriendlyDayName(String beehouseLastUpdate) {
+        return "Aujourd'hui";
+    }
 }

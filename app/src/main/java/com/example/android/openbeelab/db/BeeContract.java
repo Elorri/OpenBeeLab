@@ -19,7 +19,7 @@ public class BeeContract {
     public static final String PATH_APIARY = "apiary";
     public static final String PATH_APIARY_USER = "apiary_user";
     public static final String PATH_BEEHOUSE = "beehouse";
-    public static final String PATH_BEEHOUSE_VIEW = "beehouse_view";
+    public static final String PATH_OVERVIEW = "overview";
     public static final String PATH_WEIGHT_OVER_PERIOD = "weight_over_period";
     public static final String PATH_MEASURE = "measure";
 
@@ -120,7 +120,10 @@ public class BeeContract {
         public static final String COLUMN_APIARY_ID = "apiary_id";
         public static final String COLUMN_JSON_APIARY_ID = "json_apiary_id";
         public static final String COLUMN_DATABASE = "database";
+        public static final String VIEW_LAST_UPDATE = "last_update";
         public static final String VIEW_CURRENT_WEIGHT = "current_weight";
+        public static final String VIEW_WEIGHT_UNIT = "weight_unit";
+        public static final String VIEW_APIARY_NAME = "weight_unit";
 
 
         //USER_BEEHOUSES_BY_APIARY
@@ -176,22 +179,24 @@ public class BeeContract {
             return uri.getPathSegments().get(1);
         }
 
-        public static Uri buildBeehouseDetailViewUri(String database, String userId, String
+        //BEEHOUSE_OVERVIEW - /{userDb}/{userId}/{beehouseId}/overview/
+        public static Uri buildBeehouseOverviewUri(String database, String userId, String
                 beehouseId) {
             return BASE_CONTENT_URI.buildUpon()
                     .appendPath(database)
                     .appendPath(userId)
                     .appendPath(beehouseId)
-                    .appendPath(PATH_BEEHOUSE_VIEW)
+                    .appendPath(PATH_OVERVIEW)
                     .build();
         }
 
-        //will match /{userDb}/{userId}/{beehouseId}/beehouse_view/
-        public static String getBeehouseIdFromBeehouseDetailViewUri(Uri uri) {
+        //will match /{userDb}/{userId}/{beehouseId}/overview/
+        public static String getBeehouseIdFromBeehouseOverviewUri(Uri uri) {
             return uri.getPathSegments().get(2);
         }
 
-        public static Uri buildBeehouseViewUri(String database, String userId, String
+        //will match /{userDb}/{userId}/{beehouseId}/
+        public static Uri buildBeehouseInfoUri(String database, String userId, String
                 beehouseId) {
             return BASE_CONTENT_URI.buildUpon()
                     .appendPath(database)

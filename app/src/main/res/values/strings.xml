@@ -67,7 +67,8 @@
 
 
     <!-- formatted strings -->
-    <string name="weight"><xliff:g>%s</xliff:g> kg</string>
+    <string name="beehouses_weight"><xliff:g>%1.1f</xliff:g> kg</string>
+    <string name="beehouse_weight"><xliff:g>%1.1f</xliff:g></string>
 
 
     <!-- Strings related to Notification  preference -->

@@ -30,7 +30,7 @@
                 android:value="com.example.android.openbeelab.MainActivity" />
         </activity>
         <activity
-            android:name=".BeehouseMasterViewActivity"
+            android:name=".BeehouseOverviewActivity"
             android:label="@string/title_activity_detail"
             android:parentActivityName=".BeehousesActivity" android:launchMode="singleTop">
             <meta-data
@@ -38,20 +38,20 @@
                 android:value="com.example.android.openbeelab.BeehousesActivity" />
         </activity>
         <activity
-            android:name=".BeehouseDetailViewActivity"
+            android:name=".BeehouseInfoActivity"
             android:label="@string/title_activity_detail"
-            android:parentActivityName=".BeehouseMasterViewActivity">
+            android:parentActivityName=".BeehouseOverviewActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".BeehouseMasterViewActivity" />
+                android:value=".BeehouseOverviewActivity" />
         </activity>
         <activity
             android:name=".DatawizOverLast30DaysActivity"
             android:label="@string/title_activity_measures"
-            android:parentActivityName=".BeehouseMasterViewActivity">
+            android:parentActivityName=".BeehouseOverviewActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".BeehouseMasterViewActivity" />
+                android:value=".BeehouseOverviewActivity" />
         </activity>
 
         <activity

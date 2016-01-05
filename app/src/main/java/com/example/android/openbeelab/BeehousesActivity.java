@@ -43,7 +43,7 @@ public class BeehousesActivity extends AppCompatActivity implements BeehousesFra
 
     @Override
     public void onItemSelected(Uri uri) {
-        Intent intent = new Intent(this, BeehouseMasterViewActivity.class);
+        Intent intent = new Intent(this, BeehouseOverviewActivity.class);
         intent.setData(uri);
         startActivity(intent);
     }
