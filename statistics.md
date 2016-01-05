@@ -13,7 +13,7 @@
 | Test provider     | 0|0|++|
 | Sync Adapter     | 0|0|++|
 | Sync notifications      | 0|0|++|
-| Debug  | 72|0|++|
+| Debug  | 72|8|++|
 | Improve tablette design    | 0|0|++|
 
 

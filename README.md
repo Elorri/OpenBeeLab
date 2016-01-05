@@ -27,7 +27,7 @@ This will app allows :
 ## Apk
 The apk realease can be found under the app directory
 
-## ToDo
+## Scenarios
 [https://gist.github.com/Elorri/6205a2bcca13d2aaa168]
 	
 ## Licence
