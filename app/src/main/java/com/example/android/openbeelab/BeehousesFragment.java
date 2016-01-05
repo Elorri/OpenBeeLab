@@ -66,7 +66,7 @@ public class BeehousesFragment  extends Fragment implements LoaderManager.Loader
         View rootView = inflater.inflate(R.layout.beehouses_fragment, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        mGridView = (GridView) rootView.findViewById(R.id.gridView);
+        mGridView = (GridView) rootView.findViewById(R.id.listView);
         mGridView.setAdapter(mBeehousesAdapter);
 
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

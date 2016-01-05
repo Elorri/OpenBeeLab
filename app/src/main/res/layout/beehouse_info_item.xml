@@ -6,6 +6,8 @@
               android:minHeight="?android:attr/listPreferredItemHeight"
               android:orientation="horizontal"
     android:background="@color/colorPrimary"
+              android:paddingBottom="26dp"
+              android:paddingTop="26dp"
               xmlns:tool="http://schemas.android.com/tools">
 
     <LinearLayout
@@ -47,14 +49,15 @@
 <FrameLayout
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="@dimen/medium_margin">
+    android:padding="20dp">
         <TextView
             android:id="@+id/beehouseNameApiaryName"
             android:layout_width="120dp"
             android:layout_height="150dp"
             android:background="@drawable/ic_weight_medium"
             android:gravity="center"
+            android:paddingBottom="20dp"
             android:textAppearance="?android:textAppearanceMedium"
-            tool:text="Ruche 03\nMarmande"/>
+            tool:text="Ruche 03"/>
 </FrameLayout>
 </LinearLayout>

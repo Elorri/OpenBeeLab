@@ -46,7 +46,7 @@ public class BeehouseOverviewFragment extends Fragment implements LoaderManager.
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");
-        View view = inflater.inflate(R.layout.beehouse_view_fragment, container, false);
+        View view = inflater.inflate(R.layout.beehouse_overview_fragment, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
         mListView = (ListView) view.findViewById(R.id.listview);

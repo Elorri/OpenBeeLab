@@ -16,7 +16,7 @@ public class BeehouseOverviewActivity extends AppCompatActivity implements Beeho
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + ""+savedInstanceState);
-        setContentView(R.layout.beehouse_view_activity);
+        setContentView(R.layout.beehouse_overview_activity);
 
         if (savedInstanceState == null) {
             Log.e("Lifecycle", Thread.currentThread().getStackTrace()[2] + "");

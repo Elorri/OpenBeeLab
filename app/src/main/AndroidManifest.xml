@@ -15,15 +15,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:name=".StethoApplication">
-        <activity android:label="@string/apiaries" android:name=".MainActivity">
+        <activity android:label="@string/title_apiaries" android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".BeehousesActivity"
-                  android:label="@string/beehouses"
+                  android:label="@string/title_beehouses"
                   android:parentActivityName=".MainActivity" android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -31,7 +30,7 @@
         </activity>
         <activity
             android:name=".BeehouseOverviewActivity"
-            android:label="@string/title_activity_detail"
+            android:label="@string/title_beehouse"
             android:parentActivityName=".BeehousesActivity" android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -39,7 +38,7 @@
         </activity>
         <activity
             android:name=".BeehouseInfoActivity"
-            android:label="@string/title_activity_detail"
+            android:label="@string/title_info"
             android:parentActivityName=".BeehouseOverviewActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -47,7 +46,7 @@
         </activity>
         <activity
             android:name=".DatawizOverLast30DaysActivity"
-            android:label="@string/title_activity_measures"
+            android:label="@string/title_measures"
             android:parentActivityName=".BeehouseOverviewActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

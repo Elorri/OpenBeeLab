@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -18,10 +19,12 @@ public class MainAdapter extends CursorAdapter {
     }
 
     public static class ViewHolder {
+        public final ImageView apiaryImageView;
         public final TextView apiaryTextView;
 
         public ViewHolder(View view) {
-            apiaryTextView = (TextView) view.findViewById(R.id.apiary_img);
+            apiaryImageView = (ImageView) view.findViewById(R.id.apiary_icon);
+            apiaryTextView = (TextView) view.findViewById(R.id.apiary_name);
         }
     }
 

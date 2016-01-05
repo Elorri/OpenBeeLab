@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+    android:id="@+id/row_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    xmlns:tool="http://schemas.android.com/tools">
+    android:layout_height="wrap_content"   >
 
-    <TextView
-        android:id="@+id/apiary_img"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_margin="@dimen/medium_margin"
-        android:padding="@dimen/medium_margin"
-        android:scaleType="centerCrop"
-        tool:text="Marmande"
-        android:gravity="center|bottom"
-        android:textAppearance="?android:textAppearanceMedium"
+    <ImageView
+        android:id="@+id/apiary_icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_margin="16dp"
         android:background="@drawable/apiary"/>
 
+    <TextView
+        android:id="@+id/apiary_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_toRightOf="@id/apiary_icon"
+        android:gravity="center_vertical"
+        android:text="la_mine_rucher_01"
+        android:textAppearance="?android:textAppearanceMedium"/>
+
 </RelativeLayout>
+
+
+
+
+
+
+

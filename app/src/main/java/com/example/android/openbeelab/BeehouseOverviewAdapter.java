@@ -74,8 +74,9 @@ public class BeehouseOverviewAdapter extends CursorAdapter {
                 String beehouseLastUpdate= cursor.getString(COL_VIEW_TYPE_INFO_LAST_UPDATE);
                 float currentWeight=cursor.getFloat(COL_VIEW_TYPE_INFO_CURRENT_WEIGHT);
                 String currentWeightUnit=cursor.getString(COL_VIEW_TYPE_INFO_WEIGHT_UNIT);
-                String beehouseNameApiaryName=cursor.getString(COL_VIEW_TYPE_INFO_NAME)+"\n"+cursor
-                        .getString(COL_VIEW_TYPE_INFO_APIARY_NAME);
+//                String beehouseNameApiaryName=cursor.getString(COL_VIEW_TYPE_INFO_NAME)+"\n"+cursor
+//                        .getString(COL_VIEW_TYPE_INFO_APIARY_NAME);
+                String beehouseNameApiaryName=cursor.getString(COL_VIEW_TYPE_INFO_NAME);
 
                 String beehouseLastUpdateString = Utility.getFriendlyDayName(beehouseLastUpdate);
                 String currentWeightString = String.format(context.getString(R.string.beehouse_weight), currentWeight);

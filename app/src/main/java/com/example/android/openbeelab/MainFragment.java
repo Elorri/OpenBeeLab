@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,7 +25,7 @@ import com.example.android.openbeelab.sync.BeeSyncAdapter;
 public class MainFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
     private static final String SELECTED_KEY = "selected_position";
     private static final String MAIN_URI = "main_uri";
-    private GridView mGridView;
+    private ListView mListView;
     private Uri mMainUri;
     private MainAdapter mMainAdapter;
     private static final int APIARIES_LOADER = 0;
@@ -66,10 +65,10 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         View rootView = inflater.inflate(R.layout.main_fragment, container, false);
 
         // Get a reference to the ListView, and attach this adapter to it.
-        mGridView = (GridView) rootView.findViewById(R.id.gridView);
-        mGridView.setAdapter(mMainAdapter);
+        mListView = (ListView) rootView.findViewById(R.id.listView);
+        mListView.setAdapter(mMainAdapter);
 
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 onApiaryClicked(parent, position);
@@ -125,7 +124,7 @@ public class MainFragment extends Fragment implements LoaderManager.LoaderCallba
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
-            mGridView.smoothScrollToPosition(mPosition);
+            mListView.smoothScrollToPosition(mPosition);
         }
         updateEmptyView();
     }
